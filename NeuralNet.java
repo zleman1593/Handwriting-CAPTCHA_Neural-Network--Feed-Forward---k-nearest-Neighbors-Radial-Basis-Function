@@ -7,8 +7,9 @@
   It is a feed-forward neural network that uses back propagation.
  */
 
-// NOTE: To run this we had to pass the argument " -Xmx800M"  to the java virtual machine
-
+// NOTES: To run this we had to pass the argument " -Xmx800M"  to the java virtual machine
+// NOTES: I got 87 percent accuracy when I set epochs to 30 and hidden nodes to 15. But it took 30 minutes to run.
+// NOTES: Need to modify /User directory Ex. /user/username so the program has permissions to create the file output at that location
 
 import java.util.*;
 import java.io.IOException;
@@ -16,7 +17,8 @@ import java.lang.Math;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.io.*;
 
 public class NeuralNet {
 	//Tracks the number of images  processed in the testing set.
@@ -56,9 +58,9 @@ public class NeuralNet {
 
 		//These are hard coded versions of the above
 		numberOfOutputNodes=10;
-		numberOfHiddenNodesInLayer2=30;
+		numberOfHiddenNodesInLayer2=5;
 		numberOfhiddenLayers=1;
-		epochs = 30;
+		epochs = 3;
 		learningRate = 0.3;
 
 		//Initializes all nodes in all other hidden layer except the first hidden layer
@@ -131,9 +133,12 @@ public class NeuralNet {
 			//reports network Performance
 			double percentCorrect= (countOfCorrectImagesAnalyzed/countOfImagesAnalyzed)*100;
 			System.out.println("Analyzed " + countOfImagesAnalyzed+ " images with " +percentCorrect+ " percent accuracy.");
-
-			//Uncomment to write results to file
+		
+			System.out.println("Look in /Users/zackeryleman/Desktop  directory to find both the testing output file and the trained weights data file.");
+	
 			write(result);
+			//Creates a data file that can be reused by the network without retraining.
+			writeTrainedWeights();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -281,11 +286,61 @@ public class NeuralNet {
 		}
 		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
 		for (int i = 0; i < x.size(); i++) {
+			outputWriter.write("Learning rate: "+ Double.toString(learningRate));
+			outputWriter.newLine();
+			outputWriter.write("Epochs: "+ Integer.toString(epochs));
+			outputWriter.newLine();
+			outputWriter.write("Epochs: "+ Integer.toString(epochs));
+			outputWriter.newLine();
 			outputWriter.write("Correct: "+ x.get(i).getCorrect()+"  ");
 			outputWriter.write("Neural net output: "+ Integer.toString(x.get(i).getNeuralNetOutput())+"   ");
 			outputWriter.write("Expected output: "+ Double.toString(x.get(i).getExpectedOutput()));
 			outputWriter.newLine();
 		}
+		outputWriter.flush();  
+		outputWriter.close();  
+	}
+	public static void writeTrainedWeights () throws IOException{
+		BufferedWriter outputWriter = null;
+		String randomString=Double.toString(Math.random());
+		File file = new File("/Users/zackeryleman/Desktop/TrainedData"+randomString+".txt");
+
+		// if file does not exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+		
+			outputWriter.write("Learning rate: "+ Double.toString(learningRate));
+			outputWriter.newLine();
+			outputWriter.write("Epochs: "+ Integer.toString(epochs));
+			outputWriter.newLine();
+			outputWriter.write("Hidden Layers: "+ Integer.toString(numberOfhiddenLayers));
+			outputWriter.newLine();
+			outputWriter.write("Number of nodes in each hidden layer: "+ Integer.toString(numberOfHiddenNodesInLayer2));
+			outputWriter.newLine();
+			//We serialize these two data structures and write to file. These can then be read back into the neural net.
+			try{
+				File dataFile = new File("/Users/TrainedData2"+randomString+".txt");
+
+				// if file does not exists, then create it
+				if (!dataFile.exists()) {
+					dataFile.createNewFile();
+				}
+		         FileOutputStream fos= new FileOutputStream(dataFile.getAbsoluteFile());
+		         ObjectOutputStream oos= new ObjectOutputStream(fos);
+		         oos.writeObject(hiddenLayerNodes);
+		         oos.writeObject(outputLayerNodes);
+		         oos.close();
+		         fos.close();
+		       }catch(IOException ioe){
+		            ioe.printStackTrace();
+		        }
+			
+			
+		
+			
+			//Need to include other possible hidden layers (Not yet implemented)
 		outputWriter.flush();  
 		outputWriter.close();  
 	}
