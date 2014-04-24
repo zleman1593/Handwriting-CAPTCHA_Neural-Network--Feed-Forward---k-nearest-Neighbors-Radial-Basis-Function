@@ -70,9 +70,9 @@ public class NeuralNet {
 
 		//These are hard coded versions of the above
 		numberOfOutputNodes=10;
-		numberOfHiddenNodesInLayer2=60;
-		epochs = 3;
-		learningRate = 0.4;
+		numberOfHiddenNodesInLayer2=30;
+		epochs = 7;
+		learningRate = 0.5;
 		numberOfhiddenLayers=1;
 		String trainingImages="Training-Images";
 		String testingImages="Testing-images";
