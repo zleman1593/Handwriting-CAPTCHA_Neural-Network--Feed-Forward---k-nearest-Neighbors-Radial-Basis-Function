@@ -9,13 +9,16 @@
 
 // NOTES: To run this we had to pass the argument " -Xmx800M"  to the java virtual machine
 // NOTES: I got 87 percent accuracy when I set epochs to 30 and hidden nodes to 15. But it took 30 minutes to run.
-// NOTES: Need to modify /User directory Ex. /user/username so the program has permissions to create the file output at that location
+//IVY NOTE: You will need to change the user name to your user name in all paths like "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt"
+// ALSO: Add the folder NeuralNetOutput that is currently in the same folder as this file to your desktop.
+//ALSO: set epochs to 5 and hidden nodes to 6 for a fairly quick run to see how it works.
 
 import java.util.*;
 import java.io.IOException;
 import java.lang.Math;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.*;
@@ -25,6 +28,8 @@ public class NeuralNet {
 	public static double countOfImagesAnalyzed=0;
 	//Tracks the number of images correctly identified in the testing set.
 	public static double countOfCorrectImagesAnalyzed=0;
+	//Tracks running time of the training
+	public static long executionTime;
 	//The number of times the network is trained with the training Data
 	public static int epochs;
 	//Creates a random number generator
@@ -42,109 +47,48 @@ public class NeuralNet {
 	public static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
 	//The learning rate for the network
 	public static double learningRate;
+	//Whether to use weights that have already been trained or to train network again
+	public static boolean usePriorWeights;
 	//This array holds all other hidden layers except the first one.
 	public static ArrayList<ArrayList<ArrayList<Double>>> hiddenLayers = new ArrayList<ArrayList<ArrayList<Double>>>();
 	//For a given training image this array is filled with the output for each layer and then reset for the next image.
 	//Prevents duplicate calculations from being performed.
 	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
 
-	public static void main (String[] args) {
+	public static void main (String[] args) throws IOException, ClassNotFoundException {
 
 		//numberOfOutputNodes=args[2];
 		//numberOfHiddenNodesInLayer2=args[3];
 		//epochs = Integer.parseInt(args[4]); //number of epochs to run
 		//double learningRate = Double.parseDouble(args[5]); //learning rate
 		//numberOfhiddenLayers=Integer.parseInt(args[6]);
+		//String trainingImages=args[7];
+		//String testingImages=args[8];
+		//String trainingLabels=args[9];
+		//String testingLabels=args[10];
+		//usePriorWeights=Boolean.parseBolean(args[11]);
 
 		//These are hard coded versions of the above
 		numberOfOutputNodes=10;
-		numberOfHiddenNodesInLayer2=5;
-		numberOfhiddenLayers=1;
+		numberOfHiddenNodesInLayer2=60;
 		epochs = 3;
-		learningRate = 0.3;
-
-		//Initializes all nodes in all other hidden layer except the first hidden layer
-		if(numberOfhiddenLayers>1){
-			for(int x=1; x<numberOfhiddenLayers; x++){
-				//Create array of nodes in a hidden layer
-				ArrayList<ArrayList<Double>> hidden = new ArrayList<ArrayList<Double>>();
-				//Creates one node at a time, adds to the hidden layer, and then adds the hidden layer to the parent array
-				for (int i=0; i<numberOfHiddenNodesInLayer2; i++) { 
-					//Create node by creating an array of weights on incoming edges to this node
-					ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2); //number of nodes in previous hidden layer
-					//Initialize all weights on paths pointing to this node to random values with mean 0 and variance of 1
-					for (int j=0; j<numberOfHiddenNodesInLayer2; j++) { 
-						weights.add(random.nextGaussian());
-					} 
-					//Adds node to the hidden layer
-					hidden.add(weights); 
-				}
-				//Adds hidden layer to parent array
-				hiddenLayers.add(hidden);
-			}
-		}
-
-
-
-		//Loads training and testing data sets
-		DigitImageLoadingService train = new DigitImageLoadingService("train-labels-idx1-ubyte","train-images-idx3-ubyte");
-		DigitImageLoadingService test = new DigitImageLoadingService("t10k-labels-idx1-ubyte","t10k-images-idx3-ubyte");
-		try {
-			//Our data structure holds the testing data
-			ArrayList<DigitImage> testingData= test.loadDigitImages();
-			//Our data structure holds the training data
-			ArrayList<DigitImage> trainingData= train.loadDigitImages();
-			//Alters data into proper form
-			for(int i=0; i<trainingData.size(); i++){
-				trainingData.get(i).vectorizeTrainingData();
-			}
-
-			//Looks at a representation of an image
-			//and determines how many pixels and thus how many input nodes are needed
-			//(one per pixel)
-			numberOfInputNodes=trainingData.get(0).getData().length;
-
-			//Initialize weights  with random values for all nodes in the first hidden layer.
-			for (int i=0; i<numberOfHiddenNodesInLayer2; i++) { 
-				ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes); 
-				for (int j=0; j<numberOfInputNodes; j++) { 
-					weights.add(random.nextGaussian());
-				} 
-				hiddenLayerNodes.add(weights); 
-			}
-			//Initialize weights with random values for all nodes in the output layer.
-			for (int i=0; i<numberOfOutputNodes; i++) { 
-				ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2); 
-				for (int j=0; j<numberOfHiddenNodesInLayer2; j++) { 
-					weights.add(random.nextGaussian());
-				} 
-				outputLayerNodes.add(weights); 
-			}
-
-			long startTime = System.currentTimeMillis();
-			//Trains the network with the training Data
-			trainTheNetwork(trainingData);
-			long endTime = System.currentTimeMillis();
-	    	long executionTime = endTime - startTime;
-	    	System.out.println("Training time: " + executionTime + " milliseconds");
-			//Tests the network with the testing Data
-			ArrayList<OutputVector> result =solveTestingData(testingData);
-
-			//reports network Performance
-			double percentCorrect= (countOfCorrectImagesAnalyzed/countOfImagesAnalyzed)*100;
-			System.out.println("Analyzed " + countOfImagesAnalyzed+ " images with " +percentCorrect+ " percent accuracy.");
+		learningRate = 0.4;
+		numberOfhiddenLayers=1;
+		String trainingImages="Training-Images";
+		String testingImages="Testing-images";
+		String trainingLabels="Training-Labels";
+		String testingLabels="Testing-Labels";
+		//Set this to true to avoid retraining. Allows the files in NeuralNetOutput folder to be loaded and used.
+		usePriorWeights=false;
 		
-			System.out.println("Look in /Users/zackeryleman/Desktop  directory to find both the testing output file and the trained weights data file.");
-	
-			write(result);
-			//Creates a data file that can be reused by the network without retraining.
-			writeTrainedWeights();
-
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(!usePriorWeights){
+		initializeMultilayerFeedForward(trainingImages,trainingLabels);
+		} else{
+			readDataFromTrainedFiles();
+			numberOfInputNodes=hiddenLayerNodes.get(0).size();
 		}
-
-
+		//Test the Feed-Forward network
+		testMultilayerFeedForward(testingImages,testingLabels);
 	}
 
 	/*Returns the output from a given node after the input has been summed and processed by the activation function
@@ -155,8 +99,6 @@ public class NeuralNet {
 			sum=sum+(layerOfNodes.get(indexOfNodeinlayer).get(i) * outputFromPreviousLayer.get(i));
 		}
 		return activationFunction(sum);
-
-
 	}
 
 	/*Takes the weighted sum as the parameter and returns the output of the sigmoid activation function*/
@@ -211,7 +153,7 @@ public class NeuralNet {
 			double rawError=correctOutput-output;
 			double  additionalsquaredError =(Math.pow((rawError), 2)/2);
 			
-			errorLayer.add(rawError);//Or should it be (additionalsquaredError)?
+			errorLayer.add(rawError);
 			
 			error=error + additionalsquaredError;
 		}
@@ -278,20 +220,27 @@ public class NeuralNet {
 	public static void write (ArrayList<OutputVector> x) throws IOException{
 		BufferedWriter outputWriter = null;
 		String randomString=Double.toString(Math.random());
-		File file = new File("/Users/zackeryleman/Desktop/Results"+randomString+".txt");
+		File file = new File("/Users/zackeryleman/Desktop/NeuralNetOutput/Results"+randomString+".txt");
 
 		// if file does not exists, then create it
 		if (!file.exists()) {
 			file.createNewFile();
 		}
 		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
-		for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Learning rate: "+ Double.toString(learningRate));
 			outputWriter.newLine();
 			outputWriter.write("Epochs: "+ Integer.toString(epochs));
 			outputWriter.newLine();
-			outputWriter.write("Epochs: "+ Integer.toString(epochs));
+			outputWriter.write("Hidden Layers: "+ Integer.toString(numberOfhiddenLayers));
 			outputWriter.newLine();
+			outputWriter.write("Number of nodes in each hidden layer: "+ Integer.toString(numberOfHiddenNodesInLayer2));
+			outputWriter.newLine();
+			double percentCorrect= (countOfCorrectImagesAnalyzed/countOfImagesAnalyzed)*100;
+			outputWriter.write("Analyzed " + countOfImagesAnalyzed+ " images with " +percentCorrect+ " percent accuracy.");
+			outputWriter.newLine();
+			outputWriter.write("Training time: " + executionTime + " milliseconds");
+			outputWriter.newLine();
+			for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: "+ x.get(i).getCorrect()+"  ");
 			outputWriter.write("Neural net output: "+ Integer.toString(x.get(i).getNeuralNetOutput())+"   ");
 			outputWriter.write("Expected output: "+ Double.toString(x.get(i).getExpectedOutput()));
@@ -301,51 +250,23 @@ public class NeuralNet {
 		outputWriter.close();  
 	}
 	public static void writeTrainedWeights () throws IOException{
-		BufferedWriter outputWriter = null;
-		String randomString=Double.toString(Math.random());
-		File file = new File("/Users/zackeryleman/Desktop/TrainedData"+randomString+".txt");
-
-		// if file does not exists, then create it
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
-		
-			outputWriter.write("Learning rate: "+ Double.toString(learningRate));
-			outputWriter.newLine();
-			outputWriter.write("Epochs: "+ Integer.toString(epochs));
-			outputWriter.newLine();
-			outputWriter.write("Hidden Layers: "+ Integer.toString(numberOfhiddenLayers));
-			outputWriter.newLine();
-			outputWriter.write("Number of nodes in each hidden layer: "+ Integer.toString(numberOfHiddenNodesInLayer2));
-			outputWriter.newLine();
-			//We serialize these two data structures and write to file. These can then be read back into the neural net.
-			try{
-				File dataFile = new File("/Users/TrainedData2"+randomString+".txt");
-
-				// if file does not exists, then create it
-				if (!dataFile.exists()) {
-					dataFile.createNewFile();
-				}
-		         FileOutputStream fos= new FileOutputStream(dataFile.getAbsoluteFile());
-		         ObjectOutputStream oos= new ObjectOutputStream(fos);
-		         oos.writeObject(hiddenLayerNodes);
-		         oos.writeObject(outputLayerNodes);
+			//TODO: Make the metadata for the training parameters that created these weights  associated with these files.
+			
+			//We serialize these data structures and write to file. These can then be read back into the neural net.
+				FileOutputStream fout= new FileOutputStream ("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt");
+				ObjectOutputStream oos = new ObjectOutputStream(fout);
+				 oos.writeObject(outputLayerNodes);
+				FileOutputStream fout2= new FileOutputStream ("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt");
+				ObjectOutputStream oos2 = new ObjectOutputStream(fout2);
+		         oos2.writeObject(hiddenLayerNodes); 
+				//Need to include other possible hidden layers (Not yet implemented)
 		         oos.close();
-		         fos.close();
-		       }catch(IOException ioe){
-		            ioe.printStackTrace();
-		        }
-			
-			
-		
-			
-			//Need to include other possible hidden layers (Not yet implemented)
-		outputWriter.flush();  
-		outputWriter.close();  
+		         fout.close();
+		         oos2.close();
+		         fout2.close();
 	}
 
-	// NODE: This only works for one hidden layer right now
+	// NOTE: This only works for one hidden layer right now
 	/*This takes the training data and attempts to train the neural net to learn how to recognize  characters from images.*/
 	public static void trainTheNetwork(	ArrayList<DigitImage> trainingData){
 
@@ -397,5 +318,113 @@ public class NeuralNet {
 		}
 
 	}
+	
+	
+	public static void initializeMultilayerFeedForward(String trainingImages, String trainingLabels) throws IOException{
 
+				//Loads training and testing data sets
+				DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels,trainingImages);
+				ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
+				try {
+					//Our data structure holds the training data
+					trainingData= train.loadDigitImages();
+					//Alters data into proper form
+					for(int i=0; i<trainingData.size(); i++){
+						trainingData.get(i).vectorizeTrainingData();
+					}
+				} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+					//Looks at a representation of an image
+					//and determines how many pixels and thus how many input nodes are needed
+					//(one per pixel)
+					numberOfInputNodes=trainingData.get(0).getData().length;
+
+					
+					//Initializes all nodes in all other hidden layers except the first hidden layer
+					if(numberOfhiddenLayers>1){
+						for(int x=1; x<numberOfhiddenLayers; x++){
+							//Create array of nodes in a hidden layer
+							ArrayList<ArrayList<Double>> hidden = new ArrayList<ArrayList<Double>>();
+							//Creates one node at a time, adds to the hidden layer, and then adds the hidden layer to the parent array
+							for (int i=0; i<numberOfHiddenNodesInLayer2; i++) { 
+								//Create node by creating an array of weights on incoming edges to this node
+								ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2); //number of nodes in previous hidden layer
+								//Initialize all weights on paths pointing to this node to random values with mean 0 and variance of 1
+								for (int j=0; j<numberOfHiddenNodesInLayer2; j++) { 
+									weights.add(random.nextGaussian());
+								} 
+								//Adds node to the hidden layer
+								hidden.add(weights); 
+							}
+							//Adds hidden layer to parent array
+							hiddenLayers.add(hidden);
+						}
+					}
+
+					
+					//Initialize weights  with random values for all nodes in the first hidden layer.
+					for (int i=0; i<numberOfHiddenNodesInLayer2; i++) { 
+						ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes); 
+						for (int j=0; j<numberOfInputNodes; j++) { 
+							weights.add(random.nextGaussian());
+						} 
+						hiddenLayerNodes.add(weights); 
+					}
+					//Initialize weights with random values for all nodes in the output layer.
+					for (int i=0; i<numberOfOutputNodes; i++) { 
+						ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2); 
+						for (int j=0; j<numberOfHiddenNodesInLayer2; j++) { 
+							weights.add(random.nextGaussian());
+						} 
+						outputLayerNodes.add(weights); 
+					}
+				
+		
+					//Trains the network with the training Data
+					long startTime = System.currentTimeMillis();
+					trainTheNetwork(trainingData);
+					long endTime = System.currentTimeMillis();
+			    	 executionTime = endTime - startTime;
+			    	System.out.println("Training time: " + executionTime + " milliseconds");
+			    	//Creates a data files that can be reused by the network without retraining.
+					writeTrainedWeights();
+		
+	}
+
+	public static void testMultilayerFeedForward(String testingImages, String testingLabels) throws IOException{
+		
+		//Loads testing data set
+		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels,testingImages);
+		ArrayList<DigitImage> testingData= new ArrayList<DigitImage>();
+		try {
+			//Our data structure holds the testing data
+			 testingData= test.loadDigitImages();
+		} catch (IOException e) {
+				e.printStackTrace();
+			}
+		//Tests the network with the testing Data and prints results to file
+		write(solveTestingData(testingData));
+		//reports network Performance
+		double percentCorrect= (countOfCorrectImagesAnalyzed/countOfImagesAnalyzed)*100;
+		System.out.println("Analyzed " + countOfImagesAnalyzed+ " images with " +percentCorrect+ " percent accuracy.");
+		System.out.println("Look in /Users/\"your username\"/NeuralNetOutput/Desktop  directory to find  the output.");
+	}
+	
+	
+	public static void readDataFromTrainedFiles() throws IOException, ClassNotFoundException{
+		//Grabs weights to output Nodes
+		FileInputStream fin= new FileInputStream ("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt");
+		ObjectInputStream ois = new ObjectInputStream(fin);
+		outputLayerNodes = (ArrayList<ArrayList<Double>>) ois.readObject();
+		fin.close();
+		
+		FileInputStream fin2= new FileInputStream ("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt");
+		ObjectInputStream ois2 = new ObjectInputStream(fin2);
+		hiddenLayerNodes = (ArrayList<ArrayList<Double>>) ois2.readObject();
+		fin2.close();
+	
+	}
+	 
 }
