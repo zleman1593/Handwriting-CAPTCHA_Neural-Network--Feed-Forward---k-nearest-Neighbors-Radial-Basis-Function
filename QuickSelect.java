@@ -1,4 +1,7 @@
-
+/* This is a simple Quickslect implementation.
+ * Code taken from: http://code.google.com/p/extra-trees/source/browse/src/main/java/org/extratrees/QuickSelect.java
+ * The only modification from the code at the above source is the addition of the position() method.
+ */
 
 import java.util.ArrayList;
 
@@ -112,6 +115,7 @@ public class QuickSelect {
         a.set( index1, a.get( index2 ) );
         a.set( index2, tmp );
     }
+    
     //Should return the index of the element of interest in quickselect. Seems to be error prone.
     public  int position(ArrayList<Double>  arr, int value){
     	double valueToIndex = quickSelect(arr, value);
