@@ -12,7 +12,7 @@
 
 // IVY NOTE: You will need to change the user name to your user name in all paths like "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt"
 //ALSO: Add the folder NeuralNetOutput that is currently in the same folder as this file to your desktop.
-//ALSO: set epochs to 5 and hidden nodes to 6 for a fairly quick run to see how it works.
+//ALSO: set epochs to 5 and hidden nodes to 6 for a fairly quick run to see how it works..
 
 import java.util.*;
 import java.io.IOException;
@@ -69,7 +69,7 @@ public class NeuralNet {
 		// String testingLabels=args[10];
 
 		// These are hard coded versions of the above
-		numberOfHiddenNodesInLayer2 = 15;
+		numberOfHiddenNodesInLayer2 = 6;
 		epochs = 3;
 		learningRate = 0.5;
 		// Set this to true to avoid retraining. Allows the files in
@@ -155,7 +155,7 @@ public class NeuralNet {
 		tempOutput.add(outputLayerOutput);
 		double error = 0;
 		// Adds the error from each output node to an array which is then stored
-		// along with the other above arrays to be usedvlater.
+		// along with the other above arrays to be used later.
 		ArrayList<Double> errorLayer = new ArrayList<Double>();
 
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
@@ -224,7 +224,7 @@ public class NeuralNet {
 		String randomString = Double.toString(Math.random());
 		File file = new File("/Users/zackeryleman/Desktop/NeuralNetOutput/Results" + randomString + ".txt");
 
-		// If file does not exists, then create it
+		// If file does not exists, then create it.
 		if (!file.exists()) {
 			file.createNewFile();
 		}
@@ -253,9 +253,6 @@ public class NeuralNet {
 	}
 
 	public static void writeTrainedWeights() throws IOException {
-		// TODO: Make the metadata for the training parameters that created
-		// these weights associated with these files.
-
 		// We serialize these data structures and write to file. These can then
 		// be read back into the neural net.
 		FileOutputStream fout = new FileOutputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt");
@@ -268,6 +265,9 @@ public class NeuralNet {
 		fout.close();
 		oos2.close();
 		fout2.close();
+
+		
+		
 	}
 
 	/*
@@ -276,21 +276,12 @@ public class NeuralNet {
 	public static void trainTheNetwork(ArrayList<DigitImage> trainingData) {
 
 		for (int i = 0; i < epochs; i++) { // for each epoch
+			//for every image in the training file
+			for (int images = 0; images < trainingData.size(); images++) { 
+																			
 
-			for (int images = 0; images < trainingData.size(); images++) { // for
-																			// every
-																			// image
-																			// in
-																			// the
-																			// training
-																			// file
-
-				networkOutputError(trainingData, images);// This returns the
-															// summed error from
-															// all output nodes
-															// (Returned value
-															// is not currently
-															// used)
+				networkOutputError(trainingData, images);
+				// This returns the summed error from all output nodes (NOTE:Returned value is not currently used.)
 
 				// Update the weights to the output nodes
 				for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES; ii++) {
@@ -404,7 +395,7 @@ public class NeuralNet {
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-		System.out.println("Look in /Users/\"your username\"/NeuralNetOutput/Desktop  directory to find  the output.");
+		System.out.println("Look in /Users/\"your username\"/Desktop/NeuralNetOutput  directory to find  the output.");
 	}
 
 	public static void readDataFromTrainedFiles() throws IOException, ClassNotFoundException {
