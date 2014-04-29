@@ -20,69 +20,52 @@ import java.awt.image.Raster;
 
 public class loadCaptchaImage {
 	public static BufferedReader fileReader;
-	
 
-	
 	public static void main(String args[]) {
-		
-		
+
 		BufferedImage img = null;
 		try {
-		    img = ImageIO.read(new File("xfnrsn.gif"));
+			img = ImageIO.read(new File("xfnrsn.gif"));
 		} catch (IOException e) {
 		}
 		getHistogram(img);
-		//openFile("xfnrsn.gif");
-		
-		
-		//closeFile();
-	
+		// openFile("xfnrsn.gif");
+
+		// closeFile();
+
 	}
-	
-	
-	
+
 	public static void openFile(String filename) {
-        try { //try to read from file
-            fileReader = new BufferedReader(new FileReader(filename));
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-	
-	
-	
-	   
-    public static void closeFile() {
-        try {
-            if (fileReader != null)fileReader.close();
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    
-    
-  
-    public static void getHistogram(BufferedImage image ) {
-    	
-         int height = image.getHeight();
-         int width = image.getWidth();
-         Raster raster = image.getRaster();
-         int[][] bins = new int[3][256];
+		try { // try to read from file
+			fileReader = new BufferedReader(new FileReader(filename));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-         for (int i = 0; i < width; i++) 
-             for (int j = 0; j < height; j++) {
-                 bins[0][raster.getSample(i, j, 0)]++;
-                 bins[1][raster.getSample(i, j, 1)]++;
-                 bins[2][raster.getSample(i, j, 2)]++;
-             }
-    System.out.println(" ");
-}
+	public static void closeFile() {
+		try {
+			if (fileReader != null)
+				fileReader.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 
-    
+	public static void getHistogram(BufferedImage image) {
 
-    
-    
+		int height = image.getHeight();
+		int width = image.getWidth();
+		Raster raster = image.getRaster();
+		int[][] bins = new int[3][256];
+
+		for (int i = 0; i < width; i++)
+			for (int j = 0; j < height; j++) {
+				bins[0][raster.getSample(i, j, 0)]++;
+				bins[1][raster.getSample(i, j, 1)]++;
+				bins[2][raster.getSample(i, j, 2)]++;
+			}
+		System.out.println(" ");
+	}
 
 }
