@@ -56,6 +56,7 @@ public class NeuralNet {
 	// layer and then reset for the next image.
 	// Prevents duplicate calculations from being performed.
 	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
+	public static ArrayList<Double> miniBatch = new ArrayList<Double>();
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
@@ -69,8 +70,8 @@ public class NeuralNet {
 		// String testingLabels=args[10];
 
 		// These are hard coded versions of the above
-		numberOfHiddenNodesInLayer2 = 6;
-		epochs = 3;
+		numberOfHiddenNodesInLayer2 = 34;
+		epochs = 10;
 		learningRate = 0.5;
 		// Set this to true to avoid retraining. Allows the files in
 		// NeuralNetOutput folder to be loaded and used.
@@ -88,6 +89,7 @@ public class NeuralNet {
 		}
 		// Test the Feed-Forward network
 		testMultilayerFeedForward(testingImages, testingLabels);
+		
 	}
 
 	/*
@@ -289,15 +291,26 @@ public class NeuralNet {
 						// Grabs the error that was calculated for the output of
 						// this output node
 						double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-						// Update the weight using gradient descent
-						outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-								+(learningRate
-										*error
-										*sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-										*tempOutput.get(tempOutput.size() - 3).get(j)));
+						
+						if (images%10!=0){
+							
+							miniBatch.add((error
+								*sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+								*tempOutput.get(tempOutput.size() - 3).get(j)));
+							
+						}else{
+							double sum=0;
+							for (int o=0;o<miniBatch.size();o++){
+								sum = sum + miniBatch.get(o);
+							}
+							 miniBatch = new ArrayList<Double>();
+							// Update the weight using gradient descent
+							outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)+(sum*learningRate/10));
+					}
+						
 					}
 				}
-
+				 miniBatch = new ArrayList<Double>();
 				// Update the weights to the nodes going to the hidden nodes
 				for (int ii = 0; ii < hiddenLayerNodes.size(); ii++) {
 					for (int j = 0; j < numberOfInputNodes; j++) {
@@ -309,17 +322,48 @@ public class NeuralNet {
 									*outputLayerNodes.get(k).get(ii));
 
 						}
-						//Update the weight using gradient descent back propagation
-						hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-								+(learningRate
-										*error
-										*tempOutput.get(0).get(j))
-										*sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
+						
+						
+								
+								if (images%10!=0){
+									
+									miniBatch.add(error
+											*tempOutput.get(0).get(j)
+											*sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
+									
+								}else{
+									double sum=0;
+									for (int o=0;o<miniBatch.size();o++){
+										sum = sum + miniBatch.get(o);
+									}
+									 miniBatch = new ArrayList<Double>();
+										//Update the weight using gradient descent back propagation
+										hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)+(sum*learningRate/10));
+									
+}
+						
+						
+						
+						
+						
+						
+					
 					}
 				}
 
 				// Resets temporary data structure
 				tempOutput = new ArrayList<ArrayList<Double>>();
+			}
+			System.out.println("Epoch " + i + " has finished.");
+			
+			//Only temporarliy added
+			countOfImagesAnalyzed = 0;
+			countOfCorrectImagesAnalyzed = 0;
+			try {
+				testMultilayerFeedForward("Testing-images", "Testing-Labels");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}
@@ -413,3 +457,6 @@ public class NeuralNet {
 	}
 
 }
+
+
+
