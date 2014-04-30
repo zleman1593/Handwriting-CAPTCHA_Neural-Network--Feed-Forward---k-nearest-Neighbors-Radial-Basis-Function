@@ -69,9 +69,9 @@ public class NeuralNet {
 		// String testingLabels=args[10];
 
 		// These are hard coded versions of the above
-		numberOfHiddenNodesInLayer2 = 6;
-		epochs = 3;
-		learningRate = 0.5;
+		numberOfHiddenNodesInLayer2 = 30;
+		epochs = 10;
+		learningRate = 0.3;
 		// Set this to true to avoid retraining. Allows the files in
 		// NeuralNetOutput folder to be loaded and used.
 		usePriorWeights = false;
@@ -88,6 +88,9 @@ public class NeuralNet {
 		}
 		// Test the Feed-Forward network
 		testMultilayerFeedForward(testingImages, testingLabels);
+		
+	
+
 	}
 
 	/*
@@ -144,10 +147,10 @@ public class NeuralNet {
 
 		// Creates an Arraylist holding the output of each node in this layer
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
-		tempOutput.add(rawSingleImageData);// Stores result to be used later
-											// (This will be moved into the
-											// "outPutOfLayer" method at some
-											// point.)
+		//This step may be unnecessary. Be careful when removing as other indicies will need to change.
+		tempOutput.add(rawSingleImageData);
+		
+		// Stores result to be used later(This will be moved into the "outPutOfLayer" method at some point.)
 		ArrayList<Double> hidenLayerOutput = outPutOfLayer(hiddenLayerNodes, rawSingleImageData);
 		tempOutput.add(hidenLayerOutput);
 		// Just like the others
@@ -321,6 +324,14 @@ public class NeuralNet {
 				// Resets temporary data structure
 				tempOutput = new ArrayList<ArrayList<Double>>();
 			}
+			// Test the Feed-Forward network
+			try {
+				testMultilayerFeedForward("Testing-images", "Testing-Labels");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("Epoch" +i+ " is done.");
 
 		}
 
