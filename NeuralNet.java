@@ -182,7 +182,7 @@ public class NeuralNet {
 	public static OutputVector networkSolution(ArrayList<DigitImage> networkInputData, int imageNumber) {
 
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
-		ArrayList<Double> hidenLayerOutput = outPutOfLayer(hiddenLayerNodes, rawSingleImageData);
+		ArrayList<Double> hidenLayerOutput = outPutOfLayer2(hiddenLayerNodes, rawSingleImageData);
 		ArrayList<Double> outputLayerOutput = outPutOfLayer(outputLayerNodes, hidenLayerOutput);
 
 		double networkOutput = 0;
@@ -421,6 +421,43 @@ public class NeuralNet {
 		hiddenLayerNodes = (ArrayList<ArrayList<Double>>) ois2.readObject();
 		fin2.close();
 
+	}
+	
+	
+	public static ArrayList<Double> outPutOfLayer2(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
+		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
+		for (int i = 0; i < currentLayer.size(); i++) {
+			double output = nodeOutput2(currentLayer, outputFromPreviousLayer, i);
+			outputOfCurrentlayer.add(output);
+		}
+		return outputOfCurrentlayer;
+	}
+	
+	public static double nodeOutput2(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
+		double sum = 0;
+		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
+			
+			double blob=0;
+			
+			blob = blob + outputFromPreviousLayer.get(i);
+			if(!(i<=29)){
+			blob = blob + outputFromPreviousLayer.get(i-28);
+			blob = blob + outputFromPreviousLayer.get(i-29);
+			blob = blob + outputFromPreviousLayer.get(i-27);
+			blob = blob + outputFromPreviousLayer.get(i-1);
+			}
+			if(!(i>=754)){
+			blob = blob + outputFromPreviousLayer.get(i+1);
+			blob = blob + outputFromPreviousLayer.get(i+28);
+			blob = blob + outputFromPreviousLayer.get(i+27);
+			blob = blob + outputFromPreviousLayer.get(i+29);
+			}
+			if(blob>=1){
+				blob=1;
+			}
+			sum = sum + (blob * layerOfNodes.get(indexOfNodeinlayer).get(i));
+		}
+		return activationFunction(sum);
 	}
 
 }
