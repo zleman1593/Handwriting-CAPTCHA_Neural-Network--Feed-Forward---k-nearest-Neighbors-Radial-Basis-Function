@@ -67,8 +67,8 @@ public class KNearestNeighbors {
 
 		long startTime = System.currentTimeMillis();
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
-		// Currently dividing by 3 to only use a third of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size() / 3; i++) {
+		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
+		for (int i = 0; i < trainingData.size() / 2; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
@@ -109,12 +109,19 @@ public class KNearestNeighbors {
 	public static double nodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
+			
+			//IF: grey scale images use the following.  Note: this means commenting out the otsu()
+			//method in the "DigitImage Class" to prevent their conversion to a binary image
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
-			if(output==0){
+			
+			//ELSE USE: (output==0) instead for a binary image
+			if(output<=20){
 				output=1;
 			}else{
 				output=0;
 			}
+			
+			
 			sum = sum + output ;
 		}
 		return sum;
@@ -132,7 +139,7 @@ public class KNearestNeighbors {
 
 	public static void solveTestingData(ArrayList<DigitImage> networkInputData) {
 		// Just look at 20 images for now
-		int numberOfImagesToDebugWith = 20;
+		int numberOfImagesToDebugWith = 200;
 
 		long startTime = System.currentTimeMillis();
 		for (int i = 1; i <= numberOfImagesToDebugWith; i++) {
@@ -210,11 +217,11 @@ public class KNearestNeighbors {
 			if (number == currentOutput) {
 				countOfCorrectImagesAnalyzed++;
 				System.out.println("Network was Correct");
-			} else {
+			} //else {
 				System.out.println(" Network was Wrong");
 			}
 			System.out.println(" ");
-		}
+		//}
 		// -----------------------------------------
 
 		long endTime = System.currentTimeMillis();
