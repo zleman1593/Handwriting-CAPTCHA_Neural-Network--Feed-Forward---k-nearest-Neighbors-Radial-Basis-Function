@@ -40,7 +40,7 @@ public class KNearestNeighbors {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		 k = 3;
+		 k = 2;
 
 		initializeKNearestNeighbours(trainingImages, trainingLabels);
 
@@ -85,10 +85,10 @@ public class KNearestNeighbors {
 
 	}
 
-	public static void testKNearestNeighbours(String testingImages, String testingLabels) throws IOException {
+	public static void testKNearestNeighbours(String testingImages, String testingLabels, int k) throws IOException {
 
 		// Loads testing data set
-		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages, int k);
+		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages);
 		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the testing data
@@ -150,7 +150,7 @@ public class KNearestNeighbors {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues = outPutOfLayer(hiddenLayerNodes, temp);
 
-			??I IF K=1 just run the commented out code as it is faster.	
+			//I IF K=1 just run the commented out code as it is faster.	
 				
 			/*	
 			
