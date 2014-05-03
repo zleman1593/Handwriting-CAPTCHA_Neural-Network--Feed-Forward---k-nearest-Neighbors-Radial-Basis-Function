@@ -67,7 +67,7 @@ public class KNearestNeighbors {
 		long startTime = System.currentTimeMillis();
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
 		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size() / 2; i++) {
+		for (int i = 0; i < trainingData.size(); i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
@@ -226,11 +226,11 @@ public class KNearestNeighbors {
 			if (number == currentOutput) {
 				countOfCorrectImagesAnalyzed++;
 				System.out.println("Network was Correct");
-			} //else {
+			} else {
 				System.out.println(" Network was Wrong");
 			}
 			System.out.println(" ");
-		//}
+		}
 		// -----------------------------------------
 
 		long endTime = System.currentTimeMillis();
