@@ -40,7 +40,7 @@ public class KNearestNeighbors {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		 k = 2;
+		 k = 5;
 
 		initializeKNearestNeighbours(trainingImages, trainingLabels);
 
@@ -119,7 +119,7 @@ public class KNearestNeighbors {
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
 			
 			//ELSE USE: (output==0) instead for a binary image
-			if(output<=20){
+			if(output<=30){
 				output=1;
 			}else{
 				output=0;
@@ -231,6 +231,25 @@ public class KNearestNeighbors {
 	
 	// This method finds the most commonly occurred output among the best K outputs.
 	public static int findMostCommonOccurrenceAmongKOutputs (ArrayList<Integer> bestKOutputsList) {
+		//This is simpler:
+		int[]  holder=new int[10];
+		for (int m = 0; m < holder.length; m++) {
+			holder[m]=0;
+		}
+		for (int m = 0; m < bestKOutputsList.size(); m++) {
+			holder[bestKOutputsList.get(m)]++;	
+		}
+		int r=0;
+		int max=0;
+		for (int m = 0; m < holder.length; m++) {
+		if(holder[m]>max){
+			max=holder[m];
+			r=m;
+		}
+		}
+		return r;
+		
+		/*
 		// The following two lines sorts the bestKOutputsList in descending order. 
 		Collections.sort(bestKOutputsList); 
 		Collections.reverse(bestKOutputsList);
@@ -256,6 +275,6 @@ public class KNearestNeighbors {
 				}
 			}
 		}
-		return bestKOutputsList.get(bestOutputIndex);
+		return bestKOutputsList.get(bestOutputIndex);*/
 	}
 }
