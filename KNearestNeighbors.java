@@ -21,7 +21,7 @@ public class KNearestNeighbors {
 	public static int numberOfInputNodes;
 	// Create array of Nodes in first layer and associate done that points to the correct output
 	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
-	public static ArrayList<Double> hiddenLayerToOutput = new ArrayList<Double>();
+	public static ArrayList<Integer> hiddenLayerToOutput = new ArrayList<Integer>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -71,7 +71,7 @@ public class KNearestNeighbors {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
-			hiddenLayerToOutput.add((double) trainingData.get(i).getLabel());
+			hiddenLayerToOutput.add((int) trainingData.get(i).getLabel());
 		}
 
 		long endTime = System.currentTimeMillis();
