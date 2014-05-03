@@ -24,7 +24,8 @@ public class KNearestNeighbors {
 	public static ArrayList<Integer> hiddenLayerToOutput = new ArrayList<Integer>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues2 = new ArrayList<Double>();
-	
+	//equal to the number of threads used-1
+	public static int threadFinished=1;
 	
 	// Tracks the number of images processed in the testing set.
 	public static double countOfImagesAnalyzed2 = 0;
@@ -50,14 +51,17 @@ public class KNearestNeighbors {
 		 k = 3;
 
 		initializeKNearestNeighbours(trainingImages, trainingLabels);
-
+		long startTime = System.currentTimeMillis();
 		Runnable r1 = new Runnable() {
 			  public void run() {
 					// Test the test K-Nearest Neighbors Network
 					try {
 						testKNearestNeighbours("Testing-images", "Testing-Labels", 3);
+						threadFinished--;
+						if(threadFinished==0){
 						double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2) / (countOfImagesAnalyzed+countOfImagesAnalyzed2)) * 100;
-						System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+						System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
+						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -69,8 +73,12 @@ public class KNearestNeighbors {
 						// Test the test K-Nearest Neighbors Network
 						try {
 							testKNearestNeighbours2("Testing-images", "Testing-Labels", 3);
+							threadFinished--;
+							if(threadFinished==0){
 							double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2) / (countOfImagesAnalyzed+countOfImagesAnalyzed2)) * 100;
-							System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+							System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
+					
+							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -80,15 +88,8 @@ public class KNearestNeighbors {
 			
 				Thread thr1 = new Thread(r1);
 				Thread thr2 = new Thread(r2);
-				long startTime = System.currentTimeMillis();
 				thr1.start();
 				thr2.start();
-				// reports network Performance
-				double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2) / (countOfImagesAnalyzed+countOfImagesAnalyzed2)) * 100;
-				System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-				long endTime = System.currentTimeMillis();
-				executionTime = endTime - startTime;
-				System.out.println("Running time for " + countOfImagesAnalyzed + " images: " + executionTime + " milliseconds");
 
 				
 				
@@ -147,9 +148,7 @@ public class KNearestNeighbors {
 		// write(solveTestingData(testingData));
 		solveTestingData(testingData, k);
 
-		// reports network Performance
-		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
-		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		
 	}
 
 	/*
@@ -165,7 +164,7 @@ public class KNearestNeighbors {
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
 			
 			//ELSE USE: (output==0) instead for a binary image
-			if(output<=30){
+			if(output<=20){
 				output=1;
 			}else{
 				output=0;
@@ -237,13 +236,6 @@ public class KNearestNeighbors {
 			}
 			System.out.println(" ");
 		}
-		// -----------------------------------------
-
-		//long endTime = System.currentTimeMillis();
-		//executionTime = endTime - startTime;
-		//System.out.println("Running time for " + countOfImagesAnalyzed + " images: " + executionTime + " milliseconds");
-
-	
 		
 	}
 	
@@ -396,12 +388,5 @@ public static void solveTestingData2(ArrayList<DigitImage> networkInputData, int
 		}
 		System.out.println(" ");
 	}
-	// -----------------------------------------
-
-	//long endTime = System.currentTimeMillis();
-	//executionTime = endTime - startTime;
-	//System.out.println("Running time for " + countOfImagesAnalyzed + " images: " + executionTime + " milliseconds");
-
-
 }
 }
