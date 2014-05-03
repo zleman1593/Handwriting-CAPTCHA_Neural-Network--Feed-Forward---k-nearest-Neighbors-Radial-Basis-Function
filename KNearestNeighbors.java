@@ -94,7 +94,7 @@ public class KNearestNeighbors {
 
 		// Tests the network with the testing Data and prints results to file
 		// write(solveTestingData(testingData));
-		solveTestingData(testingData);
+		solveTestingData(testingData, 10);
 
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
@@ -136,7 +136,7 @@ public class KNearestNeighbors {
 		return outputOfCurrentlayer;
 	}
 
-	public static void solveTestingData(ArrayList<DigitImage> networkInputData, k) {
+	public static void solveTestingData(ArrayList<DigitImage> networkInputData, int k) {
 		// Just look at 20 images for now
 		int numberOfImagesToDebugWith = 200;
 
@@ -223,7 +223,7 @@ public class KNearestNeighbors {
 			System.out.println("Correct answer: " + number);
 
 			countOfImagesAnalyzed++;
-			if (number == currentOutput) {
+			if (number == output) {
 				countOfCorrectImagesAnalyzed++;
 				System.out.println("Network was Correct");
 			} else {
