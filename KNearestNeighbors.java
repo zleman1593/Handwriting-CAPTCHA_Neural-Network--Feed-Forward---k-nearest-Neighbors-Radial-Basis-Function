@@ -1,4 +1,3 @@
-
 //TODO (IVY): The "solveTestingData" method needs to be written to use the k-nearest neighbors. Currently only uses the closest neigbor.
 
 import java.util.*;
@@ -23,7 +22,7 @@ public class KNearestNeighbors {
 	// Create array of Nodes in first layer and associate done that points to the correct output
 	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<Double> hiddenLayerToOutput = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDotedOutputValues = new ArrayList<Double>();
+	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
@@ -137,18 +136,18 @@ public class KNearestNeighbors {
 		return outputOfCurrentlayer;
 	}
 
-	public static void solveTestingData(ArrayList<DigitImage> networkInputData) {
+	public static void solveTestingData(ArrayList<DigitImage> networkInputData, k) {
 		// Just look at 20 images for now
 		int numberOfImagesToDebugWith = 200;
 
 		long startTime = System.currentTimeMillis();
 		for (int i = 1; i <= numberOfImagesToDebugWith; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDotedOutputValues = outPutOfLayer(hiddenLayerNodes, temp);
+			hiddenLayerDottedOutputValues = outPutOfLayer(hiddenLayerNodes, temp);
 
 			// Find the ten nodes with the highest output value
-			QuickSelect o = new QuickSelect();
-			int k = hiddenLayerDotedOutputValues.size();
+		//	QuickSelect o = new QuickSelect();
+		//	int k = hiddenLayerDottedOutputValues.size();
 
 				//FIX-THROWS ERROS----------------------------------------------------------------
 	//The idea here is to find the ten nodes with the highest output values using quicksort in the unsorted ArrayList  "hiddenLayerDotedOutputValues".
@@ -201,15 +200,25 @@ public class KNearestNeighbors {
 				
 			//Find which node has the maximum output and then
 			//return the number that is at that node position in the associated output array.
-			double currentOutput = 0;
-			double currentMax = 0;
-			for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
-				if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
-					currentMax = hiddenLayerDotedOutputValues.get(j);
-					currentOutput = hiddenLayerToOutput.get(j);
-				}
-			}
-			System.out.println("Guess using the closest match: " + currentOutput);
+			// double currentOutput = 0;
+			// double currentMax = 0;
+			// for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
+			// 	if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
+			// 		currentMax = hiddenLayerDotedOutputValues.get(j);
+			// 		currentOutput = hiddenLayerToOutput.get(j);
+			// 	}
+			// }
+			
+			int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues.size()];
+			ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
+			int output = 0;
+			
+			initializeIndices(indicesOfDottedOutputList);
+			parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues);
+			findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
+			output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
+			
+			System.out.println("Guess using the closest match: " + output);
 			double number = networkInputData.get(i).getLabel();
 			System.out.println("Correct answer: " + number);
 
@@ -229,5 +238,65 @@ public class KNearestNeighbors {
 		System.out.println("Running time for " + countOfImagesAnalyzed + " images: " + executionTime + " milliseconds");
 
 	}
-
+	
+	// Initialize the ordered indicies for the hiddenLayerDottedOuput list
+	public static void initializeIndices (int[] indicesArray) {
+		for (int index = 0; index < indicesArray.length; index++) {
+			indicesArray[index] = index;
+		}
+	}
+		
+	public static void parallelSorting(int[] indicesToBeSorted, ArrayList<Double> listToBeSorted) {
+		for (int i = 0; i < listToBeSorted.size(); i++) {
+			for (int j = i + 1; j < listToBeSorted.size(); j++) {
+				// Swap so that bigger numbers go in the front.
+				if (listToBeSorted.get(j) > listToBeSorted.get(i)) {
+					Double temp = new Double(listToBeSorted.get(i));
+					listToBeSorted.set(i, listToBeSorted.get(j));
+					listToBeSorted.set(j, temp);
+					int tempIndex = i;
+					indicesToBeSorted[i] = j; 
+					indicesToBeSorted[j] = tempIndex; 
+				}
+			}
+		}
+	}
+	
+	// The bestKOutputsList is constructed from the sorted hiddenLaYerDottedOutput lists's indices and the 
+	// values of hiddenLayerToOutput list at the corresponding indices. 	
+	public static void findBestKOutputs(int[] sortedIndices, ArrayList<Integer> outputsList, ArrayList<Integer> bestKOutputsList, int k) {
+		for (int i = 0; i < k; i++) {
+			bestKOutputsList.add(outputsList.get(sortedIndices[i]));
+		}
+	}
+	
+	// This method finds the most commonly occurred output among the best K outputs.
+	public static int findMostCommonOccurrenceAmongKOutputs (ArrayList<Integer> bestKOutputsList) {
+		// The following two lines sorts the bestKOutputsList in descending order. 
+		Collections.sort(bestKOutputsList); 
+		Collections.reverse(bestKOutputsList);
+		// The following code finds the most frequently occurred value in the list.
+		int bestOutputIndex = 0; // The index of the most occurred output.
+		int maxNumOccurrences = 0; // Maximum number of occurrences for one output.
+		for (int m = 0; m < bestKOutputsList.size(); m++) {
+			int occurrences = 0;
+			for (int n = m + 1; n < bestKOutputsList.size(); n++) {
+				// If the output is repeated
+				if (bestKOutputsList.get(m).equals(bestKOutputsList.get(n))) {
+					occurrences++;
+				}
+				else {
+					// Going to the next output (because the array is sorted), store data. 
+					if (occurrences > maxNumOccurrences) {
+						maxNumOccurrences = occurrences;
+						bestOutputIndex = m;
+					}
+					// Outer loop jumps to next output.
+					m = n - 1;
+					break;
+				}
+			}
+		}
+		return bestKOutputsList.get(bestOutputIndex);
+	}
 }
