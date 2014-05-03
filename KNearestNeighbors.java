@@ -239,15 +239,15 @@ public class KNearestNeighbors {
 		for (int m = 0; m < bestKOutputsList.size(); m++) {
 			holder[bestKOutputsList.get(m)]++;	
 		}
-		int r=0;
+		int mostCommonValue=0;
 		int max=0;
 		for (int m = 0; m < holder.length; m++) {
 		if(holder[m]>max){
 			max=holder[m];
-			r=m;
+			mostCommonValue=m;
 		}
 		}
-		return r;
+		return mostCommonValue;
 		
 		/*
 		// The following two lines sorts the bestKOutputsList in descending order. 
