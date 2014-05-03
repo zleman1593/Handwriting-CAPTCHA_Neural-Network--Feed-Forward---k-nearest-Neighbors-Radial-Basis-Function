@@ -25,12 +25,26 @@ public class KNearestNeighbors {
 	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues2 = new ArrayList<Double>();
 	//equal to the number of threads used-1
-	public static int threadFinished=1;
+	public static int threadFinished=3;
 	
 	// Tracks the number of images processed in the testing set.
 	public static double countOfImagesAnalyzed2 = 0;
 	// Tracks the number of images correctly identified in the testing set.
 	public static double countOfCorrectImagesAnalyzed2 = 0;
+	
+	// Tracks the number of images processed in the testing set.
+	public static double countOfImagesAnalyzed3 = 0;
+	// Tracks the number of images correctly identified in the testing set.
+	public static double countOfCorrectImagesAnalyzed3 = 0;
+	
+	
+	// Tracks the number of images processed in the testing set.
+	public static double countOfImagesAnalyzed4 = 0;
+	// Tracks the number of images correctly identified in the testing set.
+	public static double countOfCorrectImagesAnalyzed4 = 0;
+	
+	
+	
 
 	//How many nearest Neighbors to use
 	public static int k;
@@ -59,7 +73,7 @@ public class KNearestNeighbors {
 						testKNearestNeighbours("Testing-images", "Testing-Labels", 3);
 						threadFinished--;
 						if(threadFinished==0){
-						double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2) / (countOfImagesAnalyzed+countOfImagesAnalyzed2)) * 100;
+						double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 						System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
 						}
 					} catch (IOException e) {
@@ -75,9 +89,8 @@ public class KNearestNeighbors {
 							testKNearestNeighbours2("Testing-images", "Testing-Labels", 3);
 							threadFinished--;
 							if(threadFinished==0){
-							double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2) / (countOfImagesAnalyzed+countOfImagesAnalyzed2)) * 100;
-							System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
-					
+								double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
+								System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -85,11 +98,47 @@ public class KNearestNeighbors {
 						}
 				  }
 				};
+				Runnable r3 = new Runnable() {
+					  public void run() {
+							// Test the test K-Nearest Neighbors Network
+							try {
+								testKNearestNeighbours3("Testing-images", "Testing-Labels", 3);
+								threadFinished--;
+								if(threadFinished==0){
+									double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
+									System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
+								}
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					  }
+					};
+					Runnable r4 = new Runnable() {
+						  public void run() {
+								// Test the test K-Nearest Neighbors Network
+								try {
+									testKNearestNeighbours4("Testing-images", "Testing-Labels", 3);
+									threadFinished--;
+									if(threadFinished==0){
+										double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
+										System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
+									}
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+						  }
+						};
 			
 				Thread thr1 = new Thread(r1);
 				Thread thr2 = new Thread(r2);
+				Thread thr3 = new Thread(r3);
+				Thread thr4 = new Thread(r4);
 				thr1.start();
 				thr2.start();
+				thr3.start();
+				thr4.start();
 
 				
 				
@@ -388,5 +437,148 @@ public static void solveTestingData2(ArrayList<DigitImage> networkInputData, int
 		}
 		System.out.println(" ");
 	}
+}
+
+public static void testKNearestNeighbours3(String testingImages, String testingLabels, int k) throws IOException {
+
+	// Loads testing data set
+	DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages);
+	ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
+	try {
+		// Our data structure holds the testing data
+		testingData = test.loadDigitImages();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+
+	// Tests the network with the testing Data and prints results to file
+	// write(solveTestingData(testingData));
+	solveTestingData3(testingData, k);
+
+}
+
+public static void solveTestingData3(ArrayList<DigitImage> networkInputData, int k) {
+// Just look at 20 images for now
+int numberOfImagesToDebugWith = 200;
+
+//long startTime = System.currentTimeMillis();
+for (int i = numberOfImagesToDebugWith; i >=numberOfImagesToDebugWith/2 ; i--) {
+	ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
+	hiddenLayerDottedOutputValues2 = outPutOfLayer(hiddenLayerNodes, temp);
+	
+	
+	//I IF K=1 just run the commented out code as it is faster.	
+		
+	/*	
+	
+		
+	//Find which node has the maximum output and then
+	//return the number that is at that node position in the associated output array.
+	 double currentOutput = 0;
+	 double currentMax = 0;
+	 for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
+		if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
+			currentMax = hiddenLayerDotedOutputValues.get(j);
+			currentOutput = hiddenLayerToOutput.get(j);
+	 	}
+	 }
+	 
+	 */
+	
+	int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues2.size()];
+	ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
+	int output = 0;
+	
+	initializeIndices(indicesOfDottedOutputList);
+	parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues2);
+	findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
+	output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
+	
+	System.out.println("Guess using the closest match: " + output);
+	double number = networkInputData.get(i).getLabel();
+	System.out.println("Correct answer: " + number);
+
+	countOfImagesAnalyzed2++;
+	if (number == output) {
+		countOfCorrectImagesAnalyzed2++;
+		System.out.println("Network was Correct");
+	} else {
+		System.out.println(" Network was Wrong");
+	}
+	System.out.println(" ");
+}
+}
+
+
+
+
+public static void testKNearestNeighbours4(String testingImages, String testingLabels, int k) throws IOException {
+
+	// Loads testing data set
+	DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages);
+	ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
+	try {
+		// Our data structure holds the testing data
+		testingData = test.loadDigitImages();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+
+	// Tests the network with the testing Data and prints results to file
+	// write(solveTestingData(testingData));
+	solveTestingData4();
+
+}
+
+public static void solveTestingData4(ArrayList<DigitImage> networkInputData, int k) {
+// Just look at 20 images for now
+int numberOfImagesToDebugWith = 200;
+
+//long startTime = System.currentTimeMillis();
+for (int i = numberOfImagesToDebugWith; i >=numberOfImagesToDebugWith/2 ; i--) {
+	ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
+	hiddenLayerDottedOutputValues2 = outPutOfLayer(hiddenLayerNodes, temp);
+	
+	
+	//I IF K=1 just run the commented out code as it is faster.	
+		
+	/*	
+	
+		
+	//Find which node has the maximum output and then
+	//return the number that is at that node position in the associated output array.
+	 double currentOutput = 0;
+	 double currentMax = 0;
+	 for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
+		if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
+			currentMax = hiddenLayerDotedOutputValues.get(j);
+			currentOutput = hiddenLayerToOutput.get(j);
+	 	}
+	 }
+	 
+	 */
+	
+	int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues2.size()];
+	ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
+	int output = 0;
+	
+	initializeIndices(indicesOfDottedOutputList);
+	parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues2);
+	findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
+	output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
+	
+	System.out.println("Guess using the closest match: " + output);
+	double number = networkInputData.get(i).getLabel();
+	System.out.println("Correct answer: " + number);
+
+	countOfImagesAnalyzed2++;
+	if (number == output) {
+		countOfCorrectImagesAnalyzed2++;
+		System.out.println("Network was Correct");
+	} else {
+		System.out.println(" Network was Wrong");
+	}
+	System.out.println(" ");
+}
 }
 }
