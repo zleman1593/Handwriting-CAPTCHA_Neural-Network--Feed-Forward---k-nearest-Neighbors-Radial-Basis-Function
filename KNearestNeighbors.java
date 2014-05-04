@@ -27,7 +27,7 @@ public class KNearestNeighbors {
 	public static ArrayList<Double> hiddenLayerDottedOutputValues3 = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues4 = new ArrayList<Double>();
 	//equal to the number of threads used-1
-	public static int threadFinished=3;
+	public static int threadFinished=4;
 	
 	// Tracks the number of images processed in the testing set.
 	public static double countOfImagesAnalyzed2 = 0;
@@ -81,6 +81,7 @@ public class KNearestNeighbors {
 							double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 							System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 							System.out.println("Execution time: " + executionTime + " milliseconds");
+							System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -101,6 +102,8 @@ public class KNearestNeighbors {
 								double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 								System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 								System.out.println("Execution time: " + executionTime + " milliseconds");
+								System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
+							
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -121,6 +124,7 @@ public class KNearestNeighbors {
 									double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 									System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 									System.out.println("Execution time: " + executionTime + " milliseconds");
+									System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
 								}
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
@@ -141,6 +145,7 @@ public class KNearestNeighbors {
 										double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 										System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 										System.out.println("Execution time: " + executionTime + " milliseconds");
+										System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
 									}
 								} catch (IOException e) {
 									// TODO Auto-generated catch block
@@ -186,7 +191,7 @@ public class KNearestNeighbors {
 		long startTime = System.currentTimeMillis();
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
 		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size()/2; i++) {
+		for (int i = 0; i < trainingData.size()/3; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
@@ -258,7 +263,7 @@ public class KNearestNeighbors {
 		int numberOfImagesToDebugWith = 200;
 
 		long startTime = System.currentTimeMillis();
-		for (int i = 1; i <= numberOfImagesToDebugWith/4; i++) {
+		for (int i = 0; i <= (numberOfImagesToDebugWith/4)-1; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues = outPutOfLayer(hiddenLayerNodes, temp);
 			
@@ -483,7 +488,7 @@ int numberOfImagesToDebugWith = 200;
 
 
 //long startTime = System.currentTimeMillis();
-for (int i =( (numberOfImagesToDebugWith*3)/4); i >=numberOfImagesToDebugWith/2 ; i--) {
+for (int i =( (numberOfImagesToDebugWith*3)/4)-1; i >=numberOfImagesToDebugWith/2 ; i--) {
 	ArrayList<Double> temp = networkInputData.get((int)i).getArrayListData();
 	hiddenLayerDottedOutputValues3 = outPutOfLayer(hiddenLayerNodes, temp);
 	
@@ -556,7 +561,7 @@ public static void solveTestingData4(ArrayList<DigitImage> networkInputData, int
 int numberOfImagesToDebugWith = 200;
 
 //long startTime = System.currentTimeMillis();
-for (int i = numberOfImagesToDebugWith; i >=numberOfImagesToDebugWith*3/4 ; i--) {
+for (int i = numberOfImagesToDebugWith; i >= (numberOfImagesToDebugWith*3)/4 ; i--) {
 	ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 	hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
 	
