@@ -79,9 +79,9 @@ public class KNearestNeighbors {
 							long endTime = System.currentTimeMillis();
 							long executionTime = endTime - startTime1;
 							double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
-							System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
+							System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 							System.out.println("Execution time: " + executionTime + " milliseconds");
-							System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
+							
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -100,10 +100,9 @@ public class KNearestNeighbors {
 								long endTime = System.currentTimeMillis();
 								long executionTime = endTime - startTime2;
 								double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
-								System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
+								System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 								System.out.println("Execution time: " + executionTime + " milliseconds");
-								System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
-							
+								
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -122,9 +121,9 @@ public class KNearestNeighbors {
 									long endTime = System.currentTimeMillis();
 									long executionTime = endTime - startTime3;
 									double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
-									System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
+									System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 									System.out.println("Execution time: " + executionTime + " milliseconds");
-									System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
+									
 								}
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
@@ -143,9 +142,9 @@ public class KNearestNeighbors {
 										long endTime = System.currentTimeMillis();
 										long executionTime = endTime - startTime4;
 										double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
-										System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
+										System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 										System.out.println("Execution time: " + executionTime + " milliseconds");
-										System.out.println(" 1: " + countOfCorrectImagesAnalyzed + " 2: " + countOfCorrectImagesAnalyzed2+" 3: " + countOfCorrectImagesAnalyzed3+ " 4: " + countOfCorrectImagesAnalyzed4);
+										
 									}
 								} catch (IOException e) {
 									// TODO Auto-generated catch block
