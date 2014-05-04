@@ -24,6 +24,8 @@ public class KNearestNeighbors {
 	public static ArrayList<Integer> hiddenLayerToOutput = new ArrayList<Integer>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues2 = new ArrayList<Double>();
+	public static ArrayList<Double> hiddenLayerDottedOutputValues3 = new ArrayList<Double>();
+	public static ArrayList<Double> hiddenLayerDottedOutputValues4 = new ArrayList<Double>();
 	//equal to the number of threads used-1
 	public static int threadFinished=3;
 	
@@ -70,13 +72,15 @@ public class KNearestNeighbors {
 			  public void run() {
 					// Test the test K-Nearest Neighbors Network
 					try {
-						long startTime = System.currentTimeMillis();
+						long startTime1 = System.currentTimeMillis();
 						testKNearestNeighbours("Testing-images", "Testing-Labels", 3);
 						threadFinished--;
 						if(threadFinished==0){
-						double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
-						System.out.println("Analyzed " + (countOfImagesAnalyzed+countOfImagesAnalyzed2) + " images with " + percentCorrect + " percent accuracy.");
-						System.out.println("Execution time: " + executionTime + " milliseconds");
+							long endTime = System.currentTimeMillis();
+							long executionTime = endTime - startTime1;
+							double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
+							System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
+							System.out.println("Execution time: " + executionTime + " milliseconds");
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -88,10 +92,12 @@ public class KNearestNeighbors {
 				  public void run() {
 						// Test the test K-Nearest Neighbors Network
 						try {
-							long startTime = System.currentTimeMillis();
+							long startTime2 = System.currentTimeMillis();
 							testKNearestNeighbours2("Testing-images", "Testing-Labels", 3);
 							threadFinished--;
 							if(threadFinished==0){
+								long endTime = System.currentTimeMillis();
+								long executionTime = endTime - startTime2;
 								double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 								System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 								System.out.println("Execution time: " + executionTime + " milliseconds");
@@ -106,10 +112,12 @@ public class KNearestNeighbors {
 					  public void run() {
 							// Test the test K-Nearest Neighbors Network
 							try {
-								long startTime = System.currentTimeMillis();
+								long startTime3 = System.currentTimeMillis();
 								testKNearestNeighbours3("Testing-images", "Testing-Labels", 3);
 								threadFinished--;
 								if(threadFinished==0){
+									long endTime = System.currentTimeMillis();
+									long executionTime = endTime - startTime3;
 									double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 									System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 									System.out.println("Execution time: " + executionTime + " milliseconds");
@@ -124,10 +132,12 @@ public class KNearestNeighbors {
 						  public void run() {
 								// Test the test K-Nearest Neighbors Network
 								try {
-									long startTime = System.currentTimeMillis();
+									long startTime4 = System.currentTimeMillis();
 									testKNearestNeighbours4("Testing-images", "Testing-Labels", 3);
 									threadFinished--;
 									if(threadFinished==0){
+										long endTime = System.currentTimeMillis();
+										long executionTime = endTime - startTime4;
 										double percentCorrect = ((countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) / (countOfImagesAnalyzed+countOfImagesAnalyzed2+countOfImagesAnalyzed3+countOfImagesAnalyzed4)) * 100;
 										System.out.println("Analyzed " + (countOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed2+countOfCorrectImagesAnalyzed3+countOfCorrectImagesAnalyzed4) + " images with " + percentCorrect + " percent accuracy.");
 										System.out.println("Execution time: " + executionTime + " milliseconds");
@@ -176,7 +186,7 @@ public class KNearestNeighbors {
 		long startTime = System.currentTimeMillis();
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
 		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size()/3; i++) {
+		for (int i = 0; i < trainingData.size()/2; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
@@ -473,9 +483,9 @@ int numberOfImagesToDebugWith = 200;
 
 
 //long startTime = System.currentTimeMillis();
-for (int i =( (numberOfImagesToDebugWith*3)/4) -1; i <=numberOfImagesToDebugWith/2 ; i--) {
+for (int i =( (numberOfImagesToDebugWith*3)/4); i >=numberOfImagesToDebugWith/2 ; i--) {
 	ArrayList<Double> temp = networkInputData.get((int)i).getArrayListData();
-	hiddenLayerDottedOutputValues2 = outPutOfLayer(hiddenLayerNodes, temp);
+	hiddenLayerDottedOutputValues3 = outPutOfLayer(hiddenLayerNodes, temp);
 	
 	
 	//I IF K=1 just run the commented out code as it is faster.	
@@ -496,12 +506,12 @@ for (int i =( (numberOfImagesToDebugWith*3)/4) -1; i <=numberOfImagesToDebugWith
 	 
 	 */
 	
-	int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues2.size()];
+	int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues3.size()];
 	ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
 	int output = 0;
 	
 	initializeIndices(indicesOfDottedOutputList);
-	parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues2);
+	parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues3);
 	findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
 	output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
 	
@@ -548,7 +558,7 @@ int numberOfImagesToDebugWith = 200;
 //long startTime = System.currentTimeMillis();
 for (int i = numberOfImagesToDebugWith; i >=numberOfImagesToDebugWith*3/4 ; i--) {
 	ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-	hiddenLayerDottedOutputValues2 = outPutOfLayer(hiddenLayerNodes, temp);
+	hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
 	
 	
 	//I IF K=1 just run the commented out code as it is faster.	
@@ -560,8 +570,8 @@ for (int i = numberOfImagesToDebugWith; i >=numberOfImagesToDebugWith*3/4 ; i--)
 	//return the number that is at that node position in the associated output array.
 	 double currentOutput = 0;
 	 double currentMax = 0;
-	 for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
-		if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
+	 for (int j = 0; j < hiddenLayerDottedOutputValues4.size(); j++) {
+		if (hiddenLayerDottedOutputValues4.get(j) > currentMax) {
 			currentMax = hiddenLayerDotedOutputValues.get(j);
 			currentOutput = hiddenLayerToOutput.get(j);
 	 	}
@@ -569,12 +579,12 @@ for (int i = numberOfImagesToDebugWith; i >=numberOfImagesToDebugWith*3/4 ; i--)
 	 
 	 */
 	
-	int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues2.size()];
+	int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues4.size()];
 	ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
 	int output = 0;
 	
 	initializeIndices(indicesOfDottedOutputList);
-	parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues2);
+	parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues4);
 	findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
 	output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
 	
