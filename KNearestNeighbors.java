@@ -248,33 +248,5 @@ public class KNearestNeighbors {
 			}
 		}
 		return mostCommonValue;
-		
-		/*
-		// The following two lines sorts the bestKOutputsList in descending order. 
-		Collections.sort(bestKOutputsList); 
-		Collections.reverse(bestKOutputsList);
-		// The following code finds the most frequently occurred value in the list.
-		int bestOutputIndex = 0; // The index of the most occurred output.
-		int maxNumOccurrences = 0; // Maximum number of occurrences for one output.
-		for (int m = 0; m < bestKOutputsList.size(); m++) {
-			int occurrences = 0;
-			for (int n = m + 1; n < bestKOutputsList.size(); n++) {
-				// If the output is repeated
-				if (bestKOutputsList.get(m).equals(bestKOutputsList.get(n))) {
-					occurrences++;
-				}
-				else {
-					// Going to the next output (because the array is sorted), store data. 
-					if (occurrences > maxNumOccurrences) {
-						maxNumOccurrences = occurrences;
-						bestOutputIndex = m;
-					}
-					// Outer loop jumps to next output.
-					m = n - 1;
-					break;
-				}
-			}
-		}
-		return bestKOutputsList.get(bestOutputIndex);*/
 	}
 }
