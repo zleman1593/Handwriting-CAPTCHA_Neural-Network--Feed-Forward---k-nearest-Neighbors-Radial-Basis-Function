@@ -232,20 +232,20 @@ public class KNearestNeighbors {
 	// This method finds the most commonly occurred output among the best K outputs.
 	public static int findMostCommonOccurrenceAmongKOutputs (ArrayList<Integer> bestKOutputsList) {
 		//This is simpler:
-		int[]  holder=new int[10];
-		for (int m = 0; m < holder.length; m++) {
-			holder[m]=0;
-		}
+		int[]  holder = new int[10];
+		// for (int m = 0; m < holder.length; m++) {
+		// 	holder[m]=0;
+		// }
 		for (int m = 0; m < bestKOutputsList.size(); m++) {
 			holder[bestKOutputsList.get(m)]++;	
 		}
-		int mostCommonValue=0;
-		int max=0;
+		int mostCommonValue = 0;
+		int max = 0;
 		for (int m = 0; m < holder.length; m++) {
-		if(holder[m]>max){
-			max=holder[m];
-			mostCommonValue=m;
-		}
+			if (holder[m] > max){
+				max = holder[m];
+				mostCommonValue = m;
+			}
 		}
 		return mostCommonValue;
 		
