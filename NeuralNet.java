@@ -69,7 +69,7 @@ public class NeuralNet {
 		// String testingLabels=args[10];
 
 		// These are hard coded versions of the above
-		numberOfHiddenNodesInLayer2 = 32;
+		numberOfHiddenNodesInLayer2 = 16;
 		epochs = 10;
 		learningRate = 0.3;
 		// Set this to true to avoid retraining. Allows the files in
@@ -280,6 +280,7 @@ public class NeuralNet {
 
 		for (int i = 0; i < epochs; i++) { // for each epoch
 			//for every image in the training file
+			long startTime = System.currentTimeMillis();
 			for (int images = 0; images < trainingData.size(); images++) { 
 
 
@@ -439,7 +440,11 @@ public class NeuralNet {
 			}
 			// Test the Feed-Forward network
 			try {
+				
 				testMultilayerFeedForward("Testing-images", "Testing-Labels");
+				long endTime = System.currentTimeMillis();
+				executionTime = endTime - startTime;
+				System.out.println("Training time: " + executionTime + " milliseconds");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -504,7 +509,8 @@ public class NeuralNet {
 	}
 
 	public static void testMultilayerFeedForward(String testingImages, String testingLabels) throws IOException {
-
+		countOfImagesAnalyzed=0;
+		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages);
 		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
