@@ -40,7 +40,7 @@ public class KNearestNeighbors {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		 k = 5;
+		 k = 3;
 
 		initializeKNearestNeighbours(trainingImages, trainingLabels);
 
@@ -119,7 +119,7 @@ public class KNearestNeighbors {
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
 			
 			//ELSE USE: (output==0) instead for a binary image
-			if(output<=30){
+			if(output<=20){
 				output=1;
 			}else{
 				output=0;
