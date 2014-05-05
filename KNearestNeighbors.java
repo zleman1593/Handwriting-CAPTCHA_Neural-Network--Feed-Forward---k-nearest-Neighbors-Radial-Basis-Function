@@ -1,4 +1,3 @@
-//TODO (IVY): The "solveTestingData" method needs to be written to use the k-nearest neighbors. Currently only uses the closest neigbor.
 
 import java.util.*;
 import java.io.IOException;
