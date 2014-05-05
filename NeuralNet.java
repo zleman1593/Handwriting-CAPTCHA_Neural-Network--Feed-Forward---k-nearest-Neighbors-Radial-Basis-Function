@@ -52,11 +52,17 @@ public class NeuralNet {
 	// Whether to use weights that have already been trained or to train network
 	// again
 	public static boolean usePriorWeights;
+
 	// For a given training image this array is filled with the output for each
 	// layer and then reset for the next image.
 	// Prevents duplicate calculations from being performed.
 	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
-
+	
+		
+	private String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Results";
+	private String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt";
+	private String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
+	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		// numberOfHiddenNodesInLayer2=args[1];
@@ -225,7 +231,7 @@ public class NeuralNet {
 	public static void write(ArrayList<OutputVector> x) throws IOException {
 		BufferedWriter outputWriter = null;
 		String randomString = Double.toString(Math.random());
-		File file = new File("/Users/zackeryleman/Desktop/NeuralNetOutput/Results" + randomString + ".txt");
+		File file = new File(filePathResults + randomString + ".txt");
 
 		// If file does not exists, then create it.
 		if (!file.exists()) {
@@ -258,19 +264,16 @@ public class NeuralNet {
 	public static void writeTrainedWeights() throws IOException {
 		// We serialize these data structures and write to file. These can then
 		// be read back into the neural net.
-		FileOutputStream fout = new FileOutputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt");
+		FileOutputStream fout = new FileOutputStream(filePathTrainedOutputWeights);
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
 		oos.writeObject(outputLayerNodes);
-		FileOutputStream fout2 = new FileOutputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt");
+		FileOutputStream fout2 = new FileOutputStream(filePathTrainedHiddenWeights);
 		ObjectOutputStream oos2 = new ObjectOutputStream(fout2);
 		oos2.writeObject(hiddenLayerNodes);
 		oos.close();
 		fout.close();
 		oos2.close();
 		fout2.close();
-
-
-
 	}
 
 	/*
@@ -283,55 +286,44 @@ public class NeuralNet {
 			long startTime = System.currentTimeMillis();
 			for (int images = 0; images < trainingData.size(); images++) { 
 
-
 				networkOutputError(trainingData, images);
 				// This returns the summed error from all output nodes (NOTE:Returned value is not currently used.)
 
-//The Duplicated code will be compressed into a method that takes four parameters that differ between the four threads.
-
+				//The Duplicated code will be compressed into a method that takes four parameters that differ between the four threads.
 				Runnable r1 = new Runnable() {
 					public void run() {
-						
 
 						// Update the weights to the output nodes
-						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES/4; ii++) {
+						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES / 4; ii++) {
 							for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 								// Grabs the error that was calculated for the output of
 								// this output node
 								double error = tempOutput.get(tempOutput.size() - 1).get(ii);
 								// Update the weight using gradient descent
 								outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-										+(learningRate
-												*error
-												*sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-												*tempOutput.get(tempOutput.size() - 3).get(j)));
+										+ (learningRate * error
+												* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+												* tempOutput.get(tempOutput.size() - 3).get(j)));
 							}
 						}
 
-						
-						
 						// Update the weights to the nodes going to the hidden nodes
-						for (int ii = 0; ii < hiddenLayerNodes.size()/4; ii++) {
-
-
+						for (int ii = 0; ii < hiddenLayerNodes.size() / 4; ii++) {
 							for (int j = 0; j < numberOfInputNodes; j++) {
 								double error = 0;
 								for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
 									// This is the summed error for the output layer
-									error= error+(sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
-											*tempOutput.get(tempOutput.size() - 1).get(k)
-											*outputLayerNodes.get(k).get(ii));
+									error = error + (sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
+											* tempOutput.get(tempOutput.size() - 1).get(k)
+											* outputLayerNodes.get(k).get(ii));
 
 								}
 								//Update the weight using gradient descent back propagation
 								hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-										+(learningRate
-												*error
-												*tempOutput.get(0).get(j))
-												*sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
+										+ (learningRate * error
+												* tempOutput.get(0).get(j))
+												* sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
 							}
-
-
 						}
 					}};
 					
