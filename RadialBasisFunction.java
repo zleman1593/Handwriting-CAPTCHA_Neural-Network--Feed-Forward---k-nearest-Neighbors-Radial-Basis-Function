@@ -1,24 +1,22 @@
-
+/*This is a Radial Basis Function Neural Network trained by gradient descent on the weights from the hidden layer to the output nodes*/
 import java.util.*;
 import java.io.IOException;
 import java.lang.Math;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.io.*;
 
 public class RadialBasisFunction {
 
 	// For a given training image this array is filled with the output for each
 	// layer and then reset for the next image.
 	// Prevents duplicate calculations from being performed.
-	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();//MAY NEED TO MODIFY: CHECK IT'S USE AND FOLLOW AND EXAMPLE
+	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
 	// The number of times the network is trained with the training Data
 	public static int epochs;
 	// Creates a random number generator
@@ -37,16 +35,13 @@ public class RadialBasisFunction {
 	public static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
 	// The learning rate for the network
 	public static double learningRate;
-	// Whether to use weights that have already been trained or to train network
-	// again
+	// Whether to use weights that have already been trained or to train network again
 	public static boolean usePriorWeights;
 	//Dictates the standard deviation in the gaussian RBF
 	public static double sigma;
 	// Number of output nodes (Currently the network depends on 10 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;
-	
-	
-	
+	//File paths
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RbfResults";
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
 	
@@ -58,14 +53,14 @@ public class RadialBasisFunction {
 		// String trainingLabels=args[9];
 		// String testingLabels=args[10];
 		// sigma = Integer.parseInt(args[11]); 
-		//int y=Runtime.getRuntime().availableProcessors();
+		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 
 		// These are hard coded versions of the above
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		sigma = 100000; // Experiment with numbers for this value 1000000
+		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.0%)
 		epochs = 10;
 		learningRate=0.3;
 		initializeRBF(trainingImages, trainingLabels);
@@ -128,6 +123,7 @@ public class RadialBasisFunction {
 	}
 
 	public static void testRBF(String testingImages, String testingLabels) throws IOException {
+		long startTime = System.currentTimeMillis();
 		countOfImagesAnalyzed=0;
 		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
@@ -145,6 +141,9 @@ public class RadialBasisFunction {
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		System.out.println("Look in /Users/\"your username\"/Desktop/NeuralNetOutput  directory to find  the output.");
+		long endTime = System.currentTimeMillis();
+		executionTime = endTime - startTime;
+		System.out.println("Testing time: " + executionTime + " milliseconds");
 	}
 
 	/*
@@ -524,12 +523,14 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Sigma: " + Double.toString(sigma));
 		outputWriter.newLine();
-		outputWriter.write("Number of nodes in each hidden layer: " + Integer.toString(60000/20));
+		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/20));//Note this value is hard coded at the moment
 		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
 		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.newLine();
+		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
 		outputWriter.newLine();
 		for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
