@@ -28,7 +28,11 @@ public class loadCaptchaImage {
 			img = ImageIO.read(new File("xfnrsn.gif"));
 		} catch (IOException e) {
 		}
+		int q=img.getRGB(0,0);
+		int q2=img.getRGB(1,1);
+		int q3=img.getRGB(10,10);
 		getHistogram(img);
+		
 		// openFile("xfnrsn.gif");
 
 		// closeFile();

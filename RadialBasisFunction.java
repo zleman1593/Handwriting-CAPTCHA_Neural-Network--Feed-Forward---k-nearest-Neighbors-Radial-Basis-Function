@@ -37,9 +37,7 @@ public class RadialBasisFunction {
 	// again
 	public static boolean usePriorWeights;
 	//Dictates the standard deviation in the gaussian RBF
-	public static int sigma;
-	// Number of hidden nodes in second layer (hidden layer)
-	public static int numberOfHiddenNodesInLayer2;
+	public static double sigma;
 	// Number of output nodes (Currently the network depends on 10 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;
 
@@ -50,7 +48,6 @@ public class RadialBasisFunction {
 		// String trainingLabels=args[9];
 		// String testingLabels=args[10];
 		// sigma = Integer.parseInt(args[11]); 
-
 		//int y=Runtime.getRuntime().availableProcessors();
 
 		// These are hard coded versions of the above
@@ -58,12 +55,13 @@ public class RadialBasisFunction {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		sigma = 1;
-		epochs = 3;
+		sigma = 1000000; // Experiment with numbers for this value
+		epochs = 10;
+		learningRate=0.3;
 		initializeRBF(trainingImages, trainingLabels);
 
-		// Test the test RBF Network
-		testMultilayerFeedForward(testingImages, testingLabels);
+		// Test the  RBF Network
+		testRBF(testingImages, testingLabels);
 	}
 
 	public static void initializeRBF(String trainingImages, String trainingLabels) throws IOException {
@@ -90,7 +88,7 @@ public class RadialBasisFunction {
 		long startTime = System.currentTimeMillis();
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
 		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size()/3; i++) {
+		for (int i = 0; i < trainingData.size()/20; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
@@ -101,8 +99,8 @@ public class RadialBasisFunction {
 		// Initialize weights with random values for all nodes in the output
 		// layer.
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
-			ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2);
-			for (int j = 0; j <  trainingData.size()/3; j++) {
+			ArrayList<Double> weights = new ArrayList<Double>();
+			for (int j = 0; j <  trainingData.size()/20; j++) {
 				weights.add(random.nextGaussian());
 			}
 			outputLayerNodes.add(weights);
@@ -117,7 +115,7 @@ public class RadialBasisFunction {
 
 	}
 
-	public static void testMultilayerFeedForward(String testingImages, String testingLabels) throws IOException {
+	public static void testRBF(String testingImages, String testingLabels) throws IOException {
 		countOfImagesAnalyzed=0;
 		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
@@ -175,7 +173,6 @@ public class RadialBasisFunction {
 
 
 
-
 	/*
 	 * This takes the training data and attempts to train the neural net to learn how to recognize characters from images.
 	 */
@@ -184,12 +181,12 @@ public class RadialBasisFunction {
 		for (int i = 0; i < epochs; i++) { // for each epoch
 			//for every image in the training file
 			long startTime = System.currentTimeMillis();
-			for (int images = 0; images < trainingData.size()/3; images++) { 
+			for (int images = 0; images < trainingData.size()/20; images++) { 
 
 				networkOutputError(trainingData, images);
 
 				// Update the weights to the output nodes
-				for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES / 4; ii++) {
+				for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES; ii++) {
 					for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 						// Grabs the error that was calculated for the output of
 						// this output node
@@ -206,13 +203,11 @@ public class RadialBasisFunction {
 				tempOutput = new ArrayList<ArrayList<Double>>();
 			}
 
-
-
-			try {
-				testMultilayerFeedForward("Testing-images", "Testing-Labels");
+			/*try {
+				testRBF("Testing-images", "Testing-Labels");
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
@@ -238,17 +233,11 @@ public class RadialBasisFunction {
 		return output;
 	}
 
-	/*
-	 * Returns the derivative of the output of the sigmoid activation function but takes as a parameter the already computer sigmoid output
-	 */
-	public static double sigmoidPrimeDynamicProgramming(double sigmoidPrime) {
-		double output = (sigmoidPrime * (1 - sigmoidPrime));
-		return output;
-	}
+
 	/*
 	 * Returns the summed total error of the output nodes and creates temporary storage for the output of all nodes for a given image
 	 */
-	public static double networkOutputError(ArrayList<DigitImage> networkInputData, int imageNumber) {
+	public static void networkOutputError(ArrayList<DigitImage> networkInputData, int imageNumber) {
 
 		// Creates an Arraylist holding the output of each node in this layer
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
@@ -261,26 +250,17 @@ public class RadialBasisFunction {
 		// Just like the others
 		ArrayList<Double> outputLayerOutput = outPutOfLayer(outputLayerNodes, hidenLayerOutput,2);
 		tempOutput.add(outputLayerOutput);
-		double error = 0;
 		// Adds the error from each output node to an array which is then stored
 		// along with the other above arrays to be used later.
 		ArrayList<Double> errorLayer = new ArrayList<Double>();
 
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
 			double correctOutput = networkInputData.get(imageNumber).getSolutionVector().get(i);
-
 			double output = outputLayerOutput.get(i);
-
 			double rawError = correctOutput - output;
-			double additionalsquaredError = (Math.pow((rawError), 2) / 2);
-
 			errorLayer.add(rawError);
-
-			error = error + additionalsquaredError;
 		}
 		tempOutput.add(errorLayer);
-		return error;
-
 	}
 
 
@@ -323,6 +303,16 @@ public class RadialBasisFunction {
 		OutputVector result = new OutputVector(correctOutput, maxInt);
 		countOfImagesAnalyzed++;
 		return result;
+	}
+	
+	
+
+	/*
+	 * Returns the derivative of the output of the sigmoid activation function but takes as a parameter the already computer sigmoid output
+	 */
+	public static double sigmoidPrimeDynamicProgramming(double sigmoidPrime) {
+		double output = (sigmoidPrime * (1 - sigmoidPrime));
+		return output;
 	}
 }
 
