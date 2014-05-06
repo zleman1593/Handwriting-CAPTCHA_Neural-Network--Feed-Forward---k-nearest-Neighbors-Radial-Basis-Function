@@ -184,9 +184,10 @@ public class RadialBasisFunction {
 			for (int images = 0; images < trainingData.size()/20; images++) { 
 
 				networkOutputError(trainingData, images);
-
+				Runnable r1 = new Runnable() {
+					public void run() {
 				// Update the weights to the output nodes
-				for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES; ii++) {
+				for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES/8; ii++) {
 					for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 						// Grabs the error that was calculated for the output of
 						// this output node
@@ -199,6 +200,164 @@ public class RadialBasisFunction {
 					}
 				}
 
+					}};
+					
+					Runnable r2 = new Runnable() {
+						public void run() {
+					// Update the weights to the output nodes
+					for (int ii = NUMBER_OF_OUTPUT_NODES/8; ii < NUMBER_OF_OUTPUT_NODES/4; ii++) {
+						for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+							// Grabs the error that was calculated for the output of
+							// this output node
+							double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+							// Update the weight using gradient descent
+							outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+									+ (learningRate * error
+											* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+											* tempOutput.get(tempOutput.size() - 3).get(j)));
+						}
+					}
+
+						}};
+					
+						Runnable r3 = new Runnable() {
+							public void run() {
+						// Update the weights to the output nodes
+						for (int ii = NUMBER_OF_OUTPUT_NODES/4; ii < (NUMBER_OF_OUTPUT_NODES*3)/8; ii++) {
+							for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+								// Grabs the error that was calculated for the output of
+								// this output node
+								double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+								// Update the weight using gradient descent
+								outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+										+ (learningRate * error
+												* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+												* tempOutput.get(tempOutput.size() - 3).get(j)));
+							}
+						}
+
+							}};
+							
+							Runnable r4 = new Runnable() {
+								public void run() {
+							// Update the weights to the output nodes
+							for (int ii = (NUMBER_OF_OUTPUT_NODES*3)/8; ii < NUMBER_OF_OUTPUT_NODES/2; ii++) {
+								for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+									// Grabs the error that was calculated for the output of
+									// this output node
+									double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+									// Update the weight using gradient descent
+									outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+											+ (learningRate * error
+													* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+													* tempOutput.get(tempOutput.size() - 3).get(j)));
+								}
+							}
+
+								}};
+								Runnable r5 = new Runnable() {
+									public void run() {
+								// Update the weights to the output nodes
+								for (int ii = NUMBER_OF_OUTPUT_NODES/2; ii < (NUMBER_OF_OUTPUT_NODES*5)/8; ii++) {
+									for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+										// Grabs the error that was calculated for the output of
+										// this output node
+										double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+										// Update the weight using gradient descent
+										outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+												+ (learningRate * error
+														* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+														* tempOutput.get(tempOutput.size() - 3).get(j)));
+									}
+								}
+
+									}};
+									
+									Runnable r6 = new Runnable() {
+										public void run() {
+									// Update the weights to the output nodes
+									for (int ii = (NUMBER_OF_OUTPUT_NODES*5)/8; ii < (NUMBER_OF_OUTPUT_NODES*6)/8; ii++) {
+										for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+											// Grabs the error that was calculated for the output of
+											// this output node
+											double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+											// Update the weight using gradient descent
+											outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+													+ (learningRate * error
+															* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+															* tempOutput.get(tempOutput.size() - 3).get(j)));
+										}
+									}
+
+										}};
+									
+										Runnable r7 = new Runnable() {
+											public void run() {
+										// Update the weights to the output nodes
+										for (int ii = (NUMBER_OF_OUTPUT_NODES*6)/8; ii < (NUMBER_OF_OUTPUT_NODES*7)/8; ii++) {
+											for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+												// Grabs the error that was calculated for the output of
+												// this output node
+												double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+												// Update the weight using gradient descent
+												outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+														+ (learningRate * error
+																* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+																* tempOutput.get(tempOutput.size() - 3).get(j)));
+											}
+										}
+
+											}};
+											
+											Runnable r8 = new Runnable() {
+												public void run() {
+											// Update the weights to the output nodes
+											for (int ii = (NUMBER_OF_OUTPUT_NODES*7)/8; ii < NUMBER_OF_OUTPUT_NODES; ii++) {
+												for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+													// Grabs the error that was calculated for the output of
+													// this output node
+													double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+													// Update the weight using gradient descent
+													outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+															+ (learningRate * error
+																	* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+																	* tempOutput.get(tempOutput.size() - 3).get(j)));
+												}
+											}
+
+												}};
+					
+					
+				Thread thr1 = new Thread(r1);
+				Thread thr2 = new Thread(r2);
+				Thread thr3 = new Thread(r3);
+				Thread thr4 = new Thread(r4);
+				Thread thr5 = new Thread(r5);
+				Thread thr6 = new Thread(r6);
+				Thread thr7 = new Thread(r7);
+				Thread thr8 = new Thread(r8);
+				thr1.start();
+				thr2.start();
+				thr3.start();
+				thr4.start();
+				thr5.start();
+				thr6.start();
+				thr7.start();
+				thr8.start();
+				try {
+					thr1.join();
+					thr2.join();
+					thr3.join();
+					thr4.join();
+					thr5.join();
+					thr6.join();
+					thr7.join();
+					thr8.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				// Resets temporary data structure
 				tempOutput = new ArrayList<ArrayList<Double>>();
 			}
