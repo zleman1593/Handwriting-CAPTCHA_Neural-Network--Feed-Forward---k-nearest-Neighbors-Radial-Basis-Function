@@ -34,7 +34,7 @@ public class KNearestNeighbors {
 		// String testingLabels=args[10];
 		// int k = Integer.parseInt(args[11]); 
 		
-		int y=Runtime.getRuntime().availableProcessors();
+		//int y=Runtime.getRuntime().availableProcessors();
 
 		// These are hard coded versions of the above
 		String trainingImages = "Training-Images";

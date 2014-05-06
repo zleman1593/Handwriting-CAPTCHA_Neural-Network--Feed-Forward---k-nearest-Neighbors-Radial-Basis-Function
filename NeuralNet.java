@@ -59,9 +59,9 @@ public class NeuralNet {
 	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
 	
 		
-	private String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Results";
-	private String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt";
-	private String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
+	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Results";
+	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt";
+	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
