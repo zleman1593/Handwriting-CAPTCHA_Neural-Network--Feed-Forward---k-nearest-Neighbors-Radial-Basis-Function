@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.lang.Math;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.io.*;
 
@@ -40,6 +44,12 @@ public class RadialBasisFunction {
 	public static double sigma;
 	// Number of output nodes (Currently the network depends on 10 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;
+	
+	
+	
+	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RbfResults";
+	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
+	
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
@@ -55,7 +65,7 @@ public class RadialBasisFunction {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		sigma = 1000000; // Experiment with numbers for this value
+		sigma = 100000; // Experiment with numbers for this value 1000000
 		epochs = 10;
 		learningRate=0.3;
 		initializeRBF(trainingImages, trainingLabels);
@@ -108,7 +118,9 @@ public class RadialBasisFunction {
 
 
 		trainTheNetwork(trainingData);
-
+		// Creates data files that can be reused by the network without
+				// retraining.
+				writeTrainedWeights();
 		long endTime = System.currentTimeMillis();
 		executionTime = endTime - startTime;
 		System.out.println("Training time: " + executionTime + " milliseconds");
@@ -128,7 +140,7 @@ public class RadialBasisFunction {
 			e.printStackTrace();
 		}
 		// Tests the network with the testing Data and prints results to file
-		solveTestingData(testingData);
+		write(solveTestingData(testingData));
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
@@ -472,6 +484,72 @@ public class RadialBasisFunction {
 	public static double sigmoidPrimeDynamicProgramming(double sigmoidPrime) {
 		double output = (sigmoidPrime * (1 - sigmoidPrime));
 		return output;
+	}
+	
+	
+	
+	
+	public static void readDataFromTrainedFiles() throws IOException, ClassNotFoundException {
+		// Grabs weights to output nodes
+		FileInputStream fin = new FileInputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt");
+		ObjectInputStream ois = new ObjectInputStream(fin);
+		outputLayerNodes = (ArrayList<ArrayList<Double>>) ois.readObject();
+		fin.close();
+		// Grabs weights to hidden nodes
+		FileInputStream fin2 = new FileInputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt");
+		ObjectInputStream ois2 = new ObjectInputStream(fin2);
+		hiddenLayerNodes = (ArrayList<ArrayList<Double>>) ois2.readObject();
+		fin2.close();
+
+	}
+	
+	
+
+	/*
+	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
+	 */
+	public static void write(ArrayList<OutputVector> x) throws IOException {
+		BufferedWriter outputWriter = null;
+		String randomString = Double.toString(Math.random());
+		File file = new File(filePathResults + randomString + ".txt");
+
+		// If file does not exists, then create it.
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+		outputWriter.write("Learning rate: " + Double.toString(learningRate));
+		outputWriter.newLine();
+		outputWriter.write("Epochs: " + Integer.toString(epochs));
+		outputWriter.newLine();
+		outputWriter.write("Sigma: " + Double.toString(sigma));
+		outputWriter.newLine();
+		outputWriter.write("Number of nodes in each hidden layer: " + Integer.toString(60000/20));
+		outputWriter.newLine();
+		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
+		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		outputWriter.newLine();
+		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.newLine();
+		for (int i = 0; i < x.size(); i++) {
+			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
+			outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
+			outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
+			outputWriter.newLine();
+		}
+		outputWriter.flush();
+		outputWriter.close();
+	}
+
+	public static void writeTrainedWeights() throws IOException {
+		// We serialize these data structures and write to file. These can then
+		// be read back into the neural net.
+		FileOutputStream fout = new FileOutputStream(filePathTrainedOutputWeights);
+		ObjectOutputStream oos = new ObjectOutputStream(fout);
+		oos.writeObject(outputLayerNodes);	
+		oos.close();
+		fout.close();
+
 	}
 }
 
