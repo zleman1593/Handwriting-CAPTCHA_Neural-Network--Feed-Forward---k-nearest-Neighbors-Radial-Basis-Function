@@ -10,55 +10,47 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class RadialBasisFunction {
-	
+
 	// For a given training image this array is filled with the output for each
 	// layer and then reset for the next image.
 	// Prevents duplicate calculations from being performed.
-	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
-	
-	
-	
+	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();//MAY NEED TO MODIFY: CHECK IT'S USE AND FOLLOW AND EXAMPLE
 	// The number of times the network is trained with the training Data
 	public static int epochs;
 	// Creates a random number generator
 	public static Random random = new Random();
-
 	// Tracks the number of images processed in the testing set.
 	public static double countOfImagesAnalyzed = 0;
 	// Tracks the number of images correctly identified in the testing set.
 	public static double countOfCorrectImagesAnalyzed = 0;
-	// Tracks running time of the hidden layer construction
+	// Tracks running time of the hidden layer construction and training
+	//of weights from the hidden layer to the output layer
 	public static long executionTime;
 	// The number of input nodes will be equal to the number of pixels in the image
 	public static int numberOfInputNodes;
-	// Create array of Nodes in first layer and associate done that points to the correct output
+	// Create array of Nodes in first layer and output layer
 	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
-
-	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
-
 	public static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
 	// The learning rate for the network
 	public static double learningRate;
 	// Whether to use weights that have already been trained or to train network
 	// again
 	public static boolean usePriorWeights;
-
-	
+	//Dictates the standard deviation in the gaussian RBF
 	public static int sigma;
-	
-	// Number of hidden nodes in second layer (first hidden layer)
-		public static int numberOfHiddenNodesInLayer2;
-		// Number of output nodes (Currently the network depends on 10 output nodes)
-		public static final int NUMBER_OF_OUTPUT_NODES = 10;
-	
+	// Number of hidden nodes in second layer (hidden layer)
+	public static int numberOfHiddenNodesInLayer2;
+	// Number of output nodes (Currently the network depends on 10 output nodes)
+	public static final int NUMBER_OF_OUTPUT_NODES = 10;
+
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
 		// String trainingImages=args[7];
 		// String testingImages=args[8];
 		// String trainingLabels=args[9];
 		// String testingLabels=args[10];
-		// int sigma = Integer.parseInt(args[11]); 
-		
+		// sigma = Integer.parseInt(args[11]); 
+
 		//int y=Runtime.getRuntime().availableProcessors();
 
 		// These are hard coded versions of the above
@@ -66,15 +58,15 @@ public class RadialBasisFunction {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		 sigma = 1;
-		 epochs = 3;
-		initializeKNearestNeighbours(trainingImages, trainingLabels);
+		sigma = 1;
+		epochs = 3;
+		initializeRBF(trainingImages, trainingLabels);
 
-		// Test the test K-Nearest Neighbors Network
+		// Test the test RBF Network
 		testMultilayerFeedForward(testingImages, testingLabels);
 	}
 
-	public static void initializeKNearestNeighbours(String trainingImages, String trainingLabels) throws IOException {
+	public static void initializeRBF(String trainingImages, String trainingLabels) throws IOException {
 
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages);
@@ -102,23 +94,23 @@ public class RadialBasisFunction {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
-			//hiddenLayerToOutput.add((int) trainingData.get(i).getLabel());
+
 		}
 
-		
-		// Initialize weights with random values for all nodes in the output
-				// layer.
-				for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
-					ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2);
-					for (int j = 0; j <  trainingData.size()/3; j++) {
-						weights.add(random.nextGaussian());
-					}
-					outputLayerNodes.add(weights);
-				}
 
-	
-				trainTheNetwork(trainingData);
-		
+		// Initialize weights with random values for all nodes in the output
+		// layer.
+		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
+			ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2);
+			for (int j = 0; j <  trainingData.size()/3; j++) {
+				weights.add(random.nextGaussian());
+			}
+			outputLayerNodes.add(weights);
+		}
+
+
+		trainTheNetwork(trainingData);
+
 		long endTime = System.currentTimeMillis();
 		executionTime = endTime - startTime;
 		System.out.println("Training time: " + executionTime + " milliseconds");
@@ -138,7 +130,7 @@ public class RadialBasisFunction {
 			e.printStackTrace();
 		}
 		// Tests the network with the testing Data and prints results to file
-		//write(solveTestingData(testingData));
+		solveTestingData(testingData);
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
@@ -153,9 +145,9 @@ public class RadialBasisFunction {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
 			sum=sum+Math.pow(layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i),2);
-	
+
 		}
-		return -1*(sum/sigma);
+		return Math.exp(-1*(sum/sigma));
 	}
 
 	public static double outputNodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
@@ -165,16 +157,16 @@ public class RadialBasisFunction {
 		}
 		return activationFunction(sum);
 	}
-	
+
 	/* This returns an array representing the output of all nodes in the given layer */
 	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer, int hidden) {
 		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
 		for (int i = 0; i < currentLayer.size(); i++) {
 			double output;
 			if(hidden==1){
-			 output = hiddenNodeOutput(currentLayer, outputFromPreviousLayer, i);
+				output = hiddenNodeOutput(currentLayer, outputFromPreviousLayer, i);
 			} else{
-				 output = outputNodeOutput(currentLayer, outputFromPreviousLayer, i);
+				output = outputNodeOutput(currentLayer, outputFromPreviousLayer, i);
 			}
 			outputOfCurrentlayer.add(output);
 		}
@@ -183,7 +175,7 @@ public class RadialBasisFunction {
 
 
 
-	
+
 	/*
 	 * This takes the training data and attempts to train the neural net to learn how to recognize characters from images.
 	 */
@@ -196,40 +188,40 @@ public class RadialBasisFunction {
 
 				networkOutputError(trainingData, images);
 
-						// Update the weights to the output nodes
-						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES / 4; ii++) {
-							for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-								// Grabs the error that was calculated for the output of
-								// this output node
-								double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-								// Update the weight using gradient descent
-								outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-										+ (learningRate * error
-												* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-												* tempOutput.get(tempOutput.size() - 3).get(j)));
-							}
-						}
-
-						// Resets temporary data structure
-						tempOutput = new ArrayList<ArrayList<Double>>();
+				// Update the weights to the output nodes
+				for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES / 4; ii++) {
+					for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+						// Grabs the error that was calculated for the output of
+						// this output node
+						double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+						// Update the weight using gradient descent
+						outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+								+ (learningRate * error
+										* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+										* tempOutput.get(tempOutput.size() - 3).get(j)));
+					}
 				}
 
-		
-					
-					try {
-						testMultilayerFeedForward("Testing-images", "Testing-Labels");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					long endTime = System.currentTimeMillis();
-					executionTime = endTime - startTime;
-					System.out.println("Training time: " + executionTime + " milliseconds");
-				
-				System.out.println("Epoch" +i+ " is done.");
-
+				// Resets temporary data structure
+				tempOutput = new ArrayList<ArrayList<Double>>();
 			}
 
+
+
+			try {
+				testMultilayerFeedForward("Testing-images", "Testing-Labels");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			long endTime = System.currentTimeMillis();
+			executionTime = endTime - startTime;
+			System.out.println("Training time: " + executionTime + " milliseconds");
+
+			System.out.println("Epoch" +i+ " is done.");
+
 		}
+
+	}
 
 	/*
 	 * Takes the weighted sum as the parameter and returns the output of the sigmoid activation function
@@ -289,6 +281,48 @@ public class RadialBasisFunction {
 		tempOutput.add(errorLayer);
 		return error;
 
+	}
+
+
+	/*
+	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
+	 */
+	public static ArrayList<OutputVector> solveTestingData(ArrayList<DigitImage> networkInputData) {
+		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
+		for (int i = 0; i < networkInputData.size(); i++) {
+			newtworkResults.add(networkSolution(networkInputData, i));
+		}
+		return newtworkResults;
+	}
+
+	/* This looks at one image and reports what number it thinks it is. */
+	public static OutputVector networkSolution(ArrayList<DigitImage> networkInputData, int imageNumber) {
+
+		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
+		ArrayList<Double> hidenLayerOutput = outPutOfLayer(hiddenLayerNodes, rawSingleImageData,1);
+		ArrayList<Double> outputLayerOutput = outPutOfLayer(outputLayerNodes, hidenLayerOutput,2);
+
+		double networkOutput = 0;
+		double correctOutput = networkInputData.get(imageNumber).getLabel();
+		int maxInt = 0;
+
+		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
+			double output = outputLayerOutput.get(i);
+			if (output > networkOutput) {
+				networkOutput = output;
+				maxInt = i;
+			}
+		}
+		if (correctOutput == maxInt) {
+			System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
+			countOfCorrectImagesAnalyzed++;
+		} else {
+			System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
+		}
+
+		OutputVector result = new OutputVector(correctOutput, maxInt);
+		countOfImagesAnalyzed++;
+		return result;
 	}
 }
 
