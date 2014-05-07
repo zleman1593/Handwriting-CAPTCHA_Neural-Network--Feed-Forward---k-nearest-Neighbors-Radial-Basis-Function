@@ -50,7 +50,7 @@ public class RadialBasisFunction {
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RbfResults";
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
-
+	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
 	public static final int TRAINING_SET_REDUCTION_FACTOR=20;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -542,6 +542,8 @@ public class RadialBasisFunction {
 		outputWriter.write("Training time: " + executionTime + " milliseconds");
 		outputWriter.newLine();
 		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
+		outputWriter.newLine();
+		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
 		for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");

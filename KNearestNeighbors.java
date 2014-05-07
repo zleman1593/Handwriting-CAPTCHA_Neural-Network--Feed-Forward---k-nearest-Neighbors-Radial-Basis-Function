@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class KNearestNeighbors {
+	
+	// Just look at 200 images for now
+	public static int numberOfImagesToDebugWith;
+	
 	// Tracks the number of images processed in the testing set.
 	public static double countOfImagesAnalyzed = 0;
 	// Tracks the number of images correctly identified in the testing set.
@@ -48,7 +52,7 @@ public class KNearestNeighbors {
 
 	//How many nearest Neighbors to use
 	public static int k;
-
+	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
@@ -65,6 +69,7 @@ public class KNearestNeighbors {
 		String testingLabels = "Testing-Labels";
 		k = 3;
 		binaryInput=false;
+		numberOfImagesToDebugWith = 200;
 		// Trains the network
 		initializeKNearestNeighbours(trainingImages, trainingLabels);
 		
@@ -112,7 +117,6 @@ public class KNearestNeighbors {
 			thr3.join();
 			thr4.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
@@ -182,19 +186,12 @@ public class KNearestNeighbors {
 	public static double nodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
-
-			//IF: grey scale images use the following.  Note: this means commenting out the otsu()
-			//method in the "DigitImage Class" to prevent their conversion to a binary image
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
-
-			//ELSE USE: (output==0) instead for a binary image
 			if(output<=20){
 				output=1;
 			}else{
 				output=0;
 			}
-
-
 			sum = sum + output ;
 		}
 		return sum;
@@ -216,9 +213,6 @@ public class KNearestNeighbors {
 	}
 
 	public static void solveTestingData(ArrayList<DigitImage> networkInputData, int k) {
-		// Just look at 20 images for now
-		int numberOfImagesToDebugWith = 200;
-
 		//	long startTime = System.currentTimeMillis();
 		for (int i = 0; i <= (numberOfImagesToDebugWith/4)-1; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
@@ -520,7 +514,8 @@ public class KNearestNeighbors {
 	public static double nodeOutputBinary(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
-			
+			//This searches for a match with any adjacent pixels
+			//(increases likely hood to match binary images) (like the diffuse border on grayscale images)
 			double blob=0;
 			blob = blob + outputFromPreviousLayer.get(i);
 			
@@ -540,8 +535,8 @@ public class KNearestNeighbors {
 			blob = blob + outputFromPreviousLayer.get(i+2);
 			blob = blob + outputFromPreviousLayer.get(i+26);
 			blob = blob + outputFromPreviousLayer.get(i+27);
-			blob = blob + outputFromPreviousLayer.get(i+28); //	blob = blob + outputFromPreviousLayer.get(i+56);
-			blob = blob + outputFromPreviousLayer.get(i+29);//blob = blob + outputFromPreviousLayer.get(i+56);
+			blob = blob + outputFromPreviousLayer.get(i+28); 
+			blob = blob + outputFromPreviousLayer.get(i+29);
 			blob = blob + outputFromPreviousLayer.get(i+30);
 			}
 			
@@ -550,26 +545,16 @@ public class KNearestNeighbors {
 			if(blob>=1){
 				blob=1;
 			}
-			
-			//IF: grey scale images use the following.  Note: this means commenting out the otsu()
-			//method in the "DigitImage Class" to prevent their conversion to a binary image
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - blob));
-			
-			//ELSE USE: (output==0) instead for a binary image
-			if(output==0){   //	if(output<=20){
+
+			if(output==0){  
 				output=1;
 			}else{
 				output=0;
 			}
 		
 			sum = sum + output ;
-			
-			
-			
 	
-		
-			
-			
 		}
 		return sum;
 	}

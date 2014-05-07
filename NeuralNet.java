@@ -62,7 +62,7 @@ public class NeuralNet {
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Results";
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt";
 	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
-	
+	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
@@ -252,6 +252,8 @@ public class NeuralNet {
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
 		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.newLine();
+		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
 		for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
