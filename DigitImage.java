@@ -25,7 +25,7 @@ public class DigitImage {
 		for (int i = 0; i < this.data.length; i++) {
 			this.data[i] = data[i] & 0xFF; // convert to unsigned
 		}
-		otsu();
+		//otsu();
 	}
 
 	// Uses Otsu's Threshold algorithm to convert from grayscale to black and

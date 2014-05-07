@@ -80,7 +80,7 @@ public class NeuralNet {
 		learningRate = 0.3;
 		// Set this to true to avoid retraining. Allows the files in
 		// NeuralNetOutput folder to be loaded and used.
-		usePriorWeights = true;
+		usePriorWeights = false;
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
