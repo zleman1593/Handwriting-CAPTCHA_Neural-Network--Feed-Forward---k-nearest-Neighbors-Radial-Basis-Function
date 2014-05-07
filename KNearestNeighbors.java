@@ -105,8 +105,70 @@ public class KNearestNeighbors {
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		System.out.println("Analyzed: "+ countOfImagesAnalyzed +"images. "+countOfCorrectImagesAnalyzed+" correct.");
 	}
 
+	/*
+	 * Returns the output from a given node after the input has been summed.It takes the layer that the node is in, the index of the node in the
+	 * layer, and the output from the previous layer
+	 */
+	public static double nodeOutputBinary(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
+		double sum = 0;
+		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
+			
+			double blob=0;
+			blob = blob + outputFromPreviousLayer.get(i);
+			
+			if(!(i<=30)){
+			blob = blob + outputFromPreviousLayer.get(i-1);
+			blob = blob + outputFromPreviousLayer.get(i-2);
+			blob = blob + outputFromPreviousLayer.get(i-26);
+			blob = blob + outputFromPreviousLayer.get(i-27);
+			blob = blob + outputFromPreviousLayer.get(i-28);
+			blob = blob + outputFromPreviousLayer.get(i-29);
+			blob = blob + outputFromPreviousLayer.get(i-30);
+			
+	
+			}
+			if(!(i>=754)){
+			blob = blob + outputFromPreviousLayer.get(i+1);
+			blob = blob + outputFromPreviousLayer.get(i+2);
+			blob = blob + outputFromPreviousLayer.get(i+26);
+			blob = blob + outputFromPreviousLayer.get(i+27);
+			blob = blob + outputFromPreviousLayer.get(i+28); //	blob = blob + outputFromPreviousLayer.get(i+56);
+			blob = blob + outputFromPreviousLayer.get(i+29);//blob = blob + outputFromPreviousLayer.get(i+56);
+			blob = blob + outputFromPreviousLayer.get(i+30);
+			}
+			
+			
+			
+			if(blob>=1){
+				blob=1;
+			}
+			
+			//IF: grey scale images use the following.  Note: this means commenting out the otsu()
+			//method in the "DigitImage Class" to prevent their conversion to a binary image
+			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - blob));
+			
+			//ELSE USE: (output==0) instead for a binary image
+			if(output==0){   //	if(output<=20){
+				output=1;
+			}else{
+				output=0;
+			}
+		
+			sum = sum + output ;
+			
+			
+			
+	
+		
+			
+			
+		}
+		return sum;
+	}
+	
 	/*
 	 * Returns the output from a given node after the input has been summed.It takes the layer that the node is in, the index of the node in the
 	 * layer, and the output from the previous layer
@@ -119,24 +181,28 @@ public class KNearestNeighbors {
 			//method in the "DigitImage Class" to prevent their conversion to a binary image
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
 			
-			//ELSE USE: (output==0) instead for a binary image
-			if(output<=20){
+		
+			if(output<=20){   
 				output=1;
 			}else{
 				output=0;
 			}
-			
-			
+		
 			sum = sum + output ;
+
+			
 		}
 		return sum;
 	}
+
+	
 
 	/* This returns an array representing the output of all nodes in the given layer */
 	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
 		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
 		for (int i = 0; i < currentLayer.size(); i++) {
 			double output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
+			//double output = nodeOutputBinary(currentLayer, outputFromPreviousLayer, i);
 			outputOfCurrentlayer.add(output);
 		}
 		return outputOfCurrentlayer;

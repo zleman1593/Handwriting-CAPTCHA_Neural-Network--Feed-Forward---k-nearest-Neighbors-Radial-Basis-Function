@@ -52,7 +52,7 @@ public class RadialBasisFunction {
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 
 	
-	public static final int TRAINING_SET_REDUCTION_FACTOR=10;
+	public static final int TRAINING_SET_REDUCTION_FACTOR=20;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
 		// String trainingImages=args[7];
@@ -60,6 +60,8 @@ public class RadialBasisFunction {
 		// String trainingLabels=args[9];
 		// String testingLabels=args[10];
 		// sigma = Integer.parseInt(args[11]); 
+		// epochs = Integer.parseInt(args[12]); 
+		// learningRate = Double.parseDouble(args[13]); 
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 		usePriorWeights=false;
@@ -68,16 +70,16 @@ public class RadialBasisFunction {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
-		epochs = 6; // For binary I am testing with sigam = 50
-		learningRate=0.5;
+		sigma = 15; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
+		epochs = 6; // For binary I am testing with sigam =  between 15-10
+		learningRate=0.3;
 		initializeRBF(trainingImages, trainingLabels);
 		
-		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> %
+		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> less accurate%
 		
 		if (!usePriorWeights) {
 			long startTime = System.currentTimeMillis();
-			readDataFromTrainedFiles();//Delete this line-----------------------------------Only for testing purposes (allows breaks between training epochs)
+			//readDataFromTrainedFiles();//Delete this line-----------------------------------Only for testing purposes (allows breaks between training epochs)
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
