@@ -10,10 +10,9 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class KNearestNeighbors {
-	
+
 	// Just look at 200 images for now
 	public static int numberOfImagesToDebugWith;
-	
 	// Tracks the number of images processed in the testing set.
 	public static double countOfImagesAnalyzed = 0;
 	// Tracks the number of images correctly identified in the testing set.
@@ -72,12 +71,12 @@ public class KNearestNeighbors {
 		numberOfImagesToDebugWith = 200;
 		// Trains the network
 		initializeKNearestNeighbours(trainingImages, trainingLabels);
-		
+
 		long startTime = System.currentTimeMillis();
-		
+
 		// Loads test data for the K-Nearest Neighbors Network
 		testKNearestNeighbours(testingImages, testingLabels);
-		
+
 		Runnable r1 = new Runnable() {
 			public void run() {
 				//Tests the first quarter of the input data
@@ -203,9 +202,9 @@ public class KNearestNeighbors {
 		for (int i = 0; i < currentLayer.size(); i++) {
 			double output;
 			if(!binaryInput){
-			 output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
+				output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
 			}else{
-			 output = nodeOutputBinary(currentLayer, outputFromPreviousLayer, i);
+				output = nodeOutputBinary(currentLayer, outputFromPreviousLayer, i);
 			}
 			outputOfCurrentlayer.add(output);
 		}
@@ -220,32 +219,32 @@ public class KNearestNeighbors {
 
 
 			//I IF K=1 just run the commented out code as it is faster.	
+			double output = 0;
+			if(k==1){	
 
-			/*	
+
+				//Find which node has the maximum output and then
+				//return the number that is at that node position in the associated output array.
+
+				double currentMax = 0;
+				for (int j = 0; j < hiddenLayerDottedOutputValues.size(); j++) {
+					if (hiddenLayerDottedOutputValues.get(j) > currentMax) {
+						currentMax = hiddenLayerDottedOutputValues.get(j);
+						output = hiddenLayerToOutput.get(j);
+					}
+				}
+			}
+			else{
+
+				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues.size()];
+				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
 
 
-			//Find which node has the maximum output and then
-			//return the number that is at that node position in the associated output array.
-			 double currentOutput = 0;
-			 double currentMax = 0;
-			 for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
-				if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
-					currentMax = hiddenLayerDotedOutputValues.get(j);
-					currentOutput = hiddenLayerToOutput.get(j);
-			 	}
-			 }
-
-			 */
-
-			int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues.size()];
-			ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-			int output = 0;
-
-			initializeIndices(indicesOfDottedOutputList);
-			parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues);
-			findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-			output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-
+				initializeIndices(indicesOfDottedOutputList);
+				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues);
+				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
+				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
+			}
 			System.out.println("Guess using the closest match: " + output);
 			double number = networkInputData.get(i).getLabel();
 			System.out.println("Correct answer1: " + number);
@@ -313,39 +312,12 @@ public class KNearestNeighbors {
 		}
 		return mostCommonValue;
 
-		/*
-		// The following two lines sorts the bestKOutputsList in descending order. 
-		Collections.sort(bestKOutputsList); 
-		Collections.reverse(bestKOutputsList);
-		// The following code finds the most frequently occurred value in the list.
-		int bestOutputIndex = 0; // The index of the most occurred output.
-		int maxNumOccurrences = 0; // Maximum number of occurrences for one output.
-		for (int m = 0; m < bestKOutputsList.size(); m++) {
-			int occurrences = 0;
-			for (int n = m + 1; n < bestKOutputsList.size(); n++) {
-				// If the output is repeated
-				if (bestKOutputsList.get(m).equals(bestKOutputsList.get(n))) {
-					occurrences++;
-				}
-				else {
-					// Going to the next output (because the array is sorted), store data. 
-					if (occurrences > maxNumOccurrences) {
-						maxNumOccurrences = occurrences;
-						bestOutputIndex = m;
-					}
-					// Outer loop jumps to next output.
-					m = n - 1;
-					break;
-				}
-			}
-		}
-		return bestKOutputsList.get(bestOutputIndex);*/
+
 	}
 
 
 	public static void solveTestingData2(ArrayList<DigitImage> networkInputData, int k) {
-		// Just look at 20 images for now
-		int numberOfImagesToDebugWith = 200;
+
 
 		//long startTime = System.currentTimeMillis();
 		for (int i = (numberOfImagesToDebugWith/2) -1; i >=numberOfImagesToDebugWith/4 ; i--) {
@@ -354,35 +326,37 @@ public class KNearestNeighbors {
 
 
 			//I IF K=1 just run the commented out code as it is faster.	
+			double output = 0;
+			if(k==1){	
 
-			/*	
+
+				//Find which node has the maximum output and then
+				//return the number that is at that node position in the associated output array.
+
+				double currentMax = 0;
+				for (int j = 0; j < hiddenLayerDottedOutputValues.size(); j++) {
+					if (hiddenLayerDottedOutputValues.get(j) > currentMax) {
+						currentMax = hiddenLayerDottedOutputValues.get(j);
+						output = hiddenLayerToOutput.get(j);
+					}
+				}
+			}
+			else{
+
+				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues2.size()];
+				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
 
 
-		//Find which node has the maximum output and then
-		//return the number that is at that node position in the associated output array.
-		 double currentOutput = 0;
-		 double currentMax = 0;
-		 for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
-			if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
-				currentMax = hiddenLayerDotedOutputValues.get(j);
-				currentOutput = hiddenLayerToOutput.get(j);
-		 	}
-		 }
+				initializeIndices(indicesOfDottedOutputList);
+				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues2);
+				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
+				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
 
-			 */
-
-			int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues2.size()];
-			ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-			int output = 0;
-
-			initializeIndices(indicesOfDottedOutputList);
-			parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues2);
-			findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-			output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-
-			System.out.println("Guess using the closest match: " + output);
+				System.out.println("Guess using the closest match: " + output);
+			}
 			double number = networkInputData.get(i).getLabel();
 			System.out.println("Correct answer2: " + number);
+
 
 			countOfImagesAnalyzed2++;
 			if (number == output) {
@@ -398,12 +372,6 @@ public class KNearestNeighbors {
 
 
 	public static void solveTestingData3(ArrayList<DigitImage> networkInputData, int k) {
-		// Just look at 20 images for now
-		int numberOfImagesToDebugWith = 200;
-
-
-
-
 		//long startTime = System.currentTimeMillis();
 		for (int i =( (numberOfImagesToDebugWith*3)/4)-1; i >=numberOfImagesToDebugWith/2 ; i--) {
 			ArrayList<Double> temp = networkInputData.get((int)i).getArrayListData();
@@ -411,32 +379,32 @@ public class KNearestNeighbors {
 
 
 			//I IF K=1 just run the commented out code as it is faster.	
+			double output = 0;
+			if(k==1){	
 
-			/*	
+
+				//Find which node has the maximum output and then
+				//return the number that is at that node position in the associated output array.
+
+				double currentMax = 0;
+				for (int j = 0; j < hiddenLayerDottedOutputValues.size(); j++) {
+					if (hiddenLayerDottedOutputValues.get(j) > currentMax) {
+						currentMax = hiddenLayerDottedOutputValues.get(j);
+						output = hiddenLayerToOutput.get(j);
+					}
+				}
+			}
+			else{
+
+				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues3.size()];
+				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
 
 
-	//Find which node has the maximum output and then
-	//return the number that is at that node position in the associated output array.
-	 double currentOutput = 0;
-	 double currentMax = 0;
-	 for (int j = 0; j < hiddenLayerDotedOutputValues.size(); j++) {
-		if (hiddenLayerDotedOutputValues.get(j) > currentMax) {
-			currentMax = hiddenLayerDotedOutputValues.get(j);
-			currentOutput = hiddenLayerToOutput.get(j);
-	 	}
-	 }
-
-			 */
-
-			int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues3.size()];
-			ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-			int output = 0;
-
-			initializeIndices(indicesOfDottedOutputList);
-			parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues3);
-			findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-			output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-
+				initializeIndices(indicesOfDottedOutputList);
+				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues3);
+				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
+				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
+			}
 			System.out.println("Guess using the closest match: " + output);
 			double number = networkInputData.get((int)i).getLabel();
 			System.out.println("Correct answer3: " + number);
@@ -456,8 +424,6 @@ public class KNearestNeighbors {
 
 
 	public static void solveTestingData4(ArrayList<DigitImage> networkInputData, int k) {
-		// Just look at 20 images for now
-		int numberOfImagesToDebugWith = 200;
 
 		//long startTime = System.currentTimeMillis();
 		for (int i = numberOfImagesToDebugWith; i >= (numberOfImagesToDebugWith*3)/4 ; i--) {
@@ -466,32 +432,32 @@ public class KNearestNeighbors {
 
 
 			//I IF K=1 just run the commented out code as it is faster.	
+			double output = 0;
+			if(k==1){	
 
-			/*	
+
+				//Find which node has the maximum output and then
+				//return the number that is at that node position in the associated output array.
+
+				double currentMax = 0;
+				for (int j = 0; j < hiddenLayerDottedOutputValues.size(); j++) {
+					if (hiddenLayerDottedOutputValues.get(j) > currentMax) {
+						currentMax = hiddenLayerDottedOutputValues.get(j);
+						output = hiddenLayerToOutput.get(j);
+					}
+				}
+			}
+			else{
+
+				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues4.size()];
+				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
 
 
-	//Find which node has the maximum output and then
-	//return the number that is at that node position in the associated output array.
-	 double currentOutput = 0;
-	 double currentMax = 0;
-	 for (int j = 0; j < hiddenLayerDottedOutputValues4.size(); j++) {
-		if (hiddenLayerDottedOutputValues4.get(j) > currentMax) {
-			currentMax = hiddenLayerDotedOutputValues.get(j);
-			currentOutput = hiddenLayerToOutput.get(j);
-	 	}
-	 }
-
-			 */
-
-			int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues4.size()];
-			ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-			int output = 0;
-
-			initializeIndices(indicesOfDottedOutputList);
-			parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues4);
-			findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-			output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-
+				initializeIndices(indicesOfDottedOutputList);
+				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues4);
+				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
+				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
+			}
 			System.out.println("Guess using the closest match: " + output);
 			double number = networkInputData.get(i).getLabel();
 			System.out.println("Correct answer4: " + number);
@@ -506,7 +472,7 @@ public class KNearestNeighbors {
 			System.out.println(" ");
 		}
 	}
-	
+
 	/*
 	 * Returns the output from a given node after the input has been summed.It takes the layer that the node is in, the index of the node in the
 	 * layer, and the output from the previous layer
@@ -518,30 +484,29 @@ public class KNearestNeighbors {
 			//(increases likely hood to match binary images) (like the diffuse border on grayscale images)
 			double blob=0;
 			blob = blob + outputFromPreviousLayer.get(i);
-			
+
 			if(!(i<=30)){
-			blob = blob + outputFromPreviousLayer.get(i-1);
-			blob = blob + outputFromPreviousLayer.get(i-2);
-			blob = blob + outputFromPreviousLayer.get(i-26);
-			blob = blob + outputFromPreviousLayer.get(i-27);
-			blob = blob + outputFromPreviousLayer.get(i-28);
-			blob = blob + outputFromPreviousLayer.get(i-29);
-			blob = blob + outputFromPreviousLayer.get(i-30);
-			
-	
+				blob = blob + outputFromPreviousLayer.get(i-1);
+				blob = blob + outputFromPreviousLayer.get(i-2);
+				blob = blob + outputFromPreviousLayer.get(i-26);
+				blob = blob + outputFromPreviousLayer.get(i-27);
+				blob = blob + outputFromPreviousLayer.get(i-28);
+				blob = blob + outputFromPreviousLayer.get(i-29);
+				blob = blob + outputFromPreviousLayer.get(i-30);
+
+
 			}
 			if(!(i>=754)){
-			blob = blob + outputFromPreviousLayer.get(i+1);
-			blob = blob + outputFromPreviousLayer.get(i+2);
-			blob = blob + outputFromPreviousLayer.get(i+26);
-			blob = blob + outputFromPreviousLayer.get(i+27);
-			blob = blob + outputFromPreviousLayer.get(i+28); 
-			blob = blob + outputFromPreviousLayer.get(i+29);
-			blob = blob + outputFromPreviousLayer.get(i+30);
+				blob = blob + outputFromPreviousLayer.get(i+1);
+				blob = blob + outputFromPreviousLayer.get(i+2);
+				blob = blob + outputFromPreviousLayer.get(i+26);
+				blob = blob + outputFromPreviousLayer.get(i+27);
+				blob = blob + outputFromPreviousLayer.get(i+28); 
+				blob = blob + outputFromPreviousLayer.get(i+29);
+				blob = blob + outputFromPreviousLayer.get(i+30);
 			}
-			
-			
-			
+
+
 			if(blob>=1){
 				blob=1;
 			}
@@ -552,11 +517,11 @@ public class KNearestNeighbors {
 			}else{
 				output=0;
 			}
-		
+
 			sum = sum + output ;
-	
+
 		}
 		return sum;
 	}
-	
+
 }
