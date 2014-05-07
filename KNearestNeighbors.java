@@ -46,7 +46,8 @@ public class KNearestNeighbors {
 		// String trainingLabels=args[9];
 		// String testingLabels=args[10];
 		// int k = Integer.parseInt(args[11]); 
-
+		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
+		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 		// These are hard coded versions of the above
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
@@ -375,7 +376,7 @@ public class KNearestNeighbors {
 
 
 		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToDebugWith*1)/8; i >(numberOfImagesToDebugWith*2)/8 ; i--) {
+		for (int i = (numberOfImagesToDebugWith*1)/8; i <(numberOfImagesToDebugWith*2)/8 ; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues2 = outPutOfLayer(hiddenLayerNodes, temp);
 
@@ -428,7 +429,7 @@ public class KNearestNeighbors {
 
 	public static void solveTestingData3(ArrayList<DigitImage> networkInputData, int k) {
 		//long startTime = System.currentTimeMillis();
-		for (int i =(numberOfImagesToDebugWith*2)/8; i >(numberOfImagesToDebugWith*3)/8 ; i--) {
+		for (int i =(numberOfImagesToDebugWith*2)/8; i <(numberOfImagesToDebugWith*3)/8 ; i++) {
 			ArrayList<Double> temp = networkInputData.get((int)i).getArrayListData();
 			hiddenLayerDottedOutputValues3 = outPutOfLayer(hiddenLayerNodes, temp);
 
@@ -479,7 +480,7 @@ public class KNearestNeighbors {
 	public static void solveTestingData4(ArrayList<DigitImage> networkInputData, int k) {
 
 		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToDebugWith*3)/8; i >(numberOfImagesToDebugWith*4)/8 ; i--) {
+		for (int i = (numberOfImagesToDebugWith*3)/8; i <(numberOfImagesToDebugWith*4)/8 ; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
 			//I IF K=1 just run the commented out code as it is faster.	
@@ -522,7 +523,7 @@ public class KNearestNeighbors {
 	public static void solveTestingData5(ArrayList<DigitImage> networkInputData, int k) {
 
 		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToDebugWith*4)/8; i >(numberOfImagesToDebugWith*5)/8 ; i--) {
+		for (int i = (numberOfImagesToDebugWith*4)/8; i <(numberOfImagesToDebugWith*5)/8 ; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
 			//I IF K=1 just run the commented out code as it is faster.	
@@ -564,7 +565,7 @@ public class KNearestNeighbors {
 	public static void solveTestingData6(ArrayList<DigitImage> networkInputData, int k) {
 
 		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToDebugWith*5)/8; i >(numberOfImagesToDebugWith*6)/8 ; i--) {
+		for (int i = (numberOfImagesToDebugWith*5)/8; i <(numberOfImagesToDebugWith*6)/8 ; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
 			//I IF K=1 just run the commented out code as it is faster.	
@@ -606,7 +607,7 @@ public class KNearestNeighbors {
 	public static void solveTestingData7(ArrayList<DigitImage> networkInputData, int k) {
 
 		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToDebugWith*6)/8; i >(numberOfImagesToDebugWith*7)/8 ; i--) {
+		for (int i = (numberOfImagesToDebugWith*6)/8; i <(numberOfImagesToDebugWith*7)/8 ; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
 			//I IF K=1 just run the commented out code as it is faster.	
@@ -649,7 +650,7 @@ public class KNearestNeighbors {
 	public static void solveTestingData8(ArrayList<DigitImage> networkInputData, int k) {
 
 		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToDebugWith*7)/8; i > numberOfImagesToDebugWith ; i--) {
+		for (int i = (numberOfImagesToDebugWith*7)/8; i < numberOfImagesToDebugWith ; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
 			hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
 			//I IF K=1 just run the commented out code as it is faster.	
