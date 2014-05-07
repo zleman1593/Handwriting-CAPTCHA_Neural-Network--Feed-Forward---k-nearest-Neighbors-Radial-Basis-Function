@@ -274,12 +274,6 @@ public class NeuralNet {
 		fout.close();
 		oos2.close();
 		fout2.close();
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> multi-threading
 	}
 
 	/*
@@ -291,75 +285,27 @@ public class NeuralNet {
 			//for every image in the training file
 			long startTime = System.currentTimeMillis();
 			for (int images = 0; images < trainingData.size(); images++) { 
-<<<<<<< HEAD
-=======
-
->>>>>>> multi-threading
 
 				networkOutputError(trainingData, images);
 				// This returns the summed error from all output nodes (NOTE:Returned value is not currently used.)
 
-<<<<<<< HEAD
 				//The Duplicated code will be compressed into a method that takes four parameters that differ between the four threads.
 				Runnable r1 = new Runnable() {
 					public void run() {
 
 						// Update the weights to the output nodes
 						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES / 4; ii++) {
-=======
-//The Duplicated code will be compressed into a method that takes four parameters that differ between the four threads.
-
-				Runnable r1 = new Runnable() {
-					public void run() {
-						
-
-						// Update the weights to the output nodes
-						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES/4; ii++) {
->>>>>>> multi-threading
 							for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 								// Grabs the error that was calculated for the output of
 								// this output node
 								double error = tempOutput.get(tempOutput.size() - 1).get(ii);
 								// Update the weight using gradient descent
 								outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-<<<<<<< HEAD
 										+ (learningRate * error
 												* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
 												* tempOutput.get(tempOutput.size() - 3).get(j)));
 							}
 						}
-=======
-										+(learningRate
-												*error
-												*sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-												*tempOutput.get(tempOutput.size() - 3).get(j)));
-							}
-						}
-
-						
-						
-						// Update the weights to the nodes going to the hidden nodes
-						for (int ii = 0; ii < hiddenLayerNodes.size()/4; ii++) {
-
-
-							for (int j = 0; j < numberOfInputNodes; j++) {
-								double error = 0;
-								for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
-									// This is the summed error for the output layer
-									error= error+(sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
-											*tempOutput.get(tempOutput.size() - 1).get(k)
-											*outputLayerNodes.get(k).get(ii));
-
-								}
-								//Update the weight using gradient descent back propagation
-								hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-										+(learningRate
-												*error
-												*tempOutput.get(0).get(j))
-												*sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
-							}
-
->>>>>>> multi-threading
 
 						// Update the weights to the nodes going to the hidden nodes
 						for (int ii = 0; ii < hiddenLayerNodes.size() / 4; ii++) {
@@ -539,13 +485,8 @@ public class NeuralNet {
 					}
 					
 							
-<<<<<<< HEAD
 
 
-=======
-
-
->>>>>>> multi-threading
 					// Resets temporary data structure
 					tempOutput = new ArrayList<ArrayList<Double>>();
 			}
