@@ -63,6 +63,7 @@ public class NeuralNet {
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt";
 	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
 	
+	public static boolean binaryInput;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		// numberOfHiddenNodesInLayer2=args[1];
@@ -75,6 +76,7 @@ public class NeuralNet {
 		// String testingLabels=args[10];
 
 		// These are hard coded versions of the above
+		binaryInput=false;
 		numberOfHiddenNodesInLayer2 = 16;
 		epochs = 10;
 		learningRate = 0.3;
@@ -510,7 +512,7 @@ public class NeuralNet {
 	public static void initializeMultilayerFeedForward(String trainingImages, String trainingLabels) throws IOException {
 
 		// Loads training and testing data sets
-		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages);
+		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
 		ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the training data
@@ -564,7 +566,7 @@ public class NeuralNet {
 		countOfImagesAnalyzed=0;
 		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
-		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages);
+		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the testing data

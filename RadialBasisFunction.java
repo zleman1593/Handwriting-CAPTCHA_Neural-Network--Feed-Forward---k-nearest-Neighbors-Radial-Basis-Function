@@ -51,7 +51,7 @@ public class RadialBasisFunction {
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 
-	
+	public static boolean binaryInput;
 	public static final int TRAINING_SET_REDUCTION_FACTOR=20;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
@@ -73,6 +73,7 @@ public class RadialBasisFunction {
 		sigma = 15; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
 		epochs = 6; // For binary I am testing with sigam =  between 15-10
 		learningRate=0.3;
+		binaryInput=false;
 		initializeRBF(trainingImages, trainingLabels);
 		
 		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> less accurate%
@@ -99,7 +100,7 @@ public class RadialBasisFunction {
 	public static void initializeRBF(String trainingImages, String trainingLabels) throws IOException {
 
 		// Loads training and testing data sets
-		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages);
+		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
 	trainingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the training data
@@ -147,7 +148,7 @@ public class RadialBasisFunction {
 		countOfImagesAnalyzed=0;
 		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
-		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages);
+		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the testing data

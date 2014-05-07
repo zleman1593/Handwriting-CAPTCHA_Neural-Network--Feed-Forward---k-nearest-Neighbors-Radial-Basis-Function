@@ -49,6 +49,7 @@ public class KNearestNeighbors {
 	//How many nearest Neighbors to use
 	public static int k;
 
+	public static boolean binaryInput;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
 		// String trainingImages=args[7];
@@ -63,7 +64,8 @@ public class KNearestNeighbors {
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
 		k = 3;
-		// Trians the network
+		binaryInput=false;
+		// Trains the network
 		initializeKNearestNeighbours(trainingImages, trainingLabels);
 		
 		long startTime = System.currentTimeMillis();
@@ -126,7 +128,7 @@ public class KNearestNeighbors {
 	public static void initializeKNearestNeighbours(String trainingImages, String trainingLabels) throws IOException {
 
 		// Loads training and testing data sets
-		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages);
+		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
 		ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the training data
@@ -163,7 +165,7 @@ public class KNearestNeighbors {
 	public static void testKNearestNeighbours(String testingImages, String testingLabels) throws IOException {
 
 		// Loads testing data set
-		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages);
+		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		testingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the testing data
@@ -202,8 +204,12 @@ public class KNearestNeighbors {
 	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
 		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
 		for (int i = 0; i < currentLayer.size(); i++) {
-			double output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
-			//double output = nodeOutputBinary(currentLayer, outputFromPreviousLayer, i);
+			double output;
+			if(!binaryInput){
+			 output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
+			}else{
+			 output = nodeOutputBinary(currentLayer, outputFromPreviousLayer, i);
+			}
 			outputOfCurrentlayer.add(output);
 		}
 		return outputOfCurrentlayer;

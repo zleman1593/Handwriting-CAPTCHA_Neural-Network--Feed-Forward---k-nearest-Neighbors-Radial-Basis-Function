@@ -11,10 +11,10 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
 
  class DigitImageLoadingService {
-
+	 private static  boolean binary=true;
     private String labelFileName;
     private String imageFileName;
 
@@ -41,9 +41,10 @@ import java.util.List;
     private static final int IMAGE_SIZE = ROWS * COLUMNS;
 
 
-    public DigitImageLoadingService(String labelFileName, String imageFileName) {
+    public DigitImageLoadingService(String labelFileName, String imageFileName, boolean binaryChoice) {
         this.labelFileName = labelFileName;
         this.imageFileName = imageFileName;
+        binary = binaryChoice;
     }
 
     public ArrayList<DigitImage> loadDigitImages() throws IOException {
@@ -102,7 +103,7 @@ import java.util.List;
             int label = labelBytes[OFFSET_SIZE + ITEMS_SIZE + i];
             byte[] imageData = Arrays.copyOfRange(imageBytes, (i * IMAGE_SIZE) + IMAGE_OFFSET, (i * IMAGE_SIZE) + IMAGE_OFFSET + IMAGE_SIZE);
 
-            images.add(new DigitImage(label, imageData));
+            images.add(new DigitImage(label, imageData, binary));
         }
 
         return images;
