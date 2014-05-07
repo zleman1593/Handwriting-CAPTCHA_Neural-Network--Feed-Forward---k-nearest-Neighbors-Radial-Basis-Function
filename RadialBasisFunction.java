@@ -1,4 +1,9 @@
 /*This is a Radial Basis Function Neural Network trained by gradient descent on the weights from the hidden layer to the output nodes*/
+
+//Notes: This has only been tested on non thresholded images. Need to experiment with binary
+//Notes: The way threads are being implemented, up to ten cores can be used. Any more will not provide an advantage as only ten threads can be created.
+//If more than ten cores are available we could think about change the way we do multi-threading.
+
 import java.util.*;
 import java.io.IOException;
 import java.lang.Math;
@@ -44,8 +49,10 @@ public class RadialBasisFunction {
 	//File paths
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RbfResults";
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
-	
+	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 
+	
+	public static final int TRAINING_SET_REDUCTION_FACTOR=10;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
 		// String trainingImages=args[7];
@@ -54,16 +61,34 @@ public class RadialBasisFunction {
 		// String testingLabels=args[10];
 		// sigma = Integer.parseInt(args[11]); 
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
-
+		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
+		usePriorWeights=false;
 		// These are hard coded versions of the above
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.0%)
-		epochs = 10;
-		learningRate=0.3;
+		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
+		epochs = 6; // For binary I am testing with sigam = 50
+		learningRate=0.5;
 		initializeRBF(trainingImages, trainingLabels);
+		
+		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> %
+		
+		if (!usePriorWeights) {
+			long startTime = System.currentTimeMillis();
+			readDataFromTrainedFiles();//Delete this line-----------------------------------Only for testing purposes (allows breaks between training epochs)
+			trainTheNetwork(trainingData);
+			long endTime = System.currentTimeMillis();
+			executionTime = endTime - startTime;
+			System.out.println("Training time: " + executionTime + " milliseconds");
+			writeTrainedWeights();
+
+		} else {
+			readDataFromTrainedFiles();
+		}
+		
+		
 
 		// Test the  RBF Network
 		testRBF(testingImages, testingLabels);
@@ -73,7 +98,7 @@ public class RadialBasisFunction {
 
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages);
-		ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
+	trainingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the training data
 			trainingData = train.loadDigitImages();
@@ -90,10 +115,10 @@ public class RadialBasisFunction {
 		// (one per pixel)
 		numberOfInputNodes = trainingData.get(0).getData().length;
 
-		long startTime = System.currentTimeMillis();
+	
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
-		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size()/20; i++) {
+		// Currently dividing by 20 to only use a 2oth of the training set so we don't run out of memory. We likely don't need that many anyway.
+		for (int i = 0; i < trainingData.size()/TRAINING_SET_REDUCTION_FACTOR; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
@@ -105,21 +130,14 @@ public class RadialBasisFunction {
 		// layer.
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>();
-			for (int j = 0; j <  trainingData.size()/20; j++) {
+			for (int j = 0; j <  trainingData.size()/TRAINING_SET_REDUCTION_FACTOR; j++) {
 				weights.add(random.nextGaussian());
 			}
 			outputLayerNodes.add(weights);
 		}
 
 
-		trainTheNetwork(trainingData);
-		// Creates data files that can be reused by the network without
-				// retraining.
-				writeTrainedWeights();
-		long endTime = System.currentTimeMillis();
-		executionTime = endTime - startTime;
-		System.out.println("Training time: " + executionTime + " milliseconds");
-
+	
 	}
 
 	public static void testRBF(String testingImages, String testingLabels) throws IOException {
@@ -192,7 +210,7 @@ public class RadialBasisFunction {
 		for (int i = 0; i < epochs; i++) { // for each epoch
 			//for every image in the training file
 			long startTime = System.currentTimeMillis();
-			for (int images = 0; images < trainingData.size()/20; images++) { 
+			for (int images = 0; images < trainingData.size()/TRAINING_SET_REDUCTION_FACTOR; images++) { 
 
 				networkOutputError(trainingData, images);
 				Runnable r1 = new Runnable() {
@@ -373,16 +391,12 @@ public class RadialBasisFunction {
 				tempOutput = new ArrayList<ArrayList<Double>>();
 			}
 
-			/*try {
-				testRBF("Testing-images", "Testing-Labels");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
+		
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
 
-			System.out.println("Epoch" +i+ " is done.");
+			System.out.println("Epoch " + (i+1) + " has finished.");
 
 		}
 
@@ -464,10 +478,10 @@ public class RadialBasisFunction {
 			}
 		}
 		if (correctOutput == maxInt) {
-			System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
+			//System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
 			countOfCorrectImagesAnalyzed++;
 		} else {
-			System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
+			//System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
 		}
 
 		OutputVector result = new OutputVector(correctOutput, maxInt);
@@ -490,16 +504,10 @@ public class RadialBasisFunction {
 	
 	public static void readDataFromTrainedFiles() throws IOException, ClassNotFoundException {
 		// Grabs weights to output nodes
-		FileInputStream fin = new FileInputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt");
+		FileInputStream fin = new FileInputStream(filePathTrainedOutputWeights);
 		ObjectInputStream ois = new ObjectInputStream(fin);
 		outputLayerNodes = (ArrayList<ArrayList<Double>>) ois.readObject();
 		fin.close();
-		// Grabs weights to hidden nodes
-		FileInputStream fin2 = new FileInputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt");
-		ObjectInputStream ois2 = new ObjectInputStream(fin2);
-		hiddenLayerNodes = (ArrayList<ArrayList<Double>>) ois2.readObject();
-		fin2.close();
-
 	}
 	
 	
@@ -523,7 +531,7 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Sigma: " + Double.toString(sigma));
 		outputWriter.newLine();
-		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/20));//Note this value is hard coded at the moment
+		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/TRAINING_SET_REDUCTION_FACTOR));
 		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");

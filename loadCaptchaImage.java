@@ -25,7 +25,7 @@ public class loadCaptchaImage {
 
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File("xfnrsn.gif"));
+			img = ImageIO.read(new File("captcha2.gif"));
 		} catch (IOException e) {
 		}
 		int q=img.getRGB(0,0);
