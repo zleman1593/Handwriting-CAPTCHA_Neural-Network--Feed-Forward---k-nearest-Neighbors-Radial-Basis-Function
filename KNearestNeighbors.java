@@ -38,6 +38,7 @@ public class KNearestNeighbors {
 	public static int k;
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
+	public static final int TRAINING_SET_REDUCTION_FACTOR=10;
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		// usePriorWeights=Boolean.parseBolean(args[4]);
 		// String trainingImages=args[7];
@@ -208,7 +209,7 @@ public class KNearestNeighbors {
 		long startTime = System.currentTimeMillis();
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
 		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size()/3; i++) {
+		for (int i = 0; i < trainingData.size()/TRAINING_SET_REDUCTION_FACTOR; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);

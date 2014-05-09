@@ -53,7 +53,11 @@ public class RadialBasisFunction {
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
 	public static final int TRAINING_SET_REDUCTION_FACTOR=20;
+	public static int[]  holder=new int[10];
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		for (int m = 0; m < holder.length; m++) {
+			holder[m]=0;
+		}
 		// usePriorWeights=Boolean.parseBolean(args[4]);
 		// String trainingImages=args[7];
 		// String testingImages=args[8];
@@ -64,15 +68,15 @@ public class RadialBasisFunction {
 		// learningRate = Double.parseDouble(args[13]); 
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
-		usePriorWeights=false;
+		usePriorWeights=true;
 		// These are hard coded versions of the above
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		sigma = 15; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
-		epochs = 6; // For binary I am testing with sigam =  between 15-10
-		learningRate=0.3;
+		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
+		epochs = 20; // For binary I am testing with sigam =  between 15-10 (11 seems optimal)
+		learningRate=1;
 		binaryInput=false;
 		initializeRBF(trainingImages, trainingLabels);
 		
@@ -80,7 +84,7 @@ public class RadialBasisFunction {
 		
 		if (!usePriorWeights) {
 			long startTime = System.currentTimeMillis();
-			//readDataFromTrainedFiles();//Delete this line-----------------------------------Only for testing purposes (allows breaks between training epochs)
+			readDataFromTrainedFiles();//Delete this line-----------------------------------Only for testing purposes (allows breaks between training epochs)
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
@@ -95,6 +99,10 @@ public class RadialBasisFunction {
 
 		// Test the  RBF Network
 		testRBF(testingImages, testingLabels);
+		
+				for (int m = 0; m < holder.length; m++) {
+					System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+				}
 	}
 
 	public static void initializeRBF(String trainingImages, String trainingLabels) throws IOException {
@@ -174,8 +182,9 @@ public class RadialBasisFunction {
 	public static double hiddenNodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
+		
 			sum=sum+Math.pow(layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i),2);
-
+		
 		}
 		return Math.exp(-1*(sum/sigma));
 	}
@@ -484,6 +493,10 @@ public class RadialBasisFunction {
 			//System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
 			countOfCorrectImagesAnalyzed++;
 		} else {
+
+				holder[(int) maxInt]++;	
+			
+		
 			//System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
 		}
 
