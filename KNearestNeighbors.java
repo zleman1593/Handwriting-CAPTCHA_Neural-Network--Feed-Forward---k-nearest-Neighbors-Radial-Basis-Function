@@ -39,7 +39,11 @@ public class KNearestNeighbors {
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
 	public static final int TRAINING_SET_REDUCTION_FACTOR=10;
+	public static int[]  holder=new int[10];
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		for (int m = 0; m < holder.length; m++) {
+			holder[m]=0;
+		}
 		// usePriorWeights=Boolean.parseBolean(args[4]);
 		// String trainingImages=args[7];
 		// String testingImages=args[8];
@@ -181,7 +185,9 @@ public class KNearestNeighbors {
 		System.out.println("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
 		System.out.println("Solution time: " + executionTime + " milliseconds");
 		System.out.println("# Correct: " + countOfCorrectImagesAnalyzedTotal);
-
+		for (int m = 0; m < holder.length; m++) {
+			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+		}
 
 	}
 
@@ -313,6 +319,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
@@ -423,6 +430,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
@@ -475,6 +483,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
@@ -520,6 +529,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
@@ -564,6 +574,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
@@ -607,6 +618,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
@@ -650,6 +662,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
@@ -694,6 +707,7 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
+				holder[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
