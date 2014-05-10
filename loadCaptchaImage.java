@@ -36,7 +36,7 @@ public class loadCaptchaImage {
 	public static ArrayList<DigitImage> images = new ArrayList<DigitImage>();
 
 	public static void main(String args[]) throws IOException {
-		  byte[] imageData= new byte[588];//Just a large number for now that should hold the 7*84 px images
+		  int[] imageData= new int[154];//Just a large number for now that should hold the 7*84 px images
 		//Import the CAPTCHAs. Images in one array and names at corresponding indicies in other array
 		File folder = new File("Captcha Testing Data");
 		File[] listOfFiles = folder.listFiles();
@@ -69,24 +69,18 @@ public class loadCaptchaImage {
 			lastColumnExplored=x+7;
 				BufferedImage subImage=img.get(i).getSubimage(0,0 , 7, 22);
 				//byte[] byte_buffer = ((DataBufferByte) subImage.getRaster().getDataBuffer()).getData();
-				try{
-				
+				try{				
 					ImageIO.write(subImage, "gif", new File("letter_output.gif")  );//so we can visualize the output
-
 					 int w = subImage.getWidth();
 					    int h = subImage.getHeight();
-
 					   int[] dataBuffInt = subImage.getRGB(0, 0, w, h, null, 0, w); 
 					   for(int u=0;u<dataBuffInt.length; u++){
 					    Color c = new Color(dataBuffInt[u]);
-		
-					    System.out.print(c.getRed()+ " "+c.getGreen()+ " "  + c.getBlue()+ " "+c.getAlpha()+" "+u);   // = (dataBuffInt[100] >> 16) & 0xFF
-
+					    System.out.print(c.getRed()+ " "+c.getGreen()+ " "  + c.getBlue()+ " "+c.getAlpha()+" "+u);
 					    System.out.println("");
+					    imageData[i]=c.getRed();
 					   }
-				    
-					
-					//imageData=;
+
 					}catch(IOException e){
 						System.out.println(e.getMessage());
 					}	
