@@ -21,7 +21,6 @@ import java.awt.image.Raster;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.DataBufferByte;
 import java.awt.Color;
-import java.net.*;
 
 import javax.imageio.ImageIO;
 
@@ -34,70 +33,71 @@ public class loadCaptchaImage {
 	public static ArrayList<String> imgName = new ArrayList<String>();
 	//For debugging purposes, currently this array will hold 5 DigitImage elements each of which is one of the 5 chars in the Captcha
 	public static ArrayList<DigitImage> images = new ArrayList<DigitImage>();
+	//Is the parent data structure that holds arrayLists of captcha characters in the digitImage format
+	//This data structure is then fed to the Neural Networks
+	public static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
+
 
 	public static void main(String args[]) throws IOException {
-		  int[] imageData= new int[154];//Just a large number for now that should hold the 7*84 px images
+		int[] imageData= new int[154];//Just a large number for now that should hold the 7*84 px images
 		//Import the CAPTCHAs. Images in one array and names at corresponding indicies in other array
 		File folder = new File("Captcha Testing Data");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()&& !(listOfFiles[i].getName().contentEquals(".DS_Store"))) {
 				System.out.println("File " + listOfFiles[i].getName());
-
 				img.add(ImageIO.read(new File("Captcha Testing Data/" +listOfFiles[i].getName())));
 				imgName.add(listOfFiles[i].getName());
 			}
 		}
-		
+
 		//For every CAPTCHA
 		for (int i=0; i<folder.listFiles().length;i++){	
-			
-			
-	int lastColumnExplored=0;
-			
+
+
+			int lastColumnExplored=-1;
 			//For a single CAPTCHA
 			for (int j=0; j<LENGTH_OF_CAPTCHA;j++){
 				//For each char in the CAPTCHA
-				
+
+
+				//IVY
 				//Starting from lastColumnExplored+1
-				//Search  columns until a black pixel is detected
-				//The pass x value of column to x
-				
-				
-				
-			int x=0;
-			lastColumnExplored=x+7;
-				BufferedImage subImage=img.get(i).getSubimage(0,0 , 7, 22);
-				//byte[] byte_buffer = ((DataBufferByte) subImage.getRaster().getDataBuffer()).getData();
+				//Search  columns until a no black pixels are detected
+				//Then search for the next column with black pixels 
+				//The the value of column to x
+				int x=0;// not zero
+
+				lastColumnExplored=x+7;
+				BufferedImage subImage=img.get(i).getSubimage(x,0 , 7, 22);
 				try{				
 					ImageIO.write(subImage, "gif", new File("letter_output.gif")  );//so we can visualize the output
-					 int w = subImage.getWidth();
-					    int h = subImage.getHeight();
-					   int[] dataBuffInt = subImage.getRGB(0, 0, w, h, null, 0, w); 
-					   for(int u=0;u<dataBuffInt.length; u++){
-					    Color c = new Color(dataBuffInt[u]);
-					    System.out.print(c.getRed()+ " "+c.getGreen()+ " "  + c.getBlue()+ " "+c.getAlpha()+" "+u);
-					    System.out.println("");
-					    imageData[i]=c.getRed();
-					   }
-
-					}catch(IOException e){
-						System.out.println(e.getMessage());
-					}	
+					int w = subImage.getWidth();
+					int h = subImage.getHeight();
+					int[] dataBuffInt = subImage.getRGB(0, 0, w, h, null, 0, w); 
+					for(int u=0;u<dataBuffInt.length; u++){
+						Color c = new Color(dataBuffInt[u]);
+						//System.out.print(c.getRed()+ " "+c.getGreen()+ " "  + c.getBlue()+ " "+c.getAlpha()+" "+u);
+						//System.out.println("");
+						imageData[i]=c.getRed();
+					}
+				}catch(IOException e){
+					System.out.println(e.getMessage());
+				}	
 				//Add letter to array holding each letter of a single captcha
-				//Note: This array will currently have all chars from all CAPTCHAS added to it. This will change. 
+				//IVY: This array "images"  currently has all chars from all CAPTCHAS added to it.  Change this so each captcha has its own arraylist.
+				//After each arraylist for a single captcha has all chars from the captcha added, add the array list to a parent arraylist.
 				try { 
-			        Integer.parseInt(imgName.get(i).substring(j, j+1)); 
-			    	images.add(new DigitImage(Integer.parseInt(imgName.get(i).substring(j, j+1)), imageData, false));
-			    } catch(NumberFormatException e) { 
-			    	images.add(new DigitImage(9, imageData, true));//because DigitImage can only take ints for now. Just pass 9 if there is a letter
-			    }
+					Integer.parseInt(imgName.get(i).substring(j, j+1)); 
+					images.add(new DigitImage(Integer.parseInt(imgName.get(i).substring(j, j+1)), imageData, false));
+				} catch(NumberFormatException e) { 
+					//IVY: Convert  imgName.get(i).substring(j, j+1) into a number and replace the "9" below
+					images.add(new DigitImage(9, imageData, false));
+				}
 				imageData=null;
 			}
-			
-			
-			
-
+			//Add broken up CAPTCHA to parent data structure
+			allCaptchas.add(images);
 		}
 	}
 

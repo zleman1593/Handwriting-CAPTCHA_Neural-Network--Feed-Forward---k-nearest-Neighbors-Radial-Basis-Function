@@ -29,16 +29,14 @@ public class DigitImage {
 			otsu();
 		}
 	}
-	
+	//This will be the constructor for captchas
 	public DigitImage(int label, int[] data, boolean binary) {
 		this.label = label;
 		this.data = new double[data.length];
 		for (int i = 0; i < this.data.length; i++) {
-			this.data[i] = data[i] & 0xFF; // convert to unsigned
+			this.data[i] = data[i];
 		}
-		if (binary==true){
-			otsu();
-		}
+		
 	}
 
 	// Uses Otsu's Threshold algorithm to convert from grayscale to black and
@@ -136,5 +134,14 @@ public class DigitImage {
 		}
 		solutionVector.set((int) label, 1);
 	}
+
+
+
+public void vectorizeTrainingDataAlphaNum() {
+	for (int i = 0; i < 36; i++) {
+		solutionVector.add(0);
+	}
+	solutionVector.set((int) label, 1);
+}
 
 }
