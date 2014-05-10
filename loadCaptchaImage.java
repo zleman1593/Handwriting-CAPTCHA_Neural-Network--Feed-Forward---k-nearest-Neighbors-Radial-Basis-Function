@@ -41,6 +41,8 @@ public class loadCaptchaImage {
 	public static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
 	// Holds all of the training images that will be fed to the neural networks
 	public static ArrayList<DigitImage> alltrainingData = new ArrayList<DigitImage>();
+	
+	public static final int CHAR_WIDTH=9;
 
 	public static void main(String args[]) throws IOException {
 		
@@ -54,7 +56,7 @@ public class loadCaptchaImage {
 	
 	public static void readAllCaptchas() throws IOException{
 	
-	int[] imageData= new int[9*22];//Just a large number for now that should hold the 9*84 px images
+	int[] imageData= new int[CHAR_WIDTH*22];//Just a large number for now that should hold the 9*84 px images
 	//Import the CAPTCHAs. Images in one array and names at corresponding indicies in other array
 	File folder = new File("Captcha Testing Data");
 	File[] listOfFiles = folder.listFiles();
@@ -83,8 +85,8 @@ public class loadCaptchaImage {
 			//The the value of column to x
 			int x=0;// not zero
 
-			lastColumnExplored=x+7;
-			BufferedImage subImage=img.get(i).getSubimage(x,0 , 9, 22);//reads nine pixels in width and entire height
+			lastColumnExplored=x+CHAR_WIDTH;
+			BufferedImage subImage=img.get(i).getSubimage(x,0 , CHAR_WIDTH, 22);//reads nine pixels in width and entire height
 			try{				
 				ImageIO.write(subImage, "gif", new File("letter_output.gif")  );//so we can visualize the output
 				int w = subImage.getWidth();
@@ -106,8 +108,8 @@ public class loadCaptchaImage {
 				Integer.parseInt(imgName.get(i).substring(j, j+1)); 
 				images.add(new DigitImage(Integer.parseInt(imgName.get(i).substring(j, j+1)), imageData, false));
 			} catch(NumberFormatException e) { 
-				//IVY: Convert  imgName.get(i).substring(j, j+1) into a number and replace the "9" below
-				images.add(new DigitImage(9, imageData, false));
+				//IVY: Convert  imgName.get(i).substring(j, j+1) into a number and replace the "8" below
+				images.add(new DigitImage(8, imageData, false));
 			}
 			imageData=null;
 		}
@@ -121,7 +123,7 @@ public class loadCaptchaImage {
 		//Ivy: Here is a rough skeleton. Use the code from the the other method to help write this.
 		
 		
-		int[] imageData= new int[9*22];//Just a large number for now that should hold the 9*84 px images
+		int[] imageData= new int[CHAR_WIDTH*22];//Just a large number for now that should hold the 9*84 px images
 		//read an image to a buffered image
 		
 		
@@ -130,7 +132,7 @@ public class loadCaptchaImage {
 		
 		//If image has more than 9 columns
 		//read  subimage  up to nine columns. i.e don't read  read column ten 
-	//USE:	BufferedImage subImage=   .getSubimage(x,0 , 9, 22);//reads nine pixels in width and entire height
+	//USE:	BufferedImage subImage=   .getSubimage(x,0 , CHAR_WIDTH, 22);//reads nine pixels in width and entire height
 		
 	
 		
