@@ -20,6 +20,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.ByteArrayOutputStream;
 import java.awt.image.DataBufferByte;
+import java.awt.Color;
+import java.net.*;
 
 import javax.imageio.ImageIO;
 
@@ -41,11 +43,7 @@ public class loadCaptchaImage {
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()&& !(listOfFiles[i].getName().contentEquals(".DS_Store"))) {
 				System.out.println("File " + listOfFiles[i].getName());
-				
-				//BufferedImage temppppp2 = new BufferedImage(84,7,BufferedImage.TYPE_BYTE_BINARY);
-				//BufferedImage temppppp=ImageIO.read(new File("Captcha Testing Data/" +listOfFiles[i].getName()));
-				//temppppp2.setData(temppppp.getData());
-				
+
 				img.add(ImageIO.read(new File("Captcha Testing Data/" +listOfFiles[i].getName())));
 				imgName.add(listOfFiles[i].getName());
 			}
@@ -69,16 +67,26 @@ public class loadCaptchaImage {
 				
 			int x=0;
 			lastColumnExplored=x+7;
-				BufferedImage subImage=img.get(i).getSubimage(7,0 , 7, 22);
+				BufferedImage subImage=img.get(i).getSubimage(0,0 , 7, 22);
 				//byte[] byte_buffer = ((DataBufferByte) subImage.getRaster().getDataBuffer()).getData();
 				try{
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ImageIO.write(subImage, "gif", baos );
+				
 					ImageIO.write(subImage, "gif", new File("letter_output.gif")  );//so we can visualize the output
-					baos.flush();
-					byte[] imageInByte = baos.toByteArray();;
-					baos.close();
-					imageData=imageInByte;
+
+					 int w = subImage.getWidth();
+					    int h = subImage.getHeight();
+
+					   int[] dataBuffInt = subImage.getRGB(0, 0, w, h, null, 0, w); 
+					   for(int u=0;u<dataBuffInt.length; u++){
+					    Color c = new Color(dataBuffInt[u]);
+		
+					    System.out.print(c.getRed()+ " "+c.getGreen()+ " "  + c.getBlue()+ " "+c.getAlpha()+" "+u);   // = (dataBuffInt[100] >> 16) & 0xFF
+
+					    System.out.println("");
+					   }
+				    
+					
+					//imageData=;
 					}catch(IOException e){
 						System.out.println(e.getMessage());
 					}	
