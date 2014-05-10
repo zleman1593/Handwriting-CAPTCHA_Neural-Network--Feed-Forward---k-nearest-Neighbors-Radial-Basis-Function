@@ -64,7 +64,11 @@ public class NeuralNet {
 	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
+	public static int[]  holder=new int[10];
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		for (int m = 0; m < holder.length; m++) {
+			holder[m]=0;
+		}
 
 		// numberOfHiddenNodesInLayer2=args[1];
 		// epochs = Integer.parseInt(args[2]); //number of epochs to run
@@ -76,7 +80,7 @@ public class NeuralNet {
 		// String testingLabels=args[10];
 
 		// These are hard coded versions of the above
-		binaryInput=false;
+		binaryInput=true;
 		numberOfHiddenNodesInLayer2 = 16;
 		epochs = 10;
 		learningRate = 0.3;
@@ -96,7 +100,9 @@ public class NeuralNet {
 		}
 		// Test the Feed-Forward network
 		testMultilayerFeedForward(testingImages, testingLabels);
-
+		for (int m = 0; m < holder.length; m++) {
+			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+		}
 
 
 	}
@@ -209,6 +215,7 @@ public class NeuralNet {
 			countOfCorrectImagesAnalyzed++;
 		} else {
 			System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
+			holder[(int) maxInt]++;	
 		}
 
 		OutputVector result = new OutputVector(correctOutput, maxInt);

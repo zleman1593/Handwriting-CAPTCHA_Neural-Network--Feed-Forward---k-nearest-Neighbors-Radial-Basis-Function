@@ -706,7 +706,7 @@ public class KNearestNeighbors {
 				countOfCorrectImagesAnalyzed.set(3,countOfCorrectImagesAnalyzed.get(3)+1);
 				System.out.println("Network was Correct");
 			} else {
-				System.out.println(" Network was Wrong");
+				System.out.println(" Network was Wrong"); 
 				holder[(int) output]++;	
 			}
 			System.out.println(" ");

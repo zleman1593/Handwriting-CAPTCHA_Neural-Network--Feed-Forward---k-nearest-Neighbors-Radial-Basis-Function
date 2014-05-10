@@ -29,6 +29,17 @@ public class DigitImage {
 			otsu();
 		}
 	}
+	
+	/*public DigitImage(int label, int[] data, boolean binary) {
+		this.label = label;
+		this.data = new double[data.length];
+		for (int i = 0; i < this.data.length; i++) {
+			this.data[i] = data[i] & 0xFF; // convert to unsigned
+		}
+		if (binary==true){
+			otsu();
+		}
+	}*/
 
 	// Uses Otsu's Threshold algorithm to convert from grayscale to black and
 	// white
