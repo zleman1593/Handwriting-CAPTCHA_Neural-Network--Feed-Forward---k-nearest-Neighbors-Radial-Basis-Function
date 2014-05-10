@@ -6,6 +6,7 @@
  */
 
 import javax.imageio.*;
+
 import java.util.*;
 import java.io.IOException;
 import java.lang.Math;
@@ -18,6 +19,8 @@ import java.io.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.ByteArrayOutputStream;
+import java.awt.image.DataBufferByte;
+
 import javax.imageio.ImageIO;
 
 public class loadCaptchaImage {
@@ -38,6 +41,11 @@ public class loadCaptchaImage {
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()&& !(listOfFiles[i].getName().contentEquals(".DS_Store"))) {
 				System.out.println("File " + listOfFiles[i].getName());
+				
+				//BufferedImage temppppp2 = new BufferedImage(84,7,BufferedImage.TYPE_BYTE_BINARY);
+				//BufferedImage temppppp=ImageIO.read(new File("Captcha Testing Data/" +listOfFiles[i].getName()));
+				//temppppp2.setData(temppppp.getData());
+				
 				img.add(ImageIO.read(new File("Captcha Testing Data/" +listOfFiles[i].getName())));
 				imgName.add(listOfFiles[i].getName());
 			}
@@ -47,22 +55,28 @@ public class loadCaptchaImage {
 		for (int i=0; i<folder.listFiles().length;i++){	
 			
 			
-			int x=0;
+	int lastColumnExplored=0;
+			
 			//For a single CAPTCHA
 			for (int j=0; j<LENGTH_OF_CAPTCHA;j++){
 				//For each char in the CAPTCHA
 				
+				//Starting from lastColumnExplored+1
+				//Search  columns until a black pixel is detected
+				//The pass x value of column to x
 				
-				x=x+(22*1);
-				////subImage=img.get(i).getRGB(1, 1, 7, 20,null,0,22);
-				BufferedImage subImage=img.get(i).getSubimage(20,1 , 20, 21);
-				//subImage.;
+				
+				
+			int x=0;
+			lastColumnExplored=x+7;
+				BufferedImage subImage=img.get(i).getSubimage(7,0 , 7, 22);
+				//byte[] byte_buffer = ((DataBufferByte) subImage.getRaster().getDataBuffer()).getData();
 				try{
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(subImage, "gif", baos );
-					ImageIO.write(subImage, "gif", new File("stripes_out.gif")  );//so we can visualize the output
+					ImageIO.write(subImage, "gif", new File("letter_output.gif")  );//so we can visualize the output
 					baos.flush();
-					byte[] imageInByte = baos.toByteArray();
+					byte[] imageInByte = baos.toByteArray();;
 					baos.close();
 					imageData=imageInByte;
 					}catch(IOException e){
@@ -78,6 +92,9 @@ public class loadCaptchaImage {
 			    }
 				imageData=null;
 			}
+			
+			
+			
 
 		}
 	}
