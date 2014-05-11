@@ -78,7 +78,6 @@ public class NeuralNet {
 		// String testingImages=args[8];
 		// String trainingLabels=args[9];
 		// String testingLabels=args[10];
-
 		// These are hard coded versions of the above
 		binaryInput=true;
 		numberOfHiddenNodesInLayer2 = 16;
@@ -262,10 +261,20 @@ public class NeuralNet {
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
+	//Writes eithe rletetrs or numbers
 		for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
-			outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
-			outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
+			if(x.get(i).getNeuralNetOutput()>9){
+				outputWriter.write("Neural net output: " + getCharForNumber(x.get(i).getNeuralNetOutput()) + "   ");
+			}else{
+				outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
+			}
+			
+			if(x.get(i).getExpectedOutput()>9){
+				outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
+			}else{
+				outputWriter.write("Expected output: " + getCharForNumber((int)x.get(i).getExpectedOutput()));
+			}
 			outputWriter.newLine();
 		}
 		outputWriter.flush();
@@ -603,6 +612,10 @@ public class NeuralNet {
 		hiddenLayerNodes = (ArrayList<ArrayList<Double>>) ois2.readObject();
 		fin2.close();
 
+	}
+	//Takes an int and turns it into the letter that it represents
+	public static String getCharForNumber(int i) {
+	    return i > 9 && i < 37 ? String.valueOf((char)(i + 55)) : null;
 	}
 
 }
