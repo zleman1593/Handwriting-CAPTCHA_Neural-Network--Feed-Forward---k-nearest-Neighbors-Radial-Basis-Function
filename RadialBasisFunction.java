@@ -111,12 +111,19 @@ public class RadialBasisFunction {
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
 	trainingData = new ArrayList<DigitImage>();
 		try {
-			// Our data structure holds the training data
+			// Our data structure holds the training datagi
 			trainingData = train.loadDigitImages();
 			// Alters data into proper form
-			for (int i = 0; i < trainingData.size(); i++) {
-				trainingData.get(i).vectorizeTrainingData();
-			}
+			if(NUMBER_OF_OUTPUT_NODES==10){
+				for (int i = 0; i < trainingData.size(); i++) {
+					trainingData.get(i).vectorizeTrainingData();
+				}
+				}
+				else{
+					for (int i = 0; i < trainingData.size(); i++) {
+						trainingData.get(i).vectorizeTrainingDataAlphaNum();
+					}
+				}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

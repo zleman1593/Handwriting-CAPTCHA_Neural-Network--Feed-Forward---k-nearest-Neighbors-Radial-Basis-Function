@@ -43,8 +43,18 @@ public class loadCaptchaImage {
 	public static ArrayList<DigitImage> alltrainingData = new ArrayList<DigitImage>();
 	
 	public static final int CHAR_WIDTH=9;
+	
+	
+	//constructor
+	public loadCaptchaImage() throws IOException {
+		//Reads and breaks up all captchas. Stores them to be read by the neural nets
+		readAllCaptchas();
+		
+		//Reads all the  individual letters and numbers
+	//	readAllTrainingData();
+	}
 
-	public static void main(String args[]) throws IOException {
+	/*public static void main(String args[]) throws IOException {
 		
 		//Reads and breaks up all captchas. Stores them to be read by the neural nets
 		readAllCaptchas();
@@ -52,7 +62,7 @@ public class loadCaptchaImage {
 		//Reads all the  individual letters and numbers
 	//	readAllTrainingData();
 		
-	}
+	}*/
 	
 	public static void readAllCaptchas() throws IOException{
 	
@@ -139,6 +149,13 @@ public class loadCaptchaImage {
 		//"label" will be the name of the folder in which the image was read from
 		//alltrainingData.add(new DigitImage(label, imageData, false));
 		
+	}
+	
+	
+	// return
+	public ArrayList<DigitImage> getTrainingData() {
+
+		return alltrainingData;
 	}
 	
 }

@@ -536,8 +536,15 @@ public class NeuralNet {
 			// Our data structure holds the training data
 			trainingData = train.loadDigitImages();
 			// Alters data into proper form
+			if(NUMBER_OF_OUTPUT_NODES==10){
 			for (int i = 0; i < trainingData.size(); i++) {
 				trainingData.get(i).vectorizeTrainingData();
+			}
+			}
+			else{
+				for (int i = 0; i < trainingData.size(); i++) {
+					trainingData.get(i).vectorizeTrainingDataAlphaNum();
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
