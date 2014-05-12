@@ -157,5 +157,10 @@ public class loadCaptchaImage {
 
 		return alltrainingData;
 	}
+	// return
+	public ArrayList<ArrayList<DigitImage>> getTestingData() {
+
+		return allCaptchas;
+	}
 	
 }

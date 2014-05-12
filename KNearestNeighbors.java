@@ -16,6 +16,7 @@ public class KNearestNeighbors {
 	// Create array of Nodes in first layer and associate done that points to the correct output
 	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<Integer> hiddenLayerToOutput = new ArrayList<Integer>();
+	
 	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues2 = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues3 = new ArrayList<Double>();
@@ -24,6 +25,7 @@ public class KNearestNeighbors {
 	public static ArrayList<Double> hiddenLayerDottedOutputValues6 = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues7 = new ArrayList<Double>();
 	public static ArrayList<Double> hiddenLayerDottedOutputValues8 = new ArrayList<Double>();
+	
 	// Tracks the number of images correctly identified in the testing set.
 	public static ArrayList<Integer> countOfCorrectImagesAnalyzed = new ArrayList<Integer>();
 	// Tracks the number of images processed in the testing set.
@@ -199,10 +201,6 @@ public class KNearestNeighbors {
 		try {
 			// Our data structure holds the training data
 			trainingData = train.loadDigitImages();
-			// Alters data into proper form
-			for (int i = 0; i < trainingData.size(); i++) {
-				trainingData.get(i).vectorizeTrainingData();
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
