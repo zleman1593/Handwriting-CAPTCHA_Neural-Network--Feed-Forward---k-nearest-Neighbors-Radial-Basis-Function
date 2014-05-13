@@ -6,9 +6,11 @@
  */
 
 //IVY: you will need to uncomment the lines with src, and then comment out the lines missing src in order for this to run on your computer.
+// ZACK: It only runs on my computer with the current set up (with src/) - that was my fix for the file reading error we encountered yesterday.
 //TODO: Every some letters in the Captcha sub arrays CHAR_OFFSET = 86 works while others CHAR_OFFSET = 87 works. Why??
+// Reply: Not sure. Can you give an example?
 //TODO: Need to add the ability to add white chars after a training image that is only 7 pixels wide to make it like a 9 px wide image.
-
+// Reply: Taken care of.
 
 import java.io.IOException;
 import java.io.File;
@@ -175,8 +177,8 @@ public class loadCaptchaImage {
 		// Scans each pixel of this character.
 		int height = image.getHeight() - offsetH;
 		int width = image.getWidth() - offsetW;
-		for (int y = 0; y < height; y++) {
-		    for (int x = 0; x < width; x++) {
+		for (int x = 0; x < width; x++) {
+		    for (int y = 0; y < height; y++) {
 		    	Color c = new Color(image.getRGB(x, y));
 		        // Convert 2-D positions to 1-D.
 		    	int pos = y * width + x;
