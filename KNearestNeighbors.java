@@ -44,7 +44,7 @@ public class KNearestNeighbors {
 	
 	public static  int countOfCorrectImagesAnalyzedTotal;
 	
-	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNNResults";
+	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNN/KNNResults";
 	
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {

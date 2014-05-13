@@ -51,10 +51,9 @@ public class NeuralNet {
 	// The learning rate for the network
 	public static double learningRate;
 	// Whether to use weights that have already been trained or to train network again in order to test the network
-	public static boolean usePriorWeightsToTestNetwork;
-	
-	// Whether to use weights that have already been trained as the startig weights to continue a hiatus in training
-	public static boolean usePriorWeightsToContinueTraining;
+	//or as the starting weights to continue a break in training
+	public static int usePriorWeights;
+
 	// For a given training image this array is filled with the output for each
 	// layer and then reset for the next image.
 	// Prevents duplicate calculations from being performed.
@@ -62,8 +61,8 @@ public class NeuralNet {
 	
 		
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Results";
-	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt";
-	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
+	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/TrainedSetOutputWeights.txt";
+	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/TrainedSetHiddenWeights.txt";
 	
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
@@ -85,7 +84,7 @@ public class NeuralNet {
 		// numberOfNodesInHiddenLayer=args[1];
 		// epochs = Integer.parseInt(args[2]); //number of epochs to run
 		// double learningRate = Double.parseDouble(args[3]); //learning rate
-		// usePriorWeightsToTestNetwork=Boolean.parseBolean(args[4]);
+		// usePriorWeights=Integer.parseInt(args[4]);
 		//binaryInput = Boolean.parseBolean(args[5]);
 		// String trainingImages=args[6];
 		// String testingImages=args[7];
@@ -95,21 +94,21 @@ public class NeuralNet {
 		
 		// These are hard coded versions of the above
 		
-		numberOfNodesInHiddenLayer = 30;
-		epochs = 10;
-		learningRate = 0.8;
+		numberOfNodesInHiddenLayer = 100;
+		epochs = 5;
+		learningRate = 0.3;
 		// Set this to true to avoid retraining. Allows the files in
 		// NeuralNetOutput folder to be loaded and used.
-		usePriorWeightsToTestNetwork = true;
+		usePriorWeights= 0;  // 0= no, 1 = ToTestNetwork, 2= ToContinueTraining
 		binaryInput=true;
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		usePriorWeightsToContinueTraining = true;
-		
 
-		/*if (!usePriorWeightsToTestNetwork) {
+		
+		// Trains the Network from scratch
+		if (usePriorWeights == 0) {
 			initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			//initializeMultilayerFeedForwardCaptcha();
 			
@@ -122,9 +121,9 @@ public class NeuralNet {
 						// Creates data files that can be reused by the network without
 						// retraining.
 						writeTrainedWeights();
-		} */
-		
-		//if(usePriorWeightsToContinueTraining){
+		} 
+		// Trains the Network starting from weights stored in file
+		else if(usePriorWeights == 2){
 		initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			readDataFromTrainedFiles();
 			// Trains the network with the training Data
@@ -138,12 +137,13 @@ public class NeuralNet {
 			writeTrainedWeights();
 			
 			
-		//}
-		/*if (usePriorWeightsToTestNetwork && !usePriorWeightsToContinueTraining)  {
+		}
+		// Tests network using weights stored in file without retraining
+		else if ( usePriorWeights == 1)  {
 			readDataFromTrainedFiles();
 			System.out.println("Reading Data from trained files");
 			numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
-		}*/
+		}
 		
 		
 		// Test the Feed-Forward network
@@ -666,12 +666,12 @@ public class NeuralNet {
 	
 	public static void readDataFromTrainedFiles() throws IOException, ClassNotFoundException {
 		// Grabs weights to output nodes
-		FileInputStream fin = new FileInputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt");
+		FileInputStream fin = new FileInputStream(filePathTrainedOutputWeights);
 		ObjectInputStream ois = new ObjectInputStream(fin);
 		outputLayerNodes = (ArrayList<ArrayList<Double>>) ois.readObject();
 		fin.close();
 		// Grabs weights to hidden nodes
-		FileInputStream fin2 = new FileInputStream("/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt");
+		FileInputStream fin2 = new FileInputStream(filePathTrainedHiddenWeights);
 		ObjectInputStream ois2 = new ObjectInputStream(fin2);
 		hiddenLayerNodes = (ArrayList<ArrayList<Double>>) ois2.readObject();
 		fin2.close();

@@ -47,8 +47,8 @@ public class RadialBasisFunction {
 	// Number of output nodes (Currently the network depends on 10  or 36 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;//---------------------------------------------------------------------------------
 	//File paths
-	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RbfResults";
-	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
+	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/RbfResults";
+	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
 
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 
