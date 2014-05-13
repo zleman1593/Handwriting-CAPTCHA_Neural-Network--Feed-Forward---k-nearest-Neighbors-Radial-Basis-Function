@@ -43,7 +43,7 @@ public class NeuralNet {
 	// Number of hidden nodes in second layer (first hidden layer)
 	public static int numberOfNodesInHiddenLayer;
 	// Number of output nodes (Currently the network depends on 10 or 36 output nodes)
-	public static final int NUMBER_OF_OUTPUT_NODES = 10;
+	public static final int NUMBER_OF_OUTPUT_NODES = 36;
 	
 	// Create array of Nodes in first layer and output layer
 	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
@@ -82,7 +82,7 @@ public class NeuralNet {
 		// epochs = Integer.parseInt(args[2]); //number of epochs to run
 		// double learningRate = Double.parseDouble(args[3]); //learning rate
 		// usePriorWeights=Boolean.parseBolean(args[4]);
-		binaryInput = Boolean.parseBolean(args[5]);
+		//binaryInput = Boolean.parseBolean(args[5]);
 		// String trainingImages=args[6];
 		// String testingImages=args[7];
 		// String trainingLabels=args[8];
@@ -91,8 +91,8 @@ public class NeuralNet {
 		
 		// These are hard coded versions of the above
 		binaryInput=true;
-		numberOfNodesInHiddenLayer = 16;
-		epochs = 10;
+		numberOfNodesInHiddenLayer = 300;
+		epochs = 30;
 		learningRate = 0.3;
 		// Set this to true to avoid retraining. Allows the files in
 		// NeuralNetOutput folder to be loaded and used.
@@ -103,15 +103,16 @@ public class NeuralNet {
 		String testingLabels = "Testing-Labels";
 
 		if (!usePriorWeights) {
-			initializeMultilayerFeedForward(trainingImages, trainingLabels);
-			//initializeMultilayerFeedForwardCaptcha();
+			//initializeMultilayerFeedForward(trainingImages, trainingLabels);
+			initializeMultilayerFeedForwardCaptcha();
 		} else {
 			readDataFromTrainedFiles();
-			numberOfInputNodes = hiddenLayerNodes.get(0).size();
+			System.out.println("Reading Data from trained files");
+			//numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
 		}
 		// Test the Feed-Forward network
-		testMultilayerFeedForward(testingImages, testingLabels);
-		//testMultilayerFeedForwardCaptcha();
+		//testMultilayerFeedForward(testingImages, testingLabels);
+		testMultilayerFeedForwardCaptcha();
 		for (int m = 0; m < holder.length; m++) {
 			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
 		}
@@ -126,6 +127,7 @@ public class NeuralNet {
 	public static double nodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
+			//System.out.println( outputFromPreviousLayer.size());
 			sum = sum + (layerOfNodes.get(indexOfNodeinlayer).get(i) * outputFromPreviousLayer.get(i));
 		}
 		return activationFunction(sum);
@@ -227,7 +229,7 @@ public class NeuralNet {
 			countOfCorrectImagesAnalyzed++;
 		} else {
 			System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
-			holder[(int) maxInt]++;	
+			//holder[(int) maxInt]++;	
 		}
 
 		OutputVector result = new OutputVector(correctOutput, maxInt);
@@ -523,15 +525,16 @@ public class NeuralNet {
 					tempOutput = new ArrayList<ArrayList<Double>>();
 			}
 			// Test the Feed-Forward network
-			try {
+			/*try {
 				
 				testMultilayerFeedForward("Testing-images", "Testing-Labels");
-				long endTime = System.currentTimeMillis();
-				executionTime = endTime - startTime;
-				System.out.println("Training time: " + executionTime + " milliseconds");
+				
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
+			long endTime = System.currentTimeMillis();
+			executionTime = endTime - startTime;
+			System.out.println("Training time: " + executionTime + " milliseconds");
 			System.out.println("Epoch " + (i+1) + " has finished.");
 
 		}
@@ -700,12 +703,15 @@ public class NeuralNet {
 		countOfImagesAnalyzed=0;
 		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
-		loadCaptchaImage dataSets = new loadCaptchaImage();
-		ArrayList<ArrayList<DigitImage>> testingData = dataSets.getTestingData();
+		//loadCaptchaImage dataSets = new loadCaptchaImage();
+		//ArrayList<ArrayList<DigitImage>> testingData = dataSets.getTestingData();
 		
+		loadCaptchaImage dataSets = new loadCaptchaImage();
+		ArrayList<DigitImage> testingData = dataSets.getTrainingData();
 		
 		// Tests the network with the testing Data and prints results to file
-		write(solveTestingDataCaptcha(testingData));
+		//write(solveTestingDataCaptcha(testingData));
+		solveTestingData(testingData);
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");

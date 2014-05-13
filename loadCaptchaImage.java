@@ -5,21 +5,15 @@
  *Currently this is a nonfunctional class and the entirety of the below code may likely be replaced.
  */
 
-import javax.imageio.*;
 
-import java.util.*;
+//TODO: Every some letters in the Captcha sub arrays CHAR_OFFSET = 86 works while others CHAR_OFFSET = 87 works. Why??
+//TODO: Need to add the ability to add white chars after a training iamge that is only 7 pixels wide.
+
+
 import java.io.IOException;
-import java.lang.Math;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.util.ArrayList;
-import java.io.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
-import java.io.ByteArrayOutputStream;
-import java.awt.image.DataBufferByte;
 import java.awt.Color;
 
 import javax.imageio.ImageIO;
@@ -40,10 +34,12 @@ public class loadCaptchaImage {
 	private static final int NUM_CHARS_IN_CAPTCHA = 6; // 6 characters in each Captcha.
 	
 	// For testing only.
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	/*public static void main(String[] args) throws IOException, ClassNotFoundException {
 		readAllTrainingData();
-		//readAllCaptchas();
-	}
+		readAllCaptchas();
+		System.out.println("Done");
+		
+	}*/
 	
 	// Constructor.
 	public loadCaptchaImage() throws IOException {
@@ -60,13 +56,15 @@ public class loadCaptchaImage {
 		// Holds all the Captcha names (correct answers).
 		ArrayList<String> imgNames = new ArrayList<String>();
 		// Import the Captcha images from folder.
-		File folder = new File("src/Captcha Testing Data");
+//		File folder = new File("src/Captcha Testing Data");
+		File folder = new File("Captcha Testing Data");
 		File[] listOfFiles = folder.listFiles();
 		for (int f = 0; f < listOfFiles.length; f++) {
 			if (listOfFiles[f].isFile() && !(listOfFiles[f].getName().contentEquals(".DS_Store"))
 					&& !(listOfFiles[f].getName().contentEquals("Thumbs.db"))) {
 //				System.out.println("File " + listOfFiles[f].getName());
-				imgs.add(ImageIO.read(new File("src/Captcha Testing Data/" + listOfFiles[f].getName())));
+//				imgs.add(ImageIO.read(new File("src/Captcha Testing Data/" + listOfFiles[f].getName())));
+				imgs.add(ImageIO.read(new File("Captcha Testing Data/" + listOfFiles[f].getName())));
 				imgNames.add(listOfFiles[f].getName());
 			}
 		}
@@ -94,6 +92,10 @@ public class loadCaptchaImage {
 				
 				// Turn a character in a Captcha into a DigitImage and add it to the Captcha's list of DigitImages (characters).
 				int num = charToInt(imgNames, i, captchaCharPos);
+				//watches for errors
+				if (num==48||num==49||num==51||num==52){
+					System.out.println("Numbershould not be: " +num);
+				}
 				oneCaptcha.add(new DigitImage(num, charPixels, false));
 				captchaCharPos++;
 			}
@@ -108,15 +110,17 @@ public class loadCaptchaImage {
 		ArrayList<BufferedImage> trainingImgs = new ArrayList<BufferedImage>();
 		// Holds all the Captcha names (correct answers).
 		ArrayList<String> trainingImgNames = new ArrayList<String>();
-		File folder = new File("src/Captcha Training Data");
+//		File folder = new File("src/Captcha Training Data"); //On some computers this line is prefered, on others the below line is.
+		File folder = new File("Captcha Training Data");
 		File [] listOfFolders = folder.listFiles();
 		for (int f = 0; f < listOfFolders.length; f++) {
-//			System.out.println(listOfFolders[f].getName());
+			System.out.println(listOfFolders[f].getName());
 			if (!(listOfFolders[f].getName().contentEquals(".DS_Store")) && 
 					!(listOfFolders[f].getName().contentEquals("Thumbs.db"))) {
 				// Subfolders of the folder.
 				String folderName = listOfFolders[f].getName();
-				String folderPath = "src/Captcha Training Data/" + folderName;
+//				String folderPath = "src/Captcha Training Data/" + folderName;
+				String folderPath = "Captcha Training Data/" + folderName;
 				File[] listOfFiles = new File (folderPath).listFiles();
 				// Go through the list of files in the sub-folders.
 				for (int fi = 0; fi < listOfFiles.length; fi++) {
@@ -144,6 +148,8 @@ public class loadCaptchaImage {
 			}
 			scanCharPixels(charImg, charPixels, offsetHeight, offsetWidth);
 			// Turn this training character into a DigitImage and add it to the Captcha's list of chars.
+			
+			
 			int num = charToInt(trainingImgNames, i, 0);
 			alltrainingData.add(new DigitImage(num, charPixels, false));
 		
@@ -184,8 +190,11 @@ public class loadCaptchaImage {
 	// We can't directly cast char to int because according to the setup for our NN 'a' needs to be 10 and the rest follows.
 	public static int charToInt(ArrayList<String> imgName, int imgIndex, int charIndex) {	
 		char c = imgName.get(imgIndex).charAt(charIndex);
+		
+		
+		
 		if (Character.isDigit(c)) {
-			return (int)c;
+			return Character.getNumericValue(c);
 		}
 		return(int)c - CHAR_OFFSET;
 	}
