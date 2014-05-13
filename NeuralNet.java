@@ -92,9 +92,9 @@ public class NeuralNet {
 		
 		// These are hard coded versions of the above
 		
-		numberOfNodesInHiddenLayer = 15;
-		epochs = 7;
-		learningRate = 1;
+		numberOfNodesInHiddenLayer = 30;
+		epochs = 10;
+		learningRate = 0.4;
 		// Set this to true to avoid retraining. Allows the files in
 		// NeuralNetOutput folder to be loaded and used.
 		usePriorWeightsToTestNetwork = false;
@@ -103,7 +103,7 @@ public class NeuralNet {
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		usePriorWeightsToContinueTraining = true;
+		usePriorWeightsToContinueTraining = false;
 
 		if (!usePriorWeightsToTestNetwork) {
 			initializeMultilayerFeedForward(trainingImages, trainingLabels);
@@ -595,6 +595,8 @@ public class NeuralNet {
 		outputWriter.newLine();
 		outputWriter.write("Number of nodes in each hidden layer: " + Integer.toString(numberOfNodesInHiddenLayer));
 		outputWriter.newLine();
+		outputWriter.write("Number of training examples used: " + Integer.toString(numberOfInputNodes));
+		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
@@ -618,6 +620,11 @@ public class NeuralNet {
 			}
 			outputWriter.newLine();
 		}
+		
+		for (int m = 0; m < holder.length; m++) {
+			outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+		}
+
 		outputWriter.flush();
 		outputWriter.close();
 	}
