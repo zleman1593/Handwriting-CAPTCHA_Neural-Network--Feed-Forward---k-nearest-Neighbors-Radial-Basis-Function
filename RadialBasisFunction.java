@@ -44,47 +44,69 @@ public class RadialBasisFunction {
 	public static boolean usePriorWeights;
 	//Dictates the standard deviation in the gaussian RBF
 	public static double sigma;
-	// Number of output nodes (Currently the network depends on 10 output nodes)
-	public static final int NUMBER_OF_OUTPUT_NODES = 10;
+	// Number of output nodes (Currently the network depends on 10  or 36 output nodes)
+	public static final int NUMBER_OF_OUTPUT_NODES = 10;//---------------------------------------------------------------------------------
 	//File paths
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RbfResults";
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
+
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
+
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
-	public static final int TRAINING_SET_REDUCTION_FACTOR=20;
+	// set to one to use all of the training data to train the network. The number of training examples  is divided by this number
+	public static  int trainingSetReductionFactor;
+
 	public static int[]  holder=new int[10];
+
+
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
 		}
-		// usePriorWeights=Boolean.parseBolean(args[4]);
+		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
+		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
+
+
+		//binaryInput=Boolean.parseBoolean(args[1]);
+		//trainingSetReductionFactor=Integer.parseInt(args[2]);
+		//numberOfImagesToTest = Integer.parseInt(args[3]);
+		// sigma = Integer.parseInt(args[4]); 
+		// epochs = Integer.parseInt(args[5]); 
+		// learningRate = Double.parseDouble(args[6]); 
 		// String trainingImages=args[7];
 		// String testingImages=args[8];
 		// String trainingLabels=args[9];
 		// String testingLabels=args[10];
-		// sigma = Integer.parseInt(args[11]); 
-		// epochs = Integer.parseInt(args[12]); 
-		// learningRate = Double.parseDouble(args[13]); 
-		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
-		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
-		usePriorWeights=true;
+		// usePriorWeights=Boolean.parseBolean(args[11]);
+
+
+
+
+
+
 		// These are hard coded versions of the above
-		String trainingImages = "Training-Images";
-		String testingImages = "Testing-images";
-		String trainingLabels = "Training-Labels";
-		String testingLabels = "Testing-Labels";
+		trainingSetReductionFactor=20;
+		usePriorWeights=true;
 		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
 		epochs = 20; // For binary I am testing with sigam =  between 15-10 (11 seems optimal)
 		learningRate=1;
 		binaryInput=false;
+		String trainingImages = "Training-Images";
+		String testingImages = "Testing-images";
+		String trainingLabels = "Training-Labels";
+		String testingLabels = "Testing-Labels";
+
+
 		initializeRBF(trainingImages, trainingLabels);
-		
+
 		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> less accurate%
-		
+
+
 		if (!usePriorWeights) {
 			long startTime = System.currentTimeMillis();
-			readDataFromTrainedFiles();//Delete this line-----------------------------------Only for testing purposes (allows breaks between training epochs)
+			//readDataFromTrainedFiles(); //Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
@@ -94,22 +116,22 @@ public class RadialBasisFunction {
 		} else {
 			readDataFromTrainedFiles();
 		}
-		
-		
+
+
 
 		// Test the  RBF Network
 		testRBF(testingImages, testingLabels);
-		
-				for (int m = 0; m < holder.length; m++) {
-					System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
-				}
+
+		for (int m = 0; m < holder.length; m++) {
+			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+		}
 	}
 
 	public static void initializeRBF(String trainingImages, String trainingLabels) throws IOException {
 
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
-	trainingData = new ArrayList<DigitImage>();
+		trainingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the training datagi
 			trainingData = train.loadDigitImages();
@@ -118,12 +140,12 @@ public class RadialBasisFunction {
 				for (int i = 0; i < trainingData.size(); i++) {
 					trainingData.get(i).vectorizeTrainingData();
 				}
+			}
+			else{
+				for (int i = 0; i < trainingData.size(); i++) {
+					trainingData.get(i).vectorizeTrainingDataAlphaNum();
 				}
-				else{
-					for (int i = 0; i < trainingData.size(); i++) {
-						trainingData.get(i).vectorizeTrainingDataAlphaNum();
-					}
-				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -133,10 +155,10 @@ public class RadialBasisFunction {
 		// (one per pixel)
 		numberOfInputNodes = trainingData.get(0).getData().length;
 
-	
+
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
 		// Currently dividing by 20 to only use a 2oth of the training set so we don't run out of memory. We likely don't need that many anyway.
-		for (int i = 0; i < trainingData.size()/TRAINING_SET_REDUCTION_FACTOR; i++) {
+		for (int i = 0; i < trainingData.size()/trainingSetReductionFactor; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
@@ -148,14 +170,14 @@ public class RadialBasisFunction {
 		// layer.
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>();
-			for (int j = 0; j <  trainingData.size()/TRAINING_SET_REDUCTION_FACTOR; j++) {
+			for (int j = 0; j <  trainingData.size()/trainingSetReductionFactor; j++) {
 				weights.add(random.nextGaussian());
 			}
 			outputLayerNodes.add(weights);
 		}
 
 
-	
+
 	}
 
 	public static void testRBF(String testingImages, String testingLabels) throws IOException {
@@ -189,9 +211,9 @@ public class RadialBasisFunction {
 	public static double hiddenNodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
-		
+
 			sum=sum+Math.pow(layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i),2);
-		
+
 		}
 		return Math.exp(-1*(sum/sigma));
 	}
@@ -222,56 +244,23 @@ public class RadialBasisFunction {
 
 
 	/*
-	 * This takes the training data and attempts to train the neural net to learn how to recognize characters from images.
+	 * This takes the training data and 
+	 * attempts to train the neural net to learn how to recognize characters from images.
+	 * Duplicated code exists because threads do not allow parameters be passed to methods,
+	 *  which would have allowed us to condense the code. Just read one thread.
 	 */
 	public static void trainTheNetwork(ArrayList<DigitImage> trainingData) {
 
 		for (int i = 0; i < epochs; i++) { // for each epoch
 			//for every image in the training file
 			long startTime = System.currentTimeMillis();
-			for (int images = 0; images < trainingData.size()/TRAINING_SET_REDUCTION_FACTOR; images++) { 
+			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
 
 				networkOutputError(trainingData, images);
 				Runnable r1 = new Runnable() {
 					public void run() {
-				// Update the weights to the output nodes
-				for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES/8; ii++) {
-					for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-						// Grabs the error that was calculated for the output of
-						// this output node
-						double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-						// Update the weight using gradient descent
-						outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-								+ (learningRate * error
-										* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-										* tempOutput.get(tempOutput.size() - 3).get(j)));
-					}
-				}
-
-					}};
-					
-					Runnable r2 = new Runnable() {
-						public void run() {
-					// Update the weights to the output nodes
-					for (int ii = NUMBER_OF_OUTPUT_NODES/8; ii < NUMBER_OF_OUTPUT_NODES/4; ii++) {
-						for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-							// Grabs the error that was calculated for the output of
-							// this output node
-							double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-							// Update the weight using gradient descent
-							outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-									+ (learningRate * error
-											* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-											* tempOutput.get(tempOutput.size() - 3).get(j)));
-						}
-					}
-
-						}};
-					
-						Runnable r3 = new Runnable() {
-							public void run() {
 						// Update the weights to the output nodes
-						for (int ii = NUMBER_OF_OUTPUT_NODES/4; ii < (NUMBER_OF_OUTPUT_NODES*3)/8; ii++) {
+						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES/8; ii++) {
 							for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 								// Grabs the error that was calculated for the output of
 								// this output node
@@ -284,12 +273,12 @@ public class RadialBasisFunction {
 							}
 						}
 
-							}};
-							
-							Runnable r4 = new Runnable() {
-								public void run() {
+					}};
+
+					Runnable r2 = new Runnable() {
+						public void run() {
 							// Update the weights to the output nodes
-							for (int ii = (NUMBER_OF_OUTPUT_NODES*3)/8; ii < NUMBER_OF_OUTPUT_NODES/2; ii++) {
+							for (int ii = NUMBER_OF_OUTPUT_NODES/8; ii < NUMBER_OF_OUTPUT_NODES/4; ii++) {
 								for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 									// Grabs the error that was calculated for the output of
 									// this output node
@@ -302,11 +291,12 @@ public class RadialBasisFunction {
 								}
 							}
 
-								}};
-								Runnable r5 = new Runnable() {
-									public void run() {
+						}};
+
+						Runnable r3 = new Runnable() {
+							public void run() {
 								// Update the weights to the output nodes
-								for (int ii = NUMBER_OF_OUTPUT_NODES/2; ii < (NUMBER_OF_OUTPUT_NODES*5)/8; ii++) {
+								for (int ii = NUMBER_OF_OUTPUT_NODES/4; ii < (NUMBER_OF_OUTPUT_NODES*3)/8; ii++) {
 									for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 										// Grabs the error that was calculated for the output of
 										// this output node
@@ -319,12 +309,12 @@ public class RadialBasisFunction {
 									}
 								}
 
-									}};
-									
-									Runnable r6 = new Runnable() {
-										public void run() {
+							}};
+
+							Runnable r4 = new Runnable() {
+								public void run() {
 									// Update the weights to the output nodes
-									for (int ii = (NUMBER_OF_OUTPUT_NODES*5)/8; ii < (NUMBER_OF_OUTPUT_NODES*6)/8; ii++) {
+									for (int ii = (NUMBER_OF_OUTPUT_NODES*3)/8; ii < NUMBER_OF_OUTPUT_NODES/2; ii++) {
 										for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 											// Grabs the error that was calculated for the output of
 											// this output node
@@ -337,12 +327,11 @@ public class RadialBasisFunction {
 										}
 									}
 
-										}};
-									
-										Runnable r7 = new Runnable() {
-											public void run() {
+								}};
+								Runnable r5 = new Runnable() {
+									public void run() {
 										// Update the weights to the output nodes
-										for (int ii = (NUMBER_OF_OUTPUT_NODES*6)/8; ii < (NUMBER_OF_OUTPUT_NODES*7)/8; ii++) {
+										for (int ii = NUMBER_OF_OUTPUT_NODES/2; ii < (NUMBER_OF_OUTPUT_NODES*5)/8; ii++) {
 											for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 												// Grabs the error that was calculated for the output of
 												// this output node
@@ -355,12 +344,12 @@ public class RadialBasisFunction {
 											}
 										}
 
-											}};
-											
-											Runnable r8 = new Runnable() {
-												public void run() {
+									}};
+
+									Runnable r6 = new Runnable() {
+										public void run() {
 											// Update the weights to the output nodes
-											for (int ii = (NUMBER_OF_OUTPUT_NODES*7)/8; ii < NUMBER_OF_OUTPUT_NODES; ii++) {
+											for (int ii = (NUMBER_OF_OUTPUT_NODES*5)/8; ii < (NUMBER_OF_OUTPUT_NODES*6)/8; ii++) {
 												for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 													// Grabs the error that was calculated for the output of
 													// this output node
@@ -373,44 +362,80 @@ public class RadialBasisFunction {
 												}
 											}
 
+										}};
+
+										Runnable r7 = new Runnable() {
+											public void run() {
+												// Update the weights to the output nodes
+												for (int ii = (NUMBER_OF_OUTPUT_NODES*6)/8; ii < (NUMBER_OF_OUTPUT_NODES*7)/8; ii++) {
+													for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+														// Grabs the error that was calculated for the output of
+														// this output node
+														double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+														// Update the weight using gradient descent
+														outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+																+ (learningRate * error
+																		* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+																		* tempOutput.get(tempOutput.size() - 3).get(j)));
+													}
+												}
+
+											}};
+
+											Runnable r8 = new Runnable() {
+												public void run() {
+													// Update the weights to the output nodes
+													for (int ii = (NUMBER_OF_OUTPUT_NODES*7)/8; ii < NUMBER_OF_OUTPUT_NODES; ii++) {
+														for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+															// Grabs the error that was calculated for the output of
+															// this output node
+															double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+															// Update the weight using gradient descent
+															outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+																	+ (learningRate * error
+																			* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+																			* tempOutput.get(tempOutput.size() - 3).get(j)));
+														}
+													}
+
 												}};
-					
-					
-				Thread thr1 = new Thread(r1);
-				Thread thr2 = new Thread(r2);
-				Thread thr3 = new Thread(r3);
-				Thread thr4 = new Thread(r4);
-				Thread thr5 = new Thread(r5);
-				Thread thr6 = new Thread(r6);
-				Thread thr7 = new Thread(r7);
-				Thread thr8 = new Thread(r8);
-				thr1.start();
-				thr2.start();
-				thr3.start();
-				thr4.start();
-				thr5.start();
-				thr6.start();
-				thr7.start();
-				thr8.start();
-				try {
-					thr1.join();
-					thr2.join();
-					thr3.join();
-					thr4.join();
-					thr5.join();
-					thr6.join();
-					thr7.join();
-					thr8.join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				// Resets temporary data structure
-				tempOutput = new ArrayList<ArrayList<Double>>();
+
+												//Now run the threads
+												Thread thr1 = new Thread(r1);
+												Thread thr2 = new Thread(r2);
+												Thread thr3 = new Thread(r3);
+												Thread thr4 = new Thread(r4);
+												Thread thr5 = new Thread(r5);
+												Thread thr6 = new Thread(r6);
+												Thread thr7 = new Thread(r7);
+												Thread thr8 = new Thread(r8);
+												thr1.start();
+												thr2.start();
+												thr3.start();
+												thr4.start();
+												thr5.start();
+												thr6.start();
+												thr7.start();
+												thr8.start();
+												try {
+													thr1.join();
+													thr2.join();
+													thr3.join();
+													thr4.join();
+													thr5.join();
+													thr6.join();
+													thr7.join();
+													thr8.join();
+												} catch (InterruptedException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+
+												// Resets temporary data structure
+												tempOutput = new ArrayList<ArrayList<Double>>();
 			}
 
-		
+
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
@@ -501,9 +526,9 @@ public class RadialBasisFunction {
 			countOfCorrectImagesAnalyzed++;
 		} else {
 
-				holder[(int) maxInt]++;	
-			
-		
+			holder[(int) maxInt]++;	
+
+
 			//System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
 		}
 
@@ -511,8 +536,8 @@ public class RadialBasisFunction {
 		countOfImagesAnalyzed++;
 		return result;
 	}
-	
-	
+
+
 
 	/*
 	 * Returns the derivative of the output of the sigmoid activation function but takes as a parameter the already computer sigmoid output
@@ -521,10 +546,10 @@ public class RadialBasisFunction {
 		double output = (sigmoidPrime * (1 - sigmoidPrime));
 		return output;
 	}
-	
-	
-	
-	
+
+
+
+
 	public static void readDataFromTrainedFiles() throws IOException, ClassNotFoundException {
 		// Grabs weights to output nodes
 		FileInputStream fin = new FileInputStream(filePathTrainedOutputWeights);
@@ -532,8 +557,8 @@ public class RadialBasisFunction {
 		outputLayerNodes = (ArrayList<ArrayList<Double>>) ois.readObject();
 		fin.close();
 	}
-	
-	
+
+
 
 	/*
 	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
@@ -554,7 +579,7 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Sigma: " + Double.toString(sigma));
 		outputWriter.newLine();
-		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/TRAINING_SET_REDUCTION_FACTOR));
+		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
 		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");

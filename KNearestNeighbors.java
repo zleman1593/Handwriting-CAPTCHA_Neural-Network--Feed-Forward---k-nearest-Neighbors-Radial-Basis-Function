@@ -59,11 +59,11 @@ public class KNearestNeighbors {
 		//binaryInput=Boolean.parseBoolean(args[2]);
 		//trainingSetReductionFactor=Integer.parseInt(args[3]);
 		//numberOfImagesToTest = Integer.parseInt(args[4]);
-		// int k = Integer.parseInt(args[11]); 
-		// String trainingImages=args[7];
-		// String testingImages=args[8];
-		// String trainingLabels=args[9];
-		// String testingLabels=args[10];
+		// int k = Integer.parseInt(args[5); 
+		// String trainingImages=args[6];
+		// String testingImages=args[7];
+		// String trainingLabels=args[8];
+		// String testingLabels=args[9];
 		
 		
 		// These are hard coded versions of the above

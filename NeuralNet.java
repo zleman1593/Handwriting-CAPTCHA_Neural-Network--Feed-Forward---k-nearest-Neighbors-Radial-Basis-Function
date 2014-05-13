@@ -41,16 +41,17 @@ public class NeuralNet {
 	// Number of hidden layers
 	public static final int NUMBER_OF_HIDDEN_LAYERS = 1;
 	// Number of hidden nodes in second layer (first hidden layer)
-	public static int numberOfHiddenNodesInLayer2;
-	// Number of output nodes (Currently the network depends on 10 output nodes)
+	public static int numberOfNodesInHiddenLayer;
+	// Number of output nodes (Currently the network depends on 10 or 36 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;
+	
 	// Create array of Nodes in first layer and output layer
 	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
+	
 	// The learning rate for the network
 	public static double learningRate;
-	// Whether to use weights that have already been trained or to train network
-	// again
+	// Whether to use weights that have already been trained or to train network again
 	public static boolean usePriorWeights;
 
 	// For a given training image this array is filled with the output for each
@@ -62,25 +63,35 @@ public class NeuralNet {
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Results";
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt";
 	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetHiddenWeights.txt";
+	
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
+	
 	public static int[]  holder=new int[10];//Should make this the size of the number of outputs 36
+	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
 		}
+		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
+		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 
-		// numberOfHiddenNodesInLayer2=args[1];
+
+		// numberOfNodesInHiddenLayer=args[1];
 		// epochs = Integer.parseInt(args[2]); //number of epochs to run
 		// double learningRate = Double.parseDouble(args[3]); //learning rate
 		// usePriorWeights=Boolean.parseBolean(args[4]);
-		// String trainingImages=args[7];
-		// String testingImages=args[8];
-		// String trainingLabels=args[9];
-		// String testingLabels=args[10];
+		binaryInput = Boolean.parseBolean(args[5]);
+		// String trainingImages=args[6];
+		// String testingImages=args[7];
+		// String trainingLabels=args[8];
+		// String testingLabels=args[9];
+		
+		
 		// These are hard coded versions of the above
 		binaryInput=true;
-		numberOfHiddenNodesInLayer2 = 16;
+		numberOfNodesInHiddenLayer = 16;
 		epochs = 10;
 		learningRate = 0.3;
 		// Set this to true to avoid retraining. Allows the files in
@@ -254,7 +265,7 @@ public class NeuralNet {
 		outputWriter.newLine();
 		outputWriter.write("Hidden Layers: " + Integer.toString(NUMBER_OF_HIDDEN_LAYERS));
 		outputWriter.newLine();
-		outputWriter.write("Number of nodes in each hidden layer: " + Integer.toString(numberOfHiddenNodesInLayer2));
+		outputWriter.write("Number of nodes in each hidden layer: " + Integer.toString(numberOfNodesInHiddenLayer));
 		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
@@ -558,7 +569,7 @@ public class NeuralNet {
 
 		// Initialize weights with random values for all nodes in the first
 		// hidden layer.
-		for (int i = 0; i < numberOfHiddenNodesInLayer2; i++) {
+		for (int i = 0; i < numberOfNodesInHiddenLayer; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			for (int j = 0; j < numberOfInputNodes; j++) {
 				weights.add(random.nextGaussian());
@@ -568,8 +579,8 @@ public class NeuralNet {
 		// Initialize weights with random values for all nodes in the output
 		// layer.
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
-			ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2);
-			for (int j = 0; j < numberOfHiddenNodesInLayer2; j++) {
+			ArrayList<Double> weights = new ArrayList<Double>(numberOfNodesInHiddenLayer);
+			for (int j = 0; j < numberOfNodesInHiddenLayer; j++) {
 				weights.add(random.nextGaussian());
 			}
 			outputLayerNodes.add(weights);
@@ -655,7 +666,7 @@ public class NeuralNet {
 
 		// Initialize weights with random values for all nodes in the first
 		// hidden layer.
-		for (int i = 0; i < numberOfHiddenNodesInLayer2; i++) {
+		for (int i = 0; i < numberOfNodesInHiddenLayer; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			for (int j = 0; j < numberOfInputNodes; j++) {
 				weights.add(random.nextGaussian());
@@ -665,8 +676,8 @@ public class NeuralNet {
 		// Initialize weights with random values for all nodes in the output
 		// layer.
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
-			ArrayList<Double> weights = new ArrayList<Double>(numberOfHiddenNodesInLayer2);
-			for (int j = 0; j < numberOfHiddenNodesInLayer2; j++) {
+			ArrayList<Double> weights = new ArrayList<Double>(numberOfNodesInHiddenLayer);
+			for (int j = 0; j < numberOfNodesInHiddenLayer; j++) {
 				weights.add(random.nextGaussian());
 			}
 			outputLayerNodes.add(weights);
