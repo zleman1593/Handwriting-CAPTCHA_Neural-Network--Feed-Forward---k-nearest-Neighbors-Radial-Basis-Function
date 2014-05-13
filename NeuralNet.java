@@ -70,6 +70,9 @@ public class NeuralNet {
 	
 	public static int[]  holder=new int[10];//Should make this the size of the number of outputs 36
 	
+	
+	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
+	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
@@ -94,28 +97,53 @@ public class NeuralNet {
 		
 		numberOfNodesInHiddenLayer = 30;
 		epochs = 10;
-		learningRate = 0.4;
+		learningRate = 0.8;
 		// Set this to true to avoid retraining. Allows the files in
 		// NeuralNetOutput folder to be loaded and used.
-		usePriorWeightsToTestNetwork = false;
+		usePriorWeightsToTestNetwork = true;
 		binaryInput=true;
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-		usePriorWeightsToContinueTraining = false;
+		usePriorWeightsToContinueTraining = true;
+		
 
-		if (!usePriorWeightsToTestNetwork) {
+		/*if (!usePriorWeightsToTestNetwork) {
 			initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			//initializeMultilayerFeedForwardCaptcha();
-		} else if(usePriorWeightsToContinueTraining){
+			
+			// Trains the network with the training Data
+						long startTime = System.currentTimeMillis();
+						trainTheNetwork(trainingData);
+						long endTime = System.currentTimeMillis();
+						executionTime = endTime - startTime;
+						System.out.println("Training time: " + executionTime + " milliseconds");
+						// Creates data files that can be reused by the network without
+						// retraining.
+						writeTrainedWeights();
+		} */
+		
+		//if(usePriorWeightsToContinueTraining){
+		initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			readDataFromTrainedFiles();
-		}
-		else {
+			// Trains the network with the training Data
+			long startTime = System.currentTimeMillis();
+			trainTheNetwork(trainingData);
+			long endTime = System.currentTimeMillis();
+			executionTime = endTime - startTime;
+			System.out.println("Training time: " + executionTime + " milliseconds");
+			// Creates data files that can be reused by the network without
+			// retraining.
+			writeTrainedWeights();
+			
+			
+		//}
+		/*if (usePriorWeightsToTestNetwork && !usePriorWeightsToContinueTraining)  {
 			readDataFromTrainedFiles();
 			System.out.println("Reading Data from trained files");
 			numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
-		}
+		}*/
 		
 		
 		// Test the Feed-Forward network
@@ -133,7 +161,6 @@ public class NeuralNet {
 
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
-		ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the training data
 			trainingData = train.loadDigitImages();
@@ -177,15 +204,7 @@ public class NeuralNet {
 			outputLayerNodes.add(weights);
 		}
 
-		// Trains the network with the training Data
-		long startTime = System.currentTimeMillis();
-		trainTheNetwork(trainingData);
-		long endTime = System.currentTimeMillis();
-		executionTime = endTime - startTime;
-		System.out.println("Training time: " + executionTime + " milliseconds");
-		// Creates data files that can be reused by the network without
-		// retraining.
-		writeTrainedWeights();
+
 
 	}
 	

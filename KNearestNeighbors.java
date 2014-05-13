@@ -44,9 +44,6 @@ public class KNearestNeighbors {
 	public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
 	
 	
-
-	
-	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
@@ -76,7 +73,9 @@ public class KNearestNeighbors {
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
 		
-		
+		if(!binaryInput){
+			System.out.println("It is normal for this network to not preform well with bianry data.");
+			}
 		
 		// "Train" the network AKA create hidden layer
 		long startTime = System.currentTimeMillis();
@@ -263,39 +262,7 @@ public class KNearestNeighbors {
 		}		
 	}
 
-	/*
-	 * Returns the output from a given node after the input has been summed.It takes the layer that the node is in, the index of the node in the
-	 * layer, and the output from the previous layer
-	 */
-	public static double nodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
-		double sum = 0;
-		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
-			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
-			if(output<=20){
-				output=1;
-			}else{
-				output=0;
-			}
-			sum = sum + output ;
-		}
-		return sum;
-	}
-
-	/* This returns an array representing the output of all nodes in the given layer */
-	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
-		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
-		for (int i = 0; i < currentLayer.size(); i++) {
-			double output;
-			if(!binaryInput){
-				output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
-			}else{
-				output = nodeOutputBinary(currentLayer, outputFromPreviousLayer, i);
-			}
-			outputOfCurrentlayer.add(output);
-		}
-		return outputOfCurrentlayer;
-	}
-
+	
 	public static void solveTestingData(ArrayList<DigitImage> networkInputData, int k) {
 		//	long startTime = System.currentTimeMillis();
 		for (int i = 0; i <numberOfImagesToTest/8; i++) {
@@ -348,6 +315,41 @@ public class KNearestNeighbors {
 
 	}
 
+	
+	
+	/* This returns an array representing the output of all nodes in the given layer */
+	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
+		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
+		for (int i = 0; i < currentLayer.size(); i++) {
+			double output;
+			output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
+			outputOfCurrentlayer.add(output);
+		}
+		return outputOfCurrentlayer;
+	}
+
+	
+	
+	/*
+	 * Returns the output from a given node after the input has been summed.It takes the layer that the node is in, the index of the node in the
+	 * layer, and the output from the previous layer
+	 */
+	public static double nodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
+		double sum = 0;
+		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
+			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
+			if(output<=20){
+				output=1;
+			}else{
+				output=0;
+			}
+			sum = sum + output ;
+		}
+		return sum;
+	}
+
+	//----------------------START UTILITY METHODS---------------------------------------------------------------------------------------------
+	
 	// Initialize the ordered indicies for the hiddenLayerDottedOuput list
 	public static void initializeIndices (int[] indicesArray) {
 		for (int index = 0; index < indicesArray.length; index++) {
@@ -371,6 +373,9 @@ public class KNearestNeighbors {
 		}
 	}
 
+	
+	//----------------------END UTILITY METHODS-----------------------------------------------------------------------------------------------
+	
 	// The bestKOutputsList is constructed from the sorted hiddenLaYerDottedOutput lists's indices and the 
 	// values of hiddenLayerToOutput list at the corresponding indices. 	
 	public static void findBestKOutputs(int[] sortedIndices, ArrayList<Integer> outputsList, ArrayList<Integer> bestKOutputsList, int k) {
@@ -402,7 +407,11 @@ public class KNearestNeighbors {
 
 	}
 
-
+	
+	// Teh below code is identical to the solveTestingData method with a few changes so  each
+	//thread processes a different part of the data.
+	
+	
 	public static void solveTestingData2(ArrayList<DigitImage> networkInputData, int k) {
 
 
@@ -735,99 +744,9 @@ public class KNearestNeighbors {
 		}
 	}
 
-	/*
-	 * Returns the output from a given node after the input has been summed.It takes the layer that the node is in, the index of the node in the
-	 * layer, and the output from the previous layer
-	 */
-	public static double nodeOutputBinary(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
-		double sum = 0;
-		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
-			//This searches for a match with any adjacent pixels
-			//(increases likely hood to match binary images) (like the diffuse border on grayscale images)
-			double blob=0;
-			blob = blob + outputFromPreviousLayer.get(i);
 
-			if(!(i<=30)){
-				blob = blob + outputFromPreviousLayer.get(i-1);
-				blob = blob + outputFromPreviousLayer.get(i-2);
-				blob = blob + outputFromPreviousLayer.get(i-26);
-				blob = blob + outputFromPreviousLayer.get(i-27);
-				blob = blob + outputFromPreviousLayer.get(i-28);
-				blob = blob + outputFromPreviousLayer.get(i-29);
-				blob = blob + outputFromPreviousLayer.get(i-30);
-
-
-			}
-			if(!(i>=754)){
-				blob = blob + outputFromPreviousLayer.get(i+1);
-				blob = blob + outputFromPreviousLayer.get(i+2);
-				blob = blob + outputFromPreviousLayer.get(i+26);
-				blob = blob + outputFromPreviousLayer.get(i+27);
-				blob = blob + outputFromPreviousLayer.get(i+28); 
-				blob = blob + outputFromPreviousLayer.get(i+29);
-				blob = blob + outputFromPreviousLayer.get(i+30);
-			}
-
-
-			if(blob>=1){
-				blob=1;
-			}
-			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - blob));
-
-			if(output==0){  
-				output=1;
-			}else{
-				output=0;
-			}
-
-			sum = sum + output ;
-
-		}
-		return sum;
-	}
 	
 }
-	/*public static void solveTestingDataXX(ArrayList<DigitImage> networkInputData, int k) {
-
-		//long startTime = System.currentTimeMillis();
-		for (int i = 0; i < numberOfImagesToTest; i++) {
-			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues.size(); j++) {
-					if (hiddenLayerDottedOutputValues.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues4.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues4);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-			}
-			System.out.println("Guess using the closest match: " + output);
-			double number = networkInputData.get(i).getLabel();
-			System.out.println("Correct answer4: " + number);
-
-			countOfImagesAnalyzed.set(3,countOfImagesAnalyzed.get(3)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(3,countOfCorrectImagesAnalyzed.get(3)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong");
-			}
-			System.out.println(" ");
-		}
-	}*/
+	
 
 
