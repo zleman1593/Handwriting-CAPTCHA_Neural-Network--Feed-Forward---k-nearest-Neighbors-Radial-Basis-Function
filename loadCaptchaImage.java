@@ -26,9 +26,9 @@ import javax.imageio.ImageIO;
 
 public class loadCaptchaImage {
 	// List of captchas fed to the Neural Networks.
-	public static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
+	private static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
 	// List of training set of characters fed to the Neural Networks.
-	public static ArrayList<DigitImage> alltrainingData = new ArrayList<DigitImage>();
+	private static ArrayList<DigitImage> alltrainingData = new ArrayList<DigitImage>();
 	
 	private static final int CHAR_WIDTH = 9; // Cut-off width of a character.
 	private static final int CHAR_HEIGHT = 22; // Cut-off height of a character.
@@ -72,10 +72,10 @@ public class loadCaptchaImage {
 		}
 		// Iterate through the list of Captcha images.
 		for (int i = 0; i < imgs.size(); i++) {	
-			ArrayList<DigitImage> oneCaptcha = new ArrayList<DigitImage>();
-			oneCaptcha.clear();
 			BufferedImage captchaImg = imgs.get(i);
-			int captchaCharPos = 0;
+			ArrayList<DigitImage> oneCaptcha = new ArrayList<DigitImage>(); // List of character images.
+			oneCaptcha.clear();
+			int captchaCharPos = 0; // How many characters of the captcha have been read.
 			// Read a single Captcha image.
 			for (int j = 0; j < captchaImg.getWidth(); j++) {
 				// Skip white spaces and find where the next character starts, then j jumps to that column.
