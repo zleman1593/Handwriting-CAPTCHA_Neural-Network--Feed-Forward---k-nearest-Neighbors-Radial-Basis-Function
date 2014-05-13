@@ -5,9 +5,9 @@
  *Currently this is a nonfunctional class and the entirety of the below code may likely be replaced.
  */
 
-
+//IVY: you will need to uncomment the lines with src, and then comment out the lines missing src in order for this to run on your computer.
 //TODO: Every some letters in the Captcha sub arrays CHAR_OFFSET = 86 works while others CHAR_OFFSET = 87 works. Why??
-//TODO: Need to add the ability to add white chars after a training iamge that is only 7 pixels wide.
+//TODO: Need to add the ability to add white chars after a training image that is only 7 pixels wide to make it like a 9 px wide image.
 
 
 import java.io.IOException;
