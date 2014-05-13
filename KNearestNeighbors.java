@@ -1,6 +1,9 @@
 
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.Math;
 import java.util.ArrayList;
@@ -37,8 +40,11 @@ public class KNearestNeighbors {
 	// Tracks the number of images processed in the testing set.
 	public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
 	
+	public static  int countOfImagesAnalyzedTotal;
 	
+	public static  int countOfCorrectImagesAnalyzedTotal;
 	
+	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNNResults";
 	
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -67,7 +73,7 @@ public class KNearestNeighbors {
 		
 		
 		// These are hard coded versions of the above
-		trainingSetReductionFactor=10;
+		trainingSetReductionFactor=5;
 		k = 3;
 		binaryInput=false;
 		numberOfImagesToTest = 200;
@@ -77,7 +83,7 @@ public class KNearestNeighbors {
 		String testingLabels = "Testing-Labels";
 		
 		if(!binaryInput){
-			System.out.println("It is normal for this network to not preform well with bianry data.");
+			System.out.println("It is normal for this network to not preform well with binary data.");
 			}
 		
 		// "Train" the network AKA create hidden layer
@@ -89,29 +95,18 @@ public class KNearestNeighbors {
 		
 		
 		//Sets up trackers for each thread
-		countOfImagesAnalyzed.add(0);
-		countOfImagesAnalyzed.add(0);
-		countOfImagesAnalyzed.add(0);
-		countOfImagesAnalyzed.add(0);
-		countOfImagesAnalyzed.add(0);
-		countOfImagesAnalyzed.add(0);
-		countOfImagesAnalyzed.add(0);
-		countOfImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
-		countOfCorrectImagesAnalyzed.add(0);
+		for(int y=0; y<8;y++){
+			countOfImagesAnalyzed.add(0);
+			countOfCorrectImagesAnalyzed.add(0);
+		}
+		
 		
 		
 		
 		// Loads test data for the K-Nearest Neighbors Network
 		loadtestDataForKNearestNeighbours(testingImages, testingLabels);
 
-		//Creates 8 threads
+		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
 		Runnable r1 = new Runnable() {
 			public void run() {
 				//Tests the first quarter of the input data
@@ -212,6 +207,7 @@ public class KNearestNeighbors {
 		System.out.println("Solution time: " + executionTime + " milliseconds");
 		System.out.println("# Correct: " + countOfCorrectImagesAnalyzedTotal);
 		
+		write();
 		//Prints out the stats for each number
 		for (int m = 0; m < holder.length; m++) {
 			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
@@ -305,9 +301,9 @@ public class KNearestNeighbors {
 			System.out.println("Thread: 1" );
 			System.out.println("Correct answer: " + number);
 
-			countOfImagesAnalyzed.set(0,countOfImagesAnalyzed.get(0)+1);
+			countOfImagesAnalyzed.set(thread,countOfImagesAnalyzed.get(thread)+1);
 			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(0,countOfCorrectImagesAnalyzed.get(0)+1);
+				countOfCorrectImagesAnalyzed.set(thread,countOfCorrectImagesAnalyzed.get(thread)+1);
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
@@ -374,6 +370,44 @@ public class KNearestNeighbors {
 				}
 			}
 		}
+	}
+
+	
+	/*
+	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
+	 */
+	//public static void write(ArrayList<OutputVector> x) throws IOException {
+	public static void write() throws IOException {
+		BufferedWriter outputWriter = null;
+		String randomString = Double.toString(Math.random());
+		File file = new File(filePathResults + randomString + ".txt");
+
+		// If file does not exists, then create it.
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+		outputWriter.write("k: " + Double.toString(k));
+		outputWriter.newLine();
+		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
+		outputWriter.newLine();
+		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
+		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		outputWriter.newLine();
+		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.newLine();
+		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
+		outputWriter.newLine();
+		outputWriter.write("Image data binary: " + binaryInput);
+		outputWriter.newLine();
+		//for (int i = 0; i < x.size(); i++) {
+			//outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
+			//outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
+			//outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
+			outputWriter.newLine();
+		//}
+		outputWriter.flush();
+		outputWriter.close();
 	}
 
 	

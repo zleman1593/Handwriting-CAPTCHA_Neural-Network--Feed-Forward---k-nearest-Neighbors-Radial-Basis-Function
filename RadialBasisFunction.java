@@ -42,8 +42,8 @@ public class RadialBasisFunction {
 	public static double learningRate;
 	// Whether to use weights that have already been trained or to train network again
 	public static boolean usePriorWeights;
-	//Dictates the standard deviation in the gaussian RBF
-	public static double sigma;
+	//Dictates the square standard deviation in the gaussian RBF
+	public static double sigmaSquared;
 	// Number of output nodes (Currently the network depends on 10  or 36 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;//---------------------------------------------------------------------------------
 	//File paths
@@ -72,7 +72,7 @@ public class RadialBasisFunction {
 		//binaryInput=Boolean.parseBoolean(args[1]);
 		//trainingSetReductionFactor=Integer.parseInt(args[2]);
 		//numberOfImagesToTest = Integer.parseInt(args[3]);
-		// sigma = Integer.parseInt(args[4]); 
+		// sigmaSquared = Integer.parseInt(args[4]); 
 		// epochs = Integer.parseInt(args[5]); 
 		// learningRate = Double.parseDouble(args[6]); 
 		// String trainingImages=args[7];
@@ -89,9 +89,9 @@ public class RadialBasisFunction {
 		// These are hard coded versions of the above
 		trainingSetReductionFactor=20;
 		usePriorWeights=false;
-		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
-		epochs = 20; // For binary I am testing with sigam =  between 15-10 (11 seems optimal)
-		learningRate=1;
+		sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
+		epochs = 5; // For binary I am testing with sigam =  between 15-10 (11 seems optimal)
+		learningRate=0.5;
 		binaryInput=false;
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
@@ -198,7 +198,7 @@ public class RadialBasisFunction {
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-		System.out.println("Look in /Users/\"your username\"/Desktop/NeuralNetOutput  directory to find  the output.");
+		System.out.println("Look in " +filePathResults+  " directory to find  the output.");
 		long endTime = System.currentTimeMillis();
 		executionTime = endTime - startTime;
 		System.out.println("Testing time: " + executionTime + " milliseconds");
@@ -215,7 +215,7 @@ public class RadialBasisFunction {
 			sum=sum+Math.pow(layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i),2);
 
 		}
-		return Math.exp(-1*(sum/sigma));
+		return Math.exp(-1*(sum/sigmaSquared));
 	}
 
 	public static double outputNodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
@@ -257,51 +257,54 @@ public class RadialBasisFunction {
 			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
 
 				networkOutputError(trainingData, images);
+				
+				
+				//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
 				Runnable r1 = new Runnable() {
 					public void run() {
 						// Update the weights to the output nodes
-						testingSubRoutine(0, NUMBER_OF_OUTPUT_NODES/8);
+						trainingSubRoutine(0, NUMBER_OF_OUTPUT_NODES/8);
 
 					}};
 
 					Runnable r2 = new Runnable() {
 						public void run() {
 							// Update the weights to the output nodes
-							testingSubRoutine(NUMBER_OF_OUTPUT_NODES/8,NUMBER_OF_OUTPUT_NODES/4);
+							trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/8,NUMBER_OF_OUTPUT_NODES/4);
 
 						}};
 
 						Runnable r3 = new Runnable() {
 							public void run() {
 								// Update the weights to the output nodes
-								testingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8);
+								trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8);
 
 							}};
 
 							Runnable r4  = new Runnable() {
 								public void run() {
 									// Update the weights to the output nodes
-									testingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2);
+									trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2);
 
 								}};
 								Runnable r5 =  new Runnable() {
 									public void run() {
 										// Update the weights to the output nodes
-										testingSubRoutine(NUMBER_OF_OUTPUT_NODES/2,(NUMBER_OF_OUTPUT_NODES*5)/8);
+										trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/2,(NUMBER_OF_OUTPUT_NODES*5)/8);
 
 									}};
 
 									Runnable r6=  new Runnable() {
 										public void run() {
 											// Update the weights to the output nodes
-											testingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8);
+											trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8);
 
 										}};
 
 										Runnable r7=  new Runnable() {
 											public void run() {
 												// Update the weights to the output nodes
-												testingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8);
+												trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8);
 
 											}};
 
@@ -309,7 +312,7 @@ public class RadialBasisFunction {
 											Runnable r8 =  new Runnable() {
 												public void run() {
 													// Update the weights to the output nodes
-													testingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES);
+													trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES);
 
 												}};
 
@@ -359,6 +362,24 @@ public class RadialBasisFunction {
 		}
 
 	}
+
+	public static void trainingSubRoutine(int start, int stop)   {
+		// Update the weights to the output nodes
+		for (int ii = start; ii < stop; ii++) {
+			for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+				// Grabs the error that was calculated for the output of
+				// this output node
+				double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+				// Update the weight using gradient descent
+				outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+						+ (learningRate * error
+								* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+								* tempOutput.get(tempOutput.size() - 3).get(j)));
+			}
+
+		}
+	}
+
 
 	/*
 	 * Takes the weighted sum as the parameter and returns the output of the sigmoid activation function
@@ -491,7 +512,7 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Epochs: " + Integer.toString(epochs));
 		outputWriter.newLine();
-		outputWriter.write("Sigma: " + Double.toString(sigma));
+		outputWriter.write("sigmaSquared: " + Double.toString(sigmaSquared));
 		outputWriter.newLine();
 		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
 		outputWriter.newLine();
@@ -525,24 +546,9 @@ public class RadialBasisFunction {
 
 	}
 	
-	public static void testingSubRoutine(int start, int stop)   {
-	// Update the weights to the output nodes
-	for (int ii = start; ii < stop; ii++) {
-		for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-			// Grabs the error that was calculated for the output of
-			// this output node
-			double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-			// Update the weight using gradient descent
-			outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-					+ (learningRate * error
-							* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-							* tempOutput.get(tempOutput.size() - 3).get(j)));
-		}
-		
-	}
-	}
 	
 	
+
 }
 
 
