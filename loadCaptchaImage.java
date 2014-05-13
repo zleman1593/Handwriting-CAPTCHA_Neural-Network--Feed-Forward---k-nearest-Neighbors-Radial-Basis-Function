@@ -83,8 +83,6 @@ public class loadCaptchaImage {
 
 				// Reaching the end of the Captcha image. 
 				if (j + CHAR_WIDTH >= captchaImg.getWidth() || captchaCharPos >= NUM_CHARS_IN_CAPTCHA) {
-//					System.out.println("End of captcha. j + char width: " + (j + CHAR_WIDTH) + "char index:" + captchaCharPos +
-//							" and image width:" + captchaImg.getWidth());
 					break;
 				}
 				
