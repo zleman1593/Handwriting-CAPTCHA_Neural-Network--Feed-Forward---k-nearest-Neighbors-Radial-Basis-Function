@@ -32,8 +32,8 @@ public class loadCaptchaImage {
 	
 	private static final int CHAR_WIDTH = 9; // Cut-off width of a character.
 	private static final int CHAR_HEIGHT = 22; // Cut-off height of a character.
-//	private static final int WHITE_COLOR = 255; // RGB value for white: 255, 255, 255.
-	// private static final int WHITE_BINARY = 0; // Binary representation of a white pixel.
+	//private static final int WHITE_COLOR = 255; // RGB value for white: 255, 255, 255.
+	 //private static final int WHITE_BINARY = 0; // Binary representation of a white pixel.
 	private static final int BLACK_COLOR = 0; // RGB value for black: 0, 0, 0.
 	private static final int BLACK_BINARY = 1; // Binary representation of a black pixel. 
 	private static final int CHAR_OFFSET = 87; // Convert char to int so that a is 10, b is 11, etc.
