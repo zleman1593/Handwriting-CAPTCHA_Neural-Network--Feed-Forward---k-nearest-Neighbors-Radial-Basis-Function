@@ -33,9 +33,9 @@ public class loadCaptchaImage {
 	private static final int CHAR_WIDTH = 9; // Cut-off width of a character.
 	private static final int CHAR_HEIGHT = 22; // Cut-off height of a character.
 //	private static final int WHITE_COLOR = 255; // RGB value for white: 255, 255, 255.
-	private static final int WHITE_BINARY = 1; // Binary representation of a white pixel.
+	// private static final int WHITE_BINARY = 0; // Binary representation of a white pixel.
 	private static final int BLACK_COLOR = 0; // RGB value for black: 0, 0, 0.
-	private static final int BLACK_BINARY = 0; // Binary representation of a black pixel. 
+	private static final int BLACK_BINARY = 1; // Binary representation of a black pixel. 
 	private static final int CHAR_OFFSET = 87; // Convert char to int so that a is 10, b is 11, etc.
 	private static final int NUM_CHARS_IN_CAPTCHA = 6; // 6 characters in each Captcha.
 	
@@ -80,8 +80,7 @@ public class loadCaptchaImage {
 			for (int j = 0; j < captchaImg.getWidth(); j++) {
 				// Skip white spaces and find where the next character starts, then j jumps to that column.
 				j = findCharCol(captchaImg, j);
-//				System.out.println("j " + j);
-				
+
 				// Reaching the end of the Captcha image. 
 				if (j + CHAR_WIDTH >= captchaImg.getWidth() || captchaCharPos >= NUM_CHARS_IN_CAPTCHA) {
 //					System.out.println("End of captcha. j + char width: " + (j + CHAR_WIDTH) + "char index:" + captchaCharPos +
