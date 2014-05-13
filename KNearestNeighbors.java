@@ -29,14 +29,8 @@ public class KNearestNeighbors {
 	public static int[]  holder=new int[10];
 	
 	//These allow each thread to manipulate its own version of a similar data structure
-	public static ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDottedOutputValues2 = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDottedOutputValues3 = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDottedOutputValues4 = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDottedOutputValues5 = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDottedOutputValues6 = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDottedOutputValues7 = new ArrayList<Double>();
-	public static ArrayList<Double> hiddenLayerDottedOutputValues8 = new ArrayList<Double>();
+	public static ArrayList<ArrayList<Double>> hiddenLayerDottedOutputValuesHolderArray = new ArrayList<ArrayList<Double>>();
+
 	
 	// Tracks the number of images correctly identified in the testing set.
 	public static ArrayList<Integer> countOfCorrectImagesAnalyzed = new ArrayList<Integer>();
@@ -44,11 +38,20 @@ public class KNearestNeighbors {
 	public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
 	
 	
+	
+	
+	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
 		}
+		for (int m = 0; m < 8; m++) {
+			 ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
+		hiddenLayerDottedOutputValuesHolderArray.add(hiddenLayerDottedOutputValues);
+		}
+		
+		
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 		
@@ -112,50 +115,50 @@ public class KNearestNeighbors {
 		Runnable r1 = new Runnable() {
 			public void run() {
 				//Tests the first quarter of the input data
-				solveTestingData(testingData, k);
+				solveTestingData(testingData, k, 0, 0, numberOfImagesToTest/8);
 			}
 		};
 		Runnable r2 = new Runnable() {
 			public void run() {
 				//Tests the second fourth of the input data
-				solveTestingData2(testingData, k);
+				solveTestingData(testingData, k, 1,(numberOfImagesToTest*1)/8,(numberOfImagesToTest*2)/8);
 			}
 		};
 		Runnable r3 = new Runnable() {
 			public void run() {
 				//Tests the third fourth of the input data
-				solveTestingData3(testingData, k);
+				solveTestingData(testingData, k, 2,(numberOfImagesToTest*2)/8,(numberOfImagesToTest*3)/8);
 			}
 		};
 		Runnable r4 = new Runnable() {
 			public void run() {
 				//Tests the last fourth of the input data
-				solveTestingData4(testingData, k);
+				solveTestingData(testingData, k, 3,(numberOfImagesToTest*3)/8,(numberOfImagesToTest*4)/8);
 			}
 		};
 
 		Runnable r5 = new Runnable() {
 			public void run() {
 				//Tests the first quarter of the input data
-				solveTestingData5(testingData, k);
+				solveTestingData(testingData, k, 4,(numberOfImagesToTest*4)/8,(numberOfImagesToTest*5)/8);
 			}
 		};
 		Runnable r6 = new Runnable() {
 			public void run() {
 				//Tests the second fourth of the input data
-				solveTestingData6(testingData, k);
+				solveTestingData(testingData, k, 5,(numberOfImagesToTest*5)/8,(numberOfImagesToTest*6)/8);
 			}
 		};
 		Runnable r7 = new Runnable() {
 			public void run() {
 				//Tests the third fourth of the input data
-				solveTestingData7(testingData, k);
+				solveTestingData(testingData, k, 6,(numberOfImagesToTest*6)/8,(numberOfImagesToTest*7)/8);
 			}
 		};
 		Runnable r8 = new Runnable() {
 			public void run() {
 				//Tests the last fourth of the input data
-				solveTestingData8(testingData, k);
+				solveTestingData(testingData, k, 7,(numberOfImagesToTest*7)/8,numberOfImagesToTest);
 			}
 		};
 
@@ -263,11 +266,11 @@ public class KNearestNeighbors {
 	}
 
 	
-	public static void solveTestingData(ArrayList<DigitImage> networkInputData, int k) {
+	public static void solveTestingData(ArrayList<DigitImage> networkInputData, int k, int thread, int startIndex, int EndIndex) {
 		//	long startTime = System.currentTimeMillis();
-		for (int i = 0; i <numberOfImagesToTest/8; i++) {
+		for (int i = startIndex; i <EndIndex; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues = outPutOfLayer(hiddenLayerNodes, temp);
+			hiddenLayerDottedOutputValuesHolderArray.set(thread,outPutOfLayer(hiddenLayerNodes, temp));
 
 
 			//I IF K=1 just run the commented out code as it is faster.	
@@ -279,21 +282,21 @@ public class KNearestNeighbors {
 				//return the number that is at that node position in the associated output array.
 
 				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues.size(); j++) {
-					if (hiddenLayerDottedOutputValues.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues.get(j);
+				for (int j = 0; j < hiddenLayerDottedOutputValuesHolderArray.get(thread).size(); j++) {
+					if (hiddenLayerDottedOutputValuesHolderArray.get(thread).get(j) > currentMax) {
+						currentMax = hiddenLayerDottedOutputValuesHolderArray.get(thread).get(j);
 						output = hiddenLayerToOutput.get(j);
 					}
 				}
 			}
 			else{
 
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues.size()];
+				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValuesHolderArray.get(thread).size()];
 				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
 
 
 				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues);
+				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValuesHolderArray.get(thread));
 				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
 				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
 			}
@@ -408,342 +411,7 @@ public class KNearestNeighbors {
 	}
 
 	
-	// Teh below code is identical to the solveTestingData method with a few changes so  each
-	//thread processes a different part of the data.
 	
-	
-	public static void solveTestingData2(ArrayList<DigitImage> networkInputData, int k) {
-
-
-		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToTest*1)/8; i <(numberOfImagesToTest*2)/8 ; i++) {
-			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues2 = outPutOfLayer(hiddenLayerNodes, temp);
-
-
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-
-
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues2.size(); j++) {
-					if (hiddenLayerDottedOutputValues.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues2.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues2.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-
-
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues2);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-
-				System.out.println("Guess using the closest match: " + output);
-			}
-			double number = networkInputData.get(i).getLabel();
-			System.out.println("Thread: 2" );
-			System.out.println("Correct answer: " + number);
-
-
-			countOfImagesAnalyzed.set(1,countOfImagesAnalyzed.get(1)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(1,countOfCorrectImagesAnalyzed.get(1)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong");
-				holder[(int) output]++;	
-			}
-			System.out.println(" ");
-		}
-	}
-
-
-
-	public static void solveTestingData3(ArrayList<DigitImage> networkInputData, int k) {
-		//long startTime = System.currentTimeMillis();
-		for (int i =(numberOfImagesToTest*2)/8; i <(numberOfImagesToTest*3)/8 ; i++) {
-			ArrayList<Double> temp = networkInputData.get((int)i).getArrayListData();
-			hiddenLayerDottedOutputValues3 = outPutOfLayer(hiddenLayerNodes, temp);
-
-
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-
-
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues3.size(); j++) {
-					if (hiddenLayerDottedOutputValues3.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues3.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues3.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-
-
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues3);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-			}
-			System.out.println("Guess using the closest match: " + output);
-			double number = networkInputData.get((int)i).getLabel();
-			System.out.println("Thread: 3" );
-			System.out.println("Correct answer: " + number);
-
-			countOfImagesAnalyzed.set(2,countOfImagesAnalyzed.get(2)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(2,countOfCorrectImagesAnalyzed.get(2)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong");
-				holder[(int) output]++;	
-			}
-			System.out.println(" ");
-		}
-	}
-
-
-	public static void solveTestingData4(ArrayList<DigitImage> networkInputData, int k) {
-
-		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToTest*3)/8; i <(numberOfImagesToTest*4)/8 ; i++) {
-			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues4 = outPutOfLayer(hiddenLayerNodes, temp);
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues4.size(); j++) {
-					if (hiddenLayerDottedOutputValues4.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues4.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues4.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues4);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-			}
-			System.out.println("Guess using the closest match: " + output);
-			double number = networkInputData.get(i).getLabel();
-			System.out.println("Thread: 4" );
-			System.out.println("Correct answer: " + number);
-
-			countOfImagesAnalyzed.set(3,countOfImagesAnalyzed.get(3)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(3,countOfCorrectImagesAnalyzed.get(3)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong");
-				holder[(int) output]++;	
-			}
-			System.out.println(" ");
-		}
-	}
-
-	public static void solveTestingData5(ArrayList<DigitImage> networkInputData, int k) {
-
-		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToTest*4)/8; i <(numberOfImagesToTest*5)/8 ; i++) {
-			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues5 = outPutOfLayer(hiddenLayerNodes, temp);
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues5.size(); j++) {
-					if (hiddenLayerDottedOutputValues5.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues5.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues5.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues5);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-			}
-			System.out.println("Guess using the closest match: " + output);
-			double number = networkInputData.get(i).getLabel();
-			System.out.println("Thread: 5" );
-			System.out.println("Correct answer: " + number);
-
-			countOfImagesAnalyzed.set(3,countOfImagesAnalyzed.get(3)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(3,countOfCorrectImagesAnalyzed.get(3)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong");
-				holder[(int) output]++;	
-			}
-			System.out.println(" ");
-		}
-	}
-	public static void solveTestingData6(ArrayList<DigitImage> networkInputData, int k) {
-
-		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToTest*5)/8; i <(numberOfImagesToTest*6)/8 ; i++) {
-			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues6 = outPutOfLayer(hiddenLayerNodes, temp);
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues6.size(); j++) {
-					if (hiddenLayerDottedOutputValues6.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues6.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues6.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues6);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-			}
-			System.out.println("Guess using the closest match: " + output);
-			double number = networkInputData.get(i).getLabel();
-			System.out.println("Thread: 6" );
-			System.out.println("Correct answer: " + number);
-
-			countOfImagesAnalyzed.set(3,countOfImagesAnalyzed.get(3)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(3,countOfCorrectImagesAnalyzed.get(3)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong");
-				holder[(int) output]++;	
-			}
-			System.out.println(" ");
-		}
-	}
-	public static void solveTestingData7(ArrayList<DigitImage> networkInputData, int k) {
-
-		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToTest*6)/8; i <(numberOfImagesToTest*7)/8 ; i++) {
-			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues7 = outPutOfLayer(hiddenLayerNodes, temp);
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues7.size(); j++) {
-					if (hiddenLayerDottedOutputValues7.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues7.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues7.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues7);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-			}
-			System.out.println("Guess using the closest match: " + output);
-			double number = networkInputData.get(i).getLabel();
-			System.out.println("Thread: 7" );
-			System.out.println("Correct answer: " + number);
-
-			countOfImagesAnalyzed.set(3,countOfImagesAnalyzed.get(3)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(3,countOfCorrectImagesAnalyzed.get(3)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong");
-				holder[(int) output]++;	
-			}
-			System.out.println(" ");
-		}
-	}
-
-	public static void solveTestingData8(ArrayList<DigitImage> networkInputData, int k) {
-
-		//long startTime = System.currentTimeMillis();
-		for (int i = (numberOfImagesToTest*7)/8; i < numberOfImagesToTest ; i++) {
-			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValues8 = outPutOfLayer(hiddenLayerNodes, temp);
-			//I IF K=1 just run the commented out code as it is faster.	
-			double output = 0;
-			if(k==1){	
-				//Find which node has the maximum output and then
-				//return the number that is at that node position in the associated output array.
-
-				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValues.size(); j++) {
-					if (hiddenLayerDottedOutputValues8.get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValues.get(j);
-						output = hiddenLayerToOutput.get(j);
-					}
-				}
-			}
-			else{
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValues8.size()];
-				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValues8);
-				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
-				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
-			}
-			System.out.println("Guess using the closest match: " + output);
-			double number = networkInputData.get(i).getLabel();
-			System.out.println("Thread: 8" );
-			System.out.println("Correct answer: " + number);
-
-			countOfImagesAnalyzed.set(3,countOfImagesAnalyzed.get(3)+1);
-			if (number == output) {
-				countOfCorrectImagesAnalyzed.set(3,countOfCorrectImagesAnalyzed.get(3)+1);
-				System.out.println("Network was Correct");
-			} else {
-				System.out.println(" Network was Wrong"); 
-				holder[(int) output]++;	
-			}
-			System.out.println(" ");
-		}
-	}
-
 
 	
 }
