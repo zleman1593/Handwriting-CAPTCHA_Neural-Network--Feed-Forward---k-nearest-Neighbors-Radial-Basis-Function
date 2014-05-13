@@ -88,7 +88,7 @@ public class RadialBasisFunction {
 
 		// These are hard coded versions of the above
 		trainingSetReductionFactor=20;
-		usePriorWeights=true;
+		usePriorWeights=false;
 		sigma = 1000000; // Experiment with numbers for this value 1000000     (sigma=100000 gave 29.86%)   (sigma=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
 		epochs = 20; // For binary I am testing with sigam =  between 15-10 (11 seems optimal)
 		learningRate=1;
@@ -260,145 +260,59 @@ public class RadialBasisFunction {
 				Runnable r1 = new Runnable() {
 					public void run() {
 						// Update the weights to the output nodes
-						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES/8; ii++) {
-							for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-								// Grabs the error that was calculated for the output of
-								// this output node
-								double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-								// Update the weight using gradient descent
-								outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-										+ (learningRate * error
-												* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-												* tempOutput.get(tempOutput.size() - 3).get(j)));
-							}
-						}
+						testingSubRoutine(0, NUMBER_OF_OUTPUT_NODES/8);
 
 					}};
 
 					Runnable r2 = new Runnable() {
 						public void run() {
 							// Update the weights to the output nodes
-							for (int ii = NUMBER_OF_OUTPUT_NODES/8; ii < NUMBER_OF_OUTPUT_NODES/4; ii++) {
-								for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-									// Grabs the error that was calculated for the output of
-									// this output node
-									double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-									// Update the weight using gradient descent
-									outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-											+ (learningRate * error
-													* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-													* tempOutput.get(tempOutput.size() - 3).get(j)));
-								}
-							}
+							testingSubRoutine(NUMBER_OF_OUTPUT_NODES/8,NUMBER_OF_OUTPUT_NODES/4);
 
 						}};
 
 						Runnable r3 = new Runnable() {
 							public void run() {
 								// Update the weights to the output nodes
-								for (int ii = NUMBER_OF_OUTPUT_NODES/4; ii < (NUMBER_OF_OUTPUT_NODES*3)/8; ii++) {
-									for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-										// Grabs the error that was calculated for the output of
-										// this output node
-										double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-										// Update the weight using gradient descent
-										outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-												+ (learningRate * error
-														* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-														* tempOutput.get(tempOutput.size() - 3).get(j)));
-									}
-								}
+								testingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8);
 
 							}};
 
-							Runnable r4 = new Runnable() {
+							Runnable r4  = new Runnable() {
 								public void run() {
 									// Update the weights to the output nodes
-									for (int ii = (NUMBER_OF_OUTPUT_NODES*3)/8; ii < NUMBER_OF_OUTPUT_NODES/2; ii++) {
-										for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-											// Grabs the error that was calculated for the output of
-											// this output node
-											double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-											// Update the weight using gradient descent
-											outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-													+ (learningRate * error
-															* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-															* tempOutput.get(tempOutput.size() - 3).get(j)));
-										}
-									}
+									testingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2);
 
 								}};
-								Runnable r5 = new Runnable() {
+								Runnable r5 =  new Runnable() {
 									public void run() {
 										// Update the weights to the output nodes
-										for (int ii = NUMBER_OF_OUTPUT_NODES/2; ii < (NUMBER_OF_OUTPUT_NODES*5)/8; ii++) {
-											for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-												// Grabs the error that was calculated for the output of
-												// this output node
-												double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-												// Update the weight using gradient descent
-												outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-														+ (learningRate * error
-																* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-																* tempOutput.get(tempOutput.size() - 3).get(j)));
-											}
-										}
+										testingSubRoutine(NUMBER_OF_OUTPUT_NODES/2,(NUMBER_OF_OUTPUT_NODES*5)/8);
 
 									}};
 
-									Runnable r6 = new Runnable() {
+									Runnable r6=  new Runnable() {
 										public void run() {
 											// Update the weights to the output nodes
-											for (int ii = (NUMBER_OF_OUTPUT_NODES*5)/8; ii < (NUMBER_OF_OUTPUT_NODES*6)/8; ii++) {
-												for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-													// Grabs the error that was calculated for the output of
-													// this output node
-													double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-													// Update the weight using gradient descent
-													outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-															+ (learningRate * error
-																	* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-																	* tempOutput.get(tempOutput.size() - 3).get(j)));
-												}
-											}
+											testingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8);
 
 										}};
 
-										Runnable r7 = new Runnable() {
+										Runnable r7=  new Runnable() {
 											public void run() {
 												// Update the weights to the output nodes
-												for (int ii = (NUMBER_OF_OUTPUT_NODES*6)/8; ii < (NUMBER_OF_OUTPUT_NODES*7)/8; ii++) {
-													for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-														// Grabs the error that was calculated for the output of
-														// this output node
-														double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-														// Update the weight using gradient descent
-														outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-																+ (learningRate * error
-																		* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-																		* tempOutput.get(tempOutput.size() - 3).get(j)));
-													}
-												}
+												testingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8);
 
 											}};
 
-											Runnable r8 = new Runnable() {
+
+											Runnable r8 =  new Runnable() {
 												public void run() {
 													// Update the weights to the output nodes
-													for (int ii = (NUMBER_OF_OUTPUT_NODES*7)/8; ii < NUMBER_OF_OUTPUT_NODES; ii++) {
-														for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-															// Grabs the error that was calculated for the output of
-															// this output node
-															double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-															// Update the weight using gradient descent
-															outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-																	+ (learningRate * error
-																			* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-																			* tempOutput.get(tempOutput.size() - 3).get(j)));
-														}
-													}
+													testingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES);
 
 												}};
+
 
 												//Now run the threads
 												Thread thr1 = new Thread(r1);
@@ -610,6 +524,25 @@ public class RadialBasisFunction {
 		fout.close();
 
 	}
+	
+	public static void testingSubRoutine(int start, int stop)   {
+	// Update the weights to the output nodes
+	for (int ii = start; ii < stop; ii++) {
+		for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+			// Grabs the error that was calculated for the output of
+			// this output node
+			double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+			// Update the weight using gradient descent
+			outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+					+ (learningRate * error
+							* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+							* tempOutput.get(tempOutput.size() - 3).get(j)));
+		}
+		
+	}
+	}
+	
+	
 }
 
 
