@@ -5,6 +5,9 @@ import java.io.IOException;
  */
 public class testAllNetworksQueue {
 
+	
+	
+	//make sure to pass the argument of 3 GB minimum of Ram
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 
@@ -159,17 +162,17 @@ public class testAllNetworksQueue {
 		System.gc();
 		try{Thread.sleep(10000); // Sleep for one second
 		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-		*/ 
+		
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/TrainedSetHiddenWeights.txt";
 		// 30 Hidden Nodes, learning rate 0.5, binary input, continue training 5 epochs at a time
-		//NeuralNet secondFF1C = new NeuralNet(30,5,0.5,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
+		NeuralNet secondFF1C = new NeuralNet(30,5,0.5,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet secondFF2C = new NeuralNet(30,5,0.5,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet secondFF3C = new NeuralNet(30,5,0.5,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
 		NeuralNet secondFF4C = new NeuralNet(30,5,0.5,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
 
-		//secondFF1C=null;
+		secondFF1C=null;
 		secondFF2C=null;
 		secondFF3C=null;
 		secondFF4C=null;
@@ -177,7 +180,7 @@ public class testAllNetworksQueue {
 		try{Thread.sleep(10000); // Sleep for one second
 		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
-	/*	filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/Results";
+		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/TrainedSetHiddenWeights.txt";
 		// 30 Hidden Nodes, learning rate 0.7, binary input, continue training 5 epochs at a time
@@ -194,8 +197,8 @@ public class testAllNetworksQueue {
 		try{Thread.sleep(10000); // Sleep for one second
 		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
-*/
 
+*/ 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1/TrainedSetHiddenWeights.txt";
@@ -389,7 +392,7 @@ public class testAllNetworksQueue {
 		//sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
 		//For binary I am testing with sigam =  between 15-10 (11 seems optimal)
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.1/RbfResults";
-		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/LR/0.1/TrainedRBFSetOutputWeights.txt";
+		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.1/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.1,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.1,false,filePathResults,filePathTrainedOutputWeights);
@@ -416,7 +419,7 @@ public class testAllNetworksQueue {
 		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/LR/0.3/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a2 = new RadialBasisFunction(20,false,1000000,5,0.3,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b2 = new RadialBasisFunction(20,false,1000000,5,0.3,false,filePathResults,filePathTrainedOutputWeights);
@@ -443,7 +446,7 @@ public class testAllNetworksQueue {
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.5/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/LR/0.5/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.5/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a3 = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b3 = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -473,7 +476,7 @@ public class testAllNetworksQueue {
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.9/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/LR/0.9/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.9/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a4 = new RadialBasisFunction(20,false,1000000,5,0.9,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b4 = new RadialBasisFunction(20,false,1000000,5,0.9,false,filePathResults,filePathTrainedOutputWeights);
@@ -514,7 +517,7 @@ public class testAllNetworksQueue {
 		//For binary I am testing with sigam =  between 15-10 (11 seems optimal)
 
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/RbfResults";
-		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/Sigma/1000000/TrainedRBFSetOutputWeights.txt";
+		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -541,7 +544,7 @@ public class testAllNetworksQueue {
 		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/Sigma/100000/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a2 = new RadialBasisFunction(20,false,100000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b2 = new RadialBasisFunction(20,false,100000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -569,7 +572,7 @@ public class testAllNetworksQueue {
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/Sigma/100/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a3 = new RadialBasisFunction(20,false,100,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b3 = new RadialBasisFunction(20,false,100,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -598,7 +601,7 @@ public class testAllNetworksQueue {
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000000/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/Sigma/100000000/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000000/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a4 = new RadialBasisFunction(20,false,100000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b4 = new RadialBasisFunction(20,false,100000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -639,7 +642,7 @@ public class testAllNetworksQueue {
 		//sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
 		//For binary I am testing with sigam =  between 15-10 (11 seems optimal)
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/20/RbfResults";
-		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/TX/20/TrainedRBFSetOutputWeights.txt";
+		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/20/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -666,7 +669,7 @@ public class testAllNetworksQueue {
 		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/1/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/TX/1/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/1/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a2 = new RadialBasisFunction(1,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b2 = new RadialBasisFunction(1,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -693,7 +696,7 @@ public class testAllNetworksQueue {
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/5/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/TX/5/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/5/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a3 = new RadialBasisFunction(5,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b3 = new RadialBasisFunction(5,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
@@ -722,7 +725,7 @@ public class testAllNetworksQueue {
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/200/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/TX/200/TrainedRBFSetOutputWeights.txt";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/200/TrainedRBFSetOutputWeights.txt";
 
 		RadialBasisFunction a4 = new RadialBasisFunction(200,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b4 = new RadialBasisFunction(200,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);

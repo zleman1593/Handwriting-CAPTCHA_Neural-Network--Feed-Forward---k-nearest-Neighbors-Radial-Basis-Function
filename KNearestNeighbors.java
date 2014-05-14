@@ -187,8 +187,8 @@ public class KNearestNeighbors {
 		long endTime = System.currentTimeMillis();
 		long executionTime = endTime - startTime;
 		
-		double countOfCorrectImagesAnalyzedTotal=0;
-		double countOfImagesAnalyzedTotal=0;
+		 countOfCorrectImagesAnalyzedTotal=0;
+		 countOfImagesAnalyzedTotal=0;
 		
 		for(int x=0;x< countOfCorrectImagesAnalyzed.size();x++){
 			countOfCorrectImagesAnalyzedTotal=countOfCorrectImagesAnalyzedTotal+countOfCorrectImagesAnalyzed.get(x);
@@ -388,7 +388,7 @@ public class KNearestNeighbors {
 		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
 		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
-		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
 		outputWriter.write("Training time: " + executionTime + " milliseconds");
 		outputWriter.newLine();
