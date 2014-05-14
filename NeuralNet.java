@@ -61,10 +61,11 @@ public class NeuralNet {
 	// Prevents duplicate calculations from being performed.
 	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
 	
-		
-	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/Results";
-	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/TrainedSetOutputWeights.txt";
-	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/TrainedSetHiddenWeights.txt";
+	public static int trainingSetReductionFactor;
+	
+	public static String filePathResults; 
+	public static String filePathTrainedOutputWeights; 
+	public static String filePathTrainedHiddenWeights; 
 	
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public  static boolean binaryInput;
@@ -74,13 +75,18 @@ public class NeuralNet {
 	
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 	
-	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1) throws IOException, ClassNotFoundException{
+	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, int trainingSetReductionFactor1) throws IOException, ClassNotFoundException{
 		
 		numberOfNodesInHiddenLayer = numberOfNodesInHiddenLayer1;
 		epochs = epochs1;               //number of epochs to run
 		learningRate =  learningRate1; //learning rate
 		usePriorWeights= usePriorWeights1;
 		binaryInput = binaryInput1;
+		filePathResults=filePathResults1;
+		filePathTrainedOutputWeights =filePathTrainedOutputWeights1;
+		filePathTrainedHiddenWeights =filePathTrainedHiddenWeights1;
+		trainingSetReductionFactor = trainingSetReductionFactor1;
+		
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
@@ -101,6 +107,7 @@ public class NeuralNet {
 		
 		// Trains the Network from scratch
 		if (usePriorWeights == 0) {
+			System.out.println("Training from Scratch");
 			initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			//initializeMultilayerFeedForwardCaptcha();
 			
@@ -116,6 +123,7 @@ public class NeuralNet {
 		} 
 		// Trains the Network starting from weights stored in file
 		else if(usePriorWeights == 2){
+			System.out.println("Training from past trained weights");
 		initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			readDataFromTrainedFiles();
 			// Trains the network with the training Data
@@ -208,7 +216,7 @@ public class NeuralNet {
 		for (int i = 0; i < epochs; i++) { // for each epoch
 			//for every image in the training file
 			long startTime = System.currentTimeMillis();
-			for (int images = 0; images < trainingData.size(); images++) { 
+			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
 
 				calculateErrorForEachOutputNode(trainingData, images);
 				
@@ -613,7 +621,7 @@ public class NeuralNet {
 		outputWriter.newLine();
 		outputWriter.write("Number of nodes in each hidden layer: " + Integer.toString(numberOfNodesInHiddenLayer));
 		outputWriter.newLine();
-		outputWriter.write("Number of training examples used: " + Integer.toString(trainingData.size()));
+		outputWriter.write("Number of training examples used: " + Integer.toString(trainingData.size()/trainingSetReductionFactor));
 		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
@@ -623,6 +631,15 @@ public class NeuralNet {
 		outputWriter.write("Testing time: " + solutionTime + " milliseconds");
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);
+		outputWriter.newLine();
+		
+		if(usePriorWeights==0){
+			outputWriter.write("Training from scratch");
+		}	else if(usePriorWeights == 2){
+			outputWriter.write("Read data from file and continued training");
+		}else if ( usePriorWeights == 1) {
+			outputWriter.write("Read data from File");
+		}
 		outputWriter.newLine();
 	//Writes  letters or numbers
 		for (int i = 0; i < x.size(); i++) {

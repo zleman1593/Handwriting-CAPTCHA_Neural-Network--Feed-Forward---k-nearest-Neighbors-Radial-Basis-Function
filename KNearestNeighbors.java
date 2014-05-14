@@ -47,10 +47,10 @@ public class KNearestNeighbors {
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNN/KNNResults";
 	
 	
-	public KNearestNeighbors(int k,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1) throws IOException, ClassNotFoundException {
+	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1) throws IOException, ClassNotFoundException {
 		
 		
-	k = k;
+	k = k1;
 	binaryInput=binaryInput1;
 	trainingSetReductionFactor=trainingSetReductionFactor1;
 	numberOfImagesToTest = numberOfImagesToTest1;
@@ -402,6 +402,11 @@ public class KNearestNeighbors {
 			//outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
 			outputWriter.newLine();
 		//}
+			
+			for (int m = 0; m < holder.length; m++) {
+				outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+				outputWriter.newLine();
+			}
 		outputWriter.flush();
 		outputWriter.close();
 	}

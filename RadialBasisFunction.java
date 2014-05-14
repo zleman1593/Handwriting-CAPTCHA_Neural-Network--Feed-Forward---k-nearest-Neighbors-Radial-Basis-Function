@@ -527,6 +527,11 @@ public class RadialBasisFunction {
 			outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
 			outputWriter.newLine();
 		}
+		for (int m = 0; m < holder.length; m++) {
+			outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+			outputWriter.newLine();
+		}
+		
 		outputWriter.flush();
 		outputWriter.close();
 	}
