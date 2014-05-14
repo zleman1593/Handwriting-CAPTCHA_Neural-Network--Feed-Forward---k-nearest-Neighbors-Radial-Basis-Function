@@ -29,7 +29,9 @@ public class NeuralNet {
 	// Tracks the number of images correctly identified in the testing set.
 	public static double countOfCorrectImagesAnalyzed = 0;
 	// Tracks running time of the training
-	public static long executionTime;
+	public static long trainingTime;
+	// Tracks running time of the training
+		public static long solutionTime;
 	// The number of times the network is trained with the training Data
 	public static int epochs;
 	// Creates a random number generator
@@ -60,7 +62,7 @@ public class NeuralNet {
 	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
 	
 		
-	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Results";
+	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/Results";
 	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/TrainedSetOutputWeights.txt";
 	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/TrainedSetHiddenWeights.txt";
 	
@@ -94,7 +96,7 @@ public class NeuralNet {
 		
 		// These are hard coded versions of the above
 		
-		numberOfNodesInHiddenLayer = 100;
+		numberOfNodesInHiddenLayer = 15;
 		epochs = 5;
 		learningRate = 0.3;
 		// Set this to true to avoid retraining. Allows the files in
@@ -113,11 +115,11 @@ public class NeuralNet {
 			//initializeMultilayerFeedForwardCaptcha();
 			
 			// Trains the network with the training Data
-						long startTime = System.currentTimeMillis();
+						long startTimeForTrainingData = System.currentTimeMillis();
 						trainTheNetwork(trainingData);
 						long endTime = System.currentTimeMillis();
-						executionTime = endTime - startTime;
-						System.out.println("Training time: " + executionTime + " milliseconds");
+						trainingTime = endTime - startTimeForTrainingData;
+						System.out.println("Training time: " + trainingTime + " milliseconds");
 						// Creates data files that can be reused by the network without
 						// retraining.
 						writeTrainedWeights();
@@ -127,11 +129,11 @@ public class NeuralNet {
 		initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			readDataFromTrainedFiles();
 			// Trains the network with the training Data
-			long startTime = System.currentTimeMillis();
+			long startTimeForTrainingData = System.currentTimeMillis();
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
-			executionTime = endTime - startTime;
-			System.out.println("Training time: " + executionTime + " milliseconds");
+			trainingTime = endTime - startTimeForTrainingData;
+			System.out.println("Training time: " + trainingTime + " milliseconds");
 			// Creates data files that can be reused by the network without
 			// retraining.
 			writeTrainedWeights();
@@ -426,8 +428,8 @@ public class NeuralNet {
 				e.printStackTrace();
 			}*/
 			long endTime = System.currentTimeMillis();
-			executionTime = endTime - startTime;
-			System.out.println("Training time: " + executionTime + " milliseconds");
+			trainingTime = endTime - startTime;
+			System.out.println("Training time: " + trainingTime + " milliseconds");
 			System.out.println("Epoch " + (i+1) + " has finished.");
 
 		}
@@ -525,11 +527,14 @@ public class NeuralNet {
 			e.printStackTrace();
 		}
 		// Tests the network with the testing Data and prints results to file
+		
+
 		write(solveTestingData(testingData));
+		
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-		System.out.println("Look in /Users/\"your username\"/Desktop/NeuralNetOutput  directory to find  the output.");
+		System.out.println("Look in" + filePathResults+ " directory to find  the output.");
 	}
 
 	
@@ -537,10 +542,14 @@ public class NeuralNet {
 	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
 	 */
 	public static ArrayList<OutputVector> solveTestingData(ArrayList<DigitImage> networkInputData) {
+		long startTime = System.currentTimeMillis();
 		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
 		for (int i = 0; i < networkInputData.size(); i++) {
 			newtworkResults.add(singleImageBestGuess(networkInputData, i));
 		}
+		long endTime = System.currentTimeMillis();
+		solutionTime = endTime - startTime;
+		System.out.println("Training time: " + solutionTime + " milliseconds");
 		return newtworkResults;
 	}
 
@@ -614,12 +623,14 @@ public class NeuralNet {
 		outputWriter.newLine();
 		outputWriter.write("Number of nodes in each hidden layer: " + Integer.toString(numberOfNodesInHiddenLayer));
 		outputWriter.newLine();
-		outputWriter.write("Number of training examples used: " + Integer.toString(numberOfInputNodes));
+		outputWriter.write("Number of training examples used: " + Integer.toString(trainingData.size()));
 		outputWriter.newLine();
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
-		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.write("Training time: " + trainingTime + " milliseconds");
+		outputWriter.newLine();
+		outputWriter.write("Testing time: " + solutionTime + " milliseconds");
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
