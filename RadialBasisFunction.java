@@ -60,6 +60,9 @@ public class RadialBasisFunction {
 	public static int[]  holder=new int[10];
 
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, boolean usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
+		hiddenLayerNodes.clear();
+		outputLayerNodes.clear();
+		
 		binaryInput = binaryInput1;
 		trainingSetReductionFactor = trainingSetReductionFactor1;
 
