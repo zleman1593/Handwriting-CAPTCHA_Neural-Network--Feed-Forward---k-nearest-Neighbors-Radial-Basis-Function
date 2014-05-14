@@ -44,17 +44,17 @@ public class KNearestNeighbors {
 	
 	public static  int countOfCorrectImagesAnalyzedTotal;
 	
-	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNN/KNNResults";
+	public static String filePathResults;
 	
 	
-	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1) throws IOException, ClassNotFoundException {
+	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1, String filePathResults1) throws IOException, ClassNotFoundException {
 		
 		
 	k = k1;
 	binaryInput=binaryInput1;
 	trainingSetReductionFactor=trainingSetReductionFactor1;
 	numberOfImagesToTest = numberOfImagesToTest1;
-
+	filePathResults=filePathResults1;
 		
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {

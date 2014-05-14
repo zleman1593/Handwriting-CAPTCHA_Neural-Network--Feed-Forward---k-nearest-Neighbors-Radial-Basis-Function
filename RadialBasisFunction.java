@@ -47,8 +47,8 @@ public class RadialBasisFunction {
 	// Number of output nodes (Currently the network depends on 10  or 36 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;//---------------------------------------------------------------------------------
 	//File paths
-	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/RbfResults";
-	public static String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/RBF/NeuralNetOutput/TrainedRBFSetOutputWeights.txt";
+	public static String filePathResults;
+	public static String filePathTrainedOutputWeights;
 
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 
@@ -59,7 +59,7 @@ public class RadialBasisFunction {
 
 	public static int[]  holder=new int[10];
 
-	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, boolean usePriorWeights1){
+	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, boolean usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
 		binaryInput = binaryInput1;
 		trainingSetReductionFactor = trainingSetReductionFactor1;
 
@@ -67,8 +67,9 @@ public class RadialBasisFunction {
 		epochs = epochs1;
 		learningRate = learningRate1;
 		usePriorWeights = usePriorWeights1;
-
-
+		filePathResults=filePathResults1;
+		filePathTrainedOutputWeights=filePathTrainedOutputWeights1;
+		
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
@@ -85,14 +86,6 @@ public class RadialBasisFunction {
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 
-
-		
-
-
-
-
-
-	
 
 
 		initializeRBF(trainingImages, trainingLabels);
@@ -340,7 +333,6 @@ public class RadialBasisFunction {
 													thr7.join();
 													thr8.join();
 												} catch (InterruptedException e) {
-													// TODO Auto-generated catch block
 													e.printStackTrace();
 												}
 

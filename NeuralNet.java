@@ -87,7 +87,8 @@ public class NeuralNet {
 		filePathTrainedHiddenWeights =filePathTrainedHiddenWeights1;
 		trainingSetReductionFactor = trainingSetReductionFactor1;
 		
-		String trainingImages = "Training-Images";
+		//These are just constants
+		String  trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
