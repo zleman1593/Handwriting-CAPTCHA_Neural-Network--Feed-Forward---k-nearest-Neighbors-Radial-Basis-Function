@@ -212,207 +212,56 @@ public class NeuralNet {
 	 * This takes the training data and attempts to train the neural net to learn how to recognize characters from images.
 	 */
 	public static void trainTheNetwork(ArrayList<DigitImage> trainingData) {
-
-		for (int i = 0; i < epochs; i++) { // for each epoch
-			//for every image in the training file
+		// For each epoch
+		for (int i = 0; i < epochs; i++) { 
+			
+			//Start Training time for this single Epoch
 			long startTime = System.currentTimeMillis();
+			
+			//For every image in the training file
 			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
 
 				calculateErrorForEachOutputNode(trainingData, images);
-				
 
-				//The Duplicated code will be compressed into a method that takes four parameters that differ between the four threads.
+
+				//Initialize the four threads, each of which will train a fourth of the weights for a given training example.
 				Runnable r1 = new Runnable() {
 					public void run() {
-
-						// Update the weights to the output nodes
-						for (int ii = 0; ii < NUMBER_OF_OUTPUT_NODES / 4; ii++) {
-							for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-								// Grabs the error that was calculated for the output of
-								// this output node
-								double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-								// Update the weight using gradient descent
-								outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-										+ (learningRate * error
-												* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-												* tempOutput.get(tempOutput.size() - 3).get(j)));
-							}
-						}
-
-						// Update the weights to the nodes going to the hidden nodes
-						for (int ii = 0; ii < hiddenLayerNodes.size() / 4; ii++) {
-							for (int j = 0; j < numberOfInputNodes; j++) {
-								double error = 0;
-								for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
-									// This is the summed error for the output layer
-									error = error + (sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
-											* tempOutput.get(tempOutput.size() - 1).get(k)
-											* outputLayerNodes.get(k).get(ii));
-
-								}
-								//Update the weight using gradient descent back propagation
-								hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-										+ (learningRate * error
-												* tempOutput.get(0).get(j))
-												* sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
-							}
-						}
+						trainingSubRoutine(0,NUMBER_OF_OUTPUT_NODES / 4,0,hiddenLayerNodes.size() / 4);	
 					}};
-					
+
 					Runnable r2 = new Runnable() {
 						public void run() {
-							
-							
-							// Update the weights to the output nodes
-							for (int ii = NUMBER_OF_OUTPUT_NODES/4; ii < NUMBER_OF_OUTPUT_NODES/2; ii++) {
-								for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-									// Grabs the error that was calculated for the output of
-									// this output node
-									double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-									// Update the weight using gradient descent
-									outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-											+(learningRate
-													*error
-													*sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-													*tempOutput.get(tempOutput.size() - 3).get(j)));
-								}
-							}
-							
-							
-							
-							// Update the weights to the nodes going to the hidden nodes
-							for (int ii = hiddenLayerNodes.size()/4; ii <hiddenLayerNodes.size()/2 ; ii++) {
-
-
-								for (int j = 0; j < numberOfInputNodes; j++) {
-									double error = 0;
-									for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
-										// This is the summed error for the output layer
-										error= error+(sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
-												*tempOutput.get(tempOutput.size() - 1).get(k)
-												*outputLayerNodes.get(k).get(ii));
-
-									}
-									//Update the weight using gradient descent back propagation
-									hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-											+(learningRate
-													*error
-													*tempOutput.get(0).get(j))
-													*sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
-								}
-
-
-							}
+							trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,NUMBER_OF_OUTPUT_NODES / 2,hiddenLayerNodes.size()/4,hiddenLayerNodes.size() / 2);	
 						}};
-						
+
+
 						Runnable r3 = new Runnable() {
 							public void run() {
-								
-								
-								// Update the weights to the output nodes
-								for (int ii = NUMBER_OF_OUTPUT_NODES/2; ii < (NUMBER_OF_OUTPUT_NODES*3)/4; ii++) {
-									for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-										// Grabs the error that was calculated for the output of
-										// this output node
-										double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-										// Update the weight using gradient descent
-										outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-												+(learningRate
-														*error
-														*sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-														*tempOutput.get(tempOutput.size() - 3).get(j)));
-									}
-								}
-								
-								
-								// Update the weights to the nodes going to the hidden nodes
-								for (int ii = hiddenLayerNodes.size()/2; ii <(hiddenLayerNodes.size()*3)/4 ; ii++) {
-
-
-									for (int j = 0; j < numberOfInputNodes; j++) {
-										double error = 0;
-										for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
-											// This is the summed error for the output layer
-											error= error+(sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
-													*tempOutput.get(tempOutput.size() - 1).get(k)
-													*outputLayerNodes.get(k).get(ii));
-
-										}
-										//Update the weight using gradient descent back propagation
-										hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-												+(learningRate
-														*error
-														*tempOutput.get(0).get(j))
-														*sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
-									}
-
-
-								}
+								trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/2,(NUMBER_OF_OUTPUT_NODES*3)/4,hiddenLayerNodes.size()/2,(hiddenLayerNodes.size()*3)/4);	
 							}};
-							
-							
-							
+
 							Runnable r4 = new Runnable() {
 								public void run() {
-									
-									
-									// Update the weights to the output nodes
-									for (int ii = (NUMBER_OF_OUTPUT_NODES*3)/4; ii <NUMBER_OF_OUTPUT_NODES; ii++) {
-										for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-											// Grabs the error that was calculated for the output of
-											// this output node
-											double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-											// Update the weight using gradient descent
-											outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-													+(learningRate
-															*error
-															*sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-															*tempOutput.get(tempOutput.size() - 3).get(j)));
-										}
-									}
-									
-									
-									
-									// Update the weights to the nodes going to the hidden nodes
-									for (int ii = (hiddenLayerNodes.size()*3)/4; ii <hiddenLayerNodes.size() ; ii++) {
-
-
-										for (int j = 0; j < numberOfInputNodes; j++) {
-											double error = 0;
-											for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
-												// This is the summed error for the output layer
-												error= error+(sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
-														*tempOutput.get(tempOutput.size() - 1).get(k)
-														*outputLayerNodes.get(k).get(ii));
-
-											}
-											//Update the weight using gradient descent back propagation
-											hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-													+(learningRate
-															*error
-															*tempOutput.get(0).get(j))
-															*sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
-										}
-
-									}
+									trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/4,NUMBER_OF_OUTPUT_NODES,(hiddenLayerNodes.size()*3)/4,hiddenLayerNodes.size());	
 								}};
 
-					Thread thr1 = new Thread(r1);
-					Thread thr2 = new Thread(r2);
-					Thread thr3 = new Thread(r3);
-					Thread thr4 = new Thread(r4);
-					thr1.start();
-					thr2.start();
-					thr3.start();
-					thr4.start();
-					try {
-						thr1.join();
-						thr2.join();
-						thr3.join();
-						thr4.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+								Thread thr1 = new Thread(r1);
+								Thread thr2 = new Thread(r2);
+								Thread thr3 = new Thread(r3);
+								Thread thr4 = new Thread(r4);
+								thr1.start();
+								thr2.start();
+								thr3.start();
+								thr4.start();
+								try {
+									thr1.join();
+									thr2.join();
+									thr3.join();
+									thr4.join();
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 
 					// Resets temporary data structure
 					tempOutput = new ArrayList<ArrayList<Double>>();
@@ -425,16 +274,58 @@ public class NeuralNet {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}*/
+			
 			long endTime = System.currentTimeMillis();
 			trainingTime = endTime - startTime;
-			System.out.println("Training time: " + trainingTime + " milliseconds");
+			System.out.println("Training time for epoch " + (i+1) + ": " + trainingTime + " milliseconds");
 			System.out.println("Epoch " + (i+1) + " has finished.");
 
 		}
 
 	}
 
+	/*
+	 * This is the heart of the code that trains the network using gradient descent and back propagation
+	 */
+	public static void trainingSubRoutine(int startIndex1, int endIndex1,int startIndex2, int endIndex2) {
+		
+	// Update the weights to the output nodes
+	for (int ii = endIndex1; ii < endIndex1; ii++) {
+		for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+			// Grabs the error that was calculated for the output of this output node
+			double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+			// Update the weight using gradient descent
+			outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
+						+ (learningRate
+							* error
+							* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+							* tempOutput.get(tempOutput.size() - 3).get(j)));
+		}
+	}
+
+	// Update the weights to the nodes going to the hidden nodes
+	for (int ii = startIndex2; ii < endIndex2; ii++) {
+		for (int j = 0; j < numberOfInputNodes; j++) {
+			double error = 0;
+			for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
+				// This is the summed error for the output layer
+				error = error +
+						(sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
+						* tempOutput.get(tempOutput.size() - 1).get(k)
+						* outputLayerNodes.get(k).get(ii));
+
+			}
+			//Update the weight using gradient descent back propagation
+			hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
+					+ (learningRate 
+							* error
+							* tempOutput.get(0).get(j))
+							* sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
+		}
+	}
 	
+	
+	}
 	
 	/*
 	 * This returns an array representing the output of all nodes in the given layer
@@ -660,6 +551,7 @@ public class NeuralNet {
 		
 		for (int m = 0; m < holder.length; m++) {
 			outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+			outputWriter.newLine();
 		}
 
 		outputWriter.flush();
