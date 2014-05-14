@@ -14,29 +14,27 @@ public class testAllNetworksQueue {
 		//To expand the current trail  by another 5 epochs, simply change the first line in each set to make it use the data already written to files: 
 		//(i.e Make sure the fourth parameter is 2 in the first line of every set.)
 		//To run a new trial: First empty the folders that are referred to in this method. Then run the method. Make sure the fourth parameter is zero in the first line of every set.
-		//runFFHiddenNodeEx(); //Exp #1
+		runFFHiddenNodeEx(); //Exp #1
 
 
 
-
-		//runFFLearningRateEx(); //Exp #2
-
+		runFFLearningRateEx(); //Exp #2
 
 
 
 		runFFTrainingExampleEx(); //Exp #3
 		
 		
-		//runKNNKEx();// Exp 7
+		runKNNKEx();// Exp 7
 
-		//runKNNTrainingExamplesEx(); //Exp 8
+		runKNNTrainingExamplesEx(); //Exp 8
 		
 
-		//runRBFSigmaEx(); //Exp #4
+		runRBFSigmaEx(); //Exp #4
 
-		//runRBFLearningRateEx(); //Exp #5
+		runRBFLearningRateEx(); //Exp #5
 
-		//runRBFTrainingExamplesEx(); //Exp #6
+		runRBFTrainingExamplesEx(); //Exp #6
 
 		
 
@@ -63,9 +61,6 @@ public class testAllNetworksQueue {
 		firstFF2=null;
 		firstFF3=null;
 		firstFF4=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/TrainedSetOutputWeights.txt";
@@ -80,9 +75,6 @@ public class testAllNetworksQueue {
 		firstFF2A=null;
 		firstFF3A=null;
 		firstFF4A=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/50/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/50/TrainedSetOutputWeights.txt";
@@ -97,9 +89,6 @@ public class testAllNetworksQueue {
 		firstFF2AA=null;
 		firstFF22AA=null;
 		firstFF3AA=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/100/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/100/TrainedSetOutputWeights.txt";
@@ -115,9 +104,7 @@ public class testAllNetworksQueue {
 		FF2B=null;
 		FF3B=null;
 		FF4B=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+
 
 
 	}
@@ -141,9 +128,7 @@ public class testAllNetworksQueue {
 		secondFF2=null;
 		secondFF3=null;
 		secondFF4=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.2/Results";
@@ -159,9 +144,7 @@ public class testAllNetworksQueue {
 		secondFF2B=null;
 		secondFF3B=null;
 		secondFF4B=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 		
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/TrainedSetOutputWeights.txt";
@@ -176,9 +159,7 @@ public class testAllNetworksQueue {
 		secondFF2C=null;
 		secondFF3C=null;
 		secondFF4C=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/TrainedSetOutputWeights.txt";
@@ -193,9 +174,7 @@ public class testAllNetworksQueue {
 		secondFF2D=null;
 		secondFF3D=null;
 		secondFF4D=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+	
 
 
 
@@ -213,10 +192,7 @@ public class testAllNetworksQueue {
 		secondFF2E=null;
 		secondFF3E=null;
 		secondFF4E=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-
+		
 	}
 
 	/*
@@ -237,9 +213,7 @@ public class testAllNetworksQueue {
 		secondFF2=null;
 		secondFF3=null;
 		secondFF4=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/2t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/2t/TrainedSetOutputWeights.txt";
@@ -254,10 +228,7 @@ public class testAllNetworksQueue {
 		secondFF2B=null;
 		secondFF3B=null;
 		secondFF4B=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-
+		
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/10t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/10t/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/10t/TrainedSetHiddenWeights.txt";
@@ -271,11 +242,7 @@ public class testAllNetworksQueue {
 		secondFF2C=null;
 		secondFF3C=null;
 		secondFF4C=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-
-
+		
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30t/TrainedSetOutputWeights.txt";
@@ -290,10 +257,7 @@ public class testAllNetworksQueue {
 		secondFF2D=null;
 		secondFF3D=null;
 		secondFF4D=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-
+		
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/60t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/60t/TrainedSetOutputWeights.txt";
@@ -309,9 +273,7 @@ public class testAllNetworksQueue {
 		secondFF2E=null;
 		secondFF3E=null;
 		secondFF4E=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 	}
 
 
@@ -341,9 +303,7 @@ public class testAllNetworksQueue {
 		h=null;
 		i=null;
 		j=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 	}
 
 
@@ -376,9 +336,7 @@ public class testAllNetworksQueue {
 		h=null;
 		i=null;
 		j=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 	}
 
 
@@ -414,9 +372,7 @@ public class testAllNetworksQueue {
 		h=null;
 		i=null;
 		j=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/TrainedRBFSetOutputWeights.txt";
@@ -440,9 +396,7 @@ public class testAllNetworksQueue {
 		h2=null;
 		i2=null;
 		j2=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.5/RbfResults";
@@ -468,11 +422,7 @@ public class testAllNetworksQueue {
 		h3=null;
 		i3=null;
 		j3=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-
-
+		
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.9/RbfResults";
@@ -498,9 +448,7 @@ public class testAllNetworksQueue {
 		h4=null;
 		i4=null;
 		j4=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 
 	}
@@ -539,9 +487,7 @@ public class testAllNetworksQueue {
 		h=null;
 		i=null;
 		j=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/TrainedRBFSetOutputWeights.txt";
@@ -566,9 +512,7 @@ public class testAllNetworksQueue {
 		h2=null;
 		i2=null;
 		j2=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100/RbfResults";
@@ -623,10 +567,7 @@ public class testAllNetworksQueue {
 		h4=null;
 		i4=null;
 		j4=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-
+		
 
 
 	}
@@ -664,10 +605,7 @@ public class testAllNetworksQueue {
 		h=null;
 		i=null;
 		j=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
-
+		
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/1/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/1/TrainedRBFSetOutputWeights.txt";
 
@@ -690,9 +628,7 @@ public class testAllNetworksQueue {
 		h2=null;
 		i2=null;
 		j2=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/5/RbfResults";
@@ -718,9 +654,7 @@ public class testAllNetworksQueue {
 		h3=null;
 		i3=null;
 		j3=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 
 
@@ -747,9 +681,7 @@ public class testAllNetworksQueue {
 		h4=null;
 		i4=null;
 		j4=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
+		
 
 
 	}

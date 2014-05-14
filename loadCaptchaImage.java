@@ -36,20 +36,20 @@ public class loadCaptchaImage {
 	private static final int NUM_CHARS_IN_CAPTCHA = 6; // 6 characters in each Captcha.
 	
 	// For testing only.
-	/*public static void main(String[] args) throws IOException, ClassNotFoundException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		readAllTrainingData();
 		readAllCaptchas();
 		System.out.println("Done");
 		
-	}*/
+	}
 	
 	// Constructor.
-	public loadCaptchaImage() throws IOException {
+	/*public loadCaptchaImage() throws IOException {
 		// Reads and breaks up all Captchas for testing.
 		readAllCaptchas();
 		// Reads all the  individual characters for training.
 		readAllTrainingData();
-	}
+	}*/
 
 	// Reads all the captcha images.
 	public static void readAllCaptchas() throws IOException{
