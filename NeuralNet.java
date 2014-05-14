@@ -79,6 +79,8 @@ public class NeuralNet {
 		
 		hiddenLayerNodes.clear();
 		outputLayerNodes.clear();
+		outputLayerNodes.clear();
+		
 		numberOfNodesInHiddenLayer = numberOfNodesInHiddenLayer1;
 		epochs = epochs1;               //number of epochs to run
 		learningRate =  learningRate1; //learning rate

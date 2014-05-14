@@ -48,7 +48,14 @@ public class KNearestNeighbors {
 	
 	public static long trainingTime;
 	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1, String filePathResults1) throws IOException, ClassNotFoundException {
-		
+		//These lines are needed to prevent errors where objects refrence
+		//each others' data structures
+		hiddenLayerNodes.clear();
+		hiddenLayerToOutput.clear();
+		hiddenLayerDottedOutputValuesHolderArray.clear();
+		countOfImagesAnalyzed.clear();
+		countOfCorrectImagesAnalyzed.clear();
+		testingData.clear();
 		
 	k = k1;
 	binaryInput=binaryInput1;
@@ -266,7 +273,7 @@ public class KNearestNeighbors {
 			hiddenLayerDottedOutputValuesHolderArray.set(thread,outPutOfLayer(hiddenLayerNodes, temp));
 
 
-			//I IF K=1 just run the commented out code as it is faster.	
+			//I IF K=1 just run this code because it is faster	
 			double output = 0;
 			if(k==1){	
 
@@ -393,7 +400,7 @@ public class KNearestNeighbors {
 		outputWriter.newLine();
 		outputWriter.write("Testing time: " + executionTime + " milliseconds");
 		outputWriter.newLine();
-		outputWriter.write("Testing time: " + trainingTime + " milliseconds");
+		outputWriter.write("Training time: " + trainingTime + " milliseconds");
 		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);
