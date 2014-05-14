@@ -55,12 +55,29 @@ public class RadialBasisFunction {
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
 	// set to one to use all of the training data to train the network. The number of training examples  is divided by this number
-	public static  int trainingSetReductionFactor;
+	public  static int trainingSetReductionFactor;
 
 	public static int[]  holder=new int[10];
 
+	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, boolean usePriorWeights1){
+		binaryInput = binaryInput1;
+		trainingSetReductionFactor = trainingSetReductionFactor1;
 
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		sigmaSquared = sigmaSquared1;
+		epochs = epochs1;
+		learningRate = learningRate1;
+		usePriorWeights = usePriorWeights1;
+
+
+		String trainingImages = "Training-Images";
+		String testingImages = "Testing-images";
+		String trainingLabels = "Training-Labels";
+		String testingLabels = "Testing-Labels";
+		
+		
+		
+		
+		
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
@@ -69,34 +86,13 @@ public class RadialBasisFunction {
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 
 
-		//binaryInput=Boolean.parseBoolean(args[1]);
-		//trainingSetReductionFactor=Integer.parseInt(args[2]);
-		//numberOfImagesToTest = Integer.parseInt(args[3]);
-		// sigmaSquared = Integer.parseInt(args[4]); 
-		// epochs = Integer.parseInt(args[5]); 
-		// learningRate = Double.parseDouble(args[6]); 
-		// String trainingImages=args[7];
-		// String testingImages=args[8];
-		// String trainingLabels=args[9];
-		// String testingLabels=args[10];
-		// usePriorWeights=Boolean.parseBolean(args[11]);
+		
 
 
 
 
 
-
-		// These are hard coded versions of the above
-		trainingSetReductionFactor=20;
-		usePriorWeights=false;
-		sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
-		epochs = 5; // For binary I am testing with sigam =  between 15-10 (11 seems optimal)
-		learningRate=0.5;
-		binaryInput=false;
-		String trainingImages = "Training-Images";
-		String testingImages = "Testing-images";
-		String trainingLabels = "Training-Labels";
-		String testingLabels = "Testing-Labels";
+	
 
 
 		initializeRBF(trainingImages, trainingLabels);

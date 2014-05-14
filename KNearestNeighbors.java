@@ -27,7 +27,7 @@ public class KNearestNeighbors {
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
 	// set to one to use all of the training data to train the network. The number of training examples  is divided by this number
-	public static  int trainingSetReductionFactor;
+	public  static int trainingSetReductionFactor;
 	//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 	public static int[]  holder=new int[10];
 	
@@ -47,7 +47,15 @@ public class KNearestNeighbors {
 	public static String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNN/KNNResults";
 	
 	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	public KNearestNeighbors(int k,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1) throws IOException, ClassNotFoundException {
+		
+		
+	k = k;
+	binaryInput=binaryInput1;
+	trainingSetReductionFactor=trainingSetReductionFactor1;
+	numberOfImagesToTest = numberOfImagesToTest1;
+
+		
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
@@ -60,23 +68,11 @@ public class KNearestNeighbors {
 		
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
-		
-		//k = Integer.parseInt(args[1]);
-		//binaryInput=Boolean.parseBoolean(args[2]);
-		//trainingSetReductionFactor=Integer.parseInt(args[3]);
-		//numberOfImagesToTest = Integer.parseInt(args[4]);
-		// int k = Integer.parseInt(args[5); 
-		// String trainingImages=args[6];
-		// String testingImages=args[7];
-		// String trainingLabels=args[8];
-		// String testingLabels=args[9];
+	
 		
 		
-		// These are hard coded versions of the above
-		trainingSetReductionFactor=5;
-		k = 3;
-		binaryInput=false;
-		numberOfImagesToTest = 200;
+	
+		
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";

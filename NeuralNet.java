@@ -42,7 +42,7 @@ public class NeuralNet {
 	// Number of hidden layers
 	public static final int NUMBER_OF_HIDDEN_LAYERS = 1;
 	// Number of hidden nodes in second layer (first hidden layer)
-	public static int numberOfNodesInHiddenLayer;
+	public  static int numberOfNodesInHiddenLayer;
 	// Number of output nodes (Currently the network depends on 10 or 36 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;
 	
@@ -51,7 +51,7 @@ public class NeuralNet {
 	public static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
 	
 	// The learning rate for the network
-	public static double learningRate;
+	public  static double learningRate;
 	// Whether to use weights that have already been trained or to train network again in order to test the network
 	//or as the starting weights to continue a break in training
 	public static int usePriorWeights;
@@ -67,14 +67,27 @@ public class NeuralNet {
 	public static String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/TrainedSetHiddenWeights.txt";
 	
 	// Is true if the input into the network consists of binary images. False if Grayscale.
-	public static boolean binaryInput;
+	public  static boolean binaryInput;
 	
 	public static int[]  holder=new int[10];//Should make this the size of the number of outputs 36
 	
 	
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1) throws IOException, ClassNotFoundException{
+		
+		numberOfNodesInHiddenLayer = numberOfNodesInHiddenLayer1;
+		epochs = epochs1;               //number of epochs to run
+		learningRate =  learningRate1; //learning rate
+		usePriorWeights= usePriorWeights1;
+		binaryInput = binaryInput1;
+		String trainingImages = "Training-Images";
+		String testingImages = "Testing-images";
+		String trainingLabels = "Training-Labels";
+		String testingLabels = "Testing-Labels";
+
+				
+
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
@@ -83,30 +96,7 @@ public class NeuralNet {
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 
 
-		// numberOfNodesInHiddenLayer=args[1];
-		// epochs = Integer.parseInt(args[2]); //number of epochs to run
-		// double learningRate = Double.parseDouble(args[3]); //learning rate
-		// usePriorWeights=Integer.parseInt(args[4]);
-		//binaryInput = Boolean.parseBolean(args[5]);
-		// String trainingImages=args[6];
-		// String testingImages=args[7];
-		// String trainingLabels=args[8];
-		// String testingLabels=args[9];
 		
-		
-		// These are hard coded versions of the above
-		
-		numberOfNodesInHiddenLayer = 15;
-		epochs = 5;
-		learningRate = 0.3;
-		// Set this to true to avoid retraining. Allows the files in
-		// NeuralNetOutput folder to be loaded and used.
-		usePriorWeights= 0;  // 0= no, 1 = ToTestNetwork, 2= ToContinueTraining
-		binaryInput=true;
-		String trainingImages = "Training-Images";
-		String testingImages = "Testing-images";
-		String trainingLabels = "Training-Labels";
-		String testingLabels = "Testing-Labels";
 
 		
 		// Trains the Network from scratch
@@ -162,7 +152,7 @@ public class NeuralNet {
 	public static void initializeMultilayerFeedForward(String trainingImages, String trainingLabels) throws IOException {
 
 		// Loads training and testing data sets
-		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
+		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages, binaryInput);
 		try {
 			// Our data structure holds the training data
 			trainingData = train.loadDigitImages();
