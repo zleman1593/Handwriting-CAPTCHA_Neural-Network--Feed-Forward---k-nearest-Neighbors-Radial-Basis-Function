@@ -24,10 +24,10 @@ public class testAllNetworksQueue {
 
 
 
-		runFFTrainingExampleEx(); //Exp #3
+		//runFFTrainingExampleEx(); //Exp #3
 		
 		
-		//runKNNKEx();// Exp 7
+		runKNNKEx();// Exp 7
 
 		//runKNNTrainingExamplesEx(); //Exp 8
 		

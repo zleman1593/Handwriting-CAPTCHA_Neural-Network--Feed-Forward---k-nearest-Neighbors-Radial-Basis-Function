@@ -40,13 +40,13 @@ public class KNearestNeighbors {
 	// Tracks the number of images processed in the testing set.
 	public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
 	
-	public static  int countOfImagesAnalyzedTotal;
+	public static  double countOfImagesAnalyzedTotal;
 	
-	public static  int countOfCorrectImagesAnalyzedTotal;
+	public static  double countOfCorrectImagesAnalyzedTotal;
 	
 	public static String filePathResults;
 	
-	
+	public static long trainingTime;
 	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1, String filePathResults1) throws IOException, ClassNotFoundException {
 		
 		
@@ -87,7 +87,8 @@ public class KNearestNeighbors {
 		trainKNearestNeighbours(trainingImages, trainingLabels);
 
 	
-
+		long endTime = System.currentTimeMillis();
+		long trainingTime = endTime - startTime;
 		
 		
 		//Sets up trackers for each thread
@@ -184,7 +185,7 @@ public class KNearestNeighbors {
 		}
 		
 		
-		long endTime = System.currentTimeMillis();
+		 endTime = System.currentTimeMillis();
 		long executionTime = endTime - startTime;
 		
 		 countOfCorrectImagesAnalyzedTotal=0;
@@ -390,8 +391,9 @@ public class KNearestNeighbors {
 		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
-		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.write("Testing time: " + executionTime + " milliseconds");
 		outputWriter.newLine();
+		outputWriter.write("Testing time: " + trainingTime + " milliseconds");
 		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);

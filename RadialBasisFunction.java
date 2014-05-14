@@ -93,18 +93,18 @@ public class RadialBasisFunction {
 		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> less accurate%
 
 
-		if (!usePriorWeights) {
+	
 			long startTime = System.currentTimeMillis();
-			//readDataFromTrainedFiles(); //Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
+			if (usePriorWeights) {
+				readDataFromTrainedFiles();
+			}//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
 			writeTrainedWeights();
 
-		} else {
-			readDataFromTrainedFiles();
-		}
+		
 
 
 
