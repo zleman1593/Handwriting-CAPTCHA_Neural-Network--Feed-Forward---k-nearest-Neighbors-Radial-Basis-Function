@@ -47,8 +47,8 @@ public class NeuralNet {
 	public static final int NUMBER_OF_OUTPUT_NODES = 10;
 	
 	// Create array of Nodes in first layer and output layer
-	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
-	public static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
+	private static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
+	private static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
 	
 	// The learning rate for the network
 	public  static double learningRate;
@@ -77,6 +77,8 @@ public class NeuralNet {
 	
 	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, int trainingSetReductionFactor1) throws IOException, ClassNotFoundException{
 		
+		hiddenLayerNodes.clear();
+		outputLayerNodes.clear();
 		numberOfNodesInHiddenLayer = numberOfNodesInHiddenLayer1;
 		epochs = epochs1;               //number of epochs to run
 		learningRate =  learningRate1; //learning rate

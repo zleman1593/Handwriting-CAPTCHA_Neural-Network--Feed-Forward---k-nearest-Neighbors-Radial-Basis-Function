@@ -24,10 +24,10 @@ public class testAllNetworksQueue {
 
 
 
-		//runFFTrainingExampleEx(); //Exp #3
+		runFFTrainingExampleEx(); //Exp #3
 		
 		
-		runKNNKEx();// Exp 7
+		//runKNNKEx();// Exp 7
 
 		//runKNNTrainingExamplesEx(); //Exp 8
 		
@@ -228,10 +228,10 @@ public class testAllNetworksQueue {
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1t/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1t/TrainedSetHiddenWeights.txt";
 		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
-		NeuralNet secondFF1 = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
-		NeuralNet secondFF2 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
-		NeuralNet secondFF3 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
-		NeuralNet secondFF4 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
+		NeuralNet secondFF1 = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 1-5
+		NeuralNet secondFF2 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 6-10
+		NeuralNet secondFF3 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 11-15
+		NeuralNet secondFF4 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 16-20
 
 		secondFF1=null;
 		secondFF2=null;
