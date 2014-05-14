@@ -40,9 +40,9 @@ public class KNearestNeighbors {
 	// Tracks the number of images processed in the testing set.
 	public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
 	
-	public static  double countOfImagesAnalyzedTotal;
+	public static  double countOfImagesAnalyzedTota=0;
 	
-	public static  double countOfCorrectImagesAnalyzedTotal;
+	public static  double countOfCorrectImagesAnalyzedTotal=0;
 	
 	public static String filePathResults;
 	

@@ -6,11 +6,7 @@
  */
 
 //IVY: you will need to uncomment the lines with src, and then comment out the lines missing src in order for this to run on your computer.
-// ZACK: It only runs on my computer with the current set up (with src/) - that was my fix for the file reading error we encountered yesterday.
-//TODO: Every some letters in the Captcha sub arrays CHAR_OFFSET = 86 works while others CHAR_OFFSET = 87 works. Why??
-// Reply: Not sure. Can you give an example?
-//TODO: Need to add the ability to add white chars after a training image that is only 7 pixels wide to make it like a 9 px wide image.
-// Reply: Taken care of.
+
 
 import java.io.IOException;
 import java.io.File;
@@ -36,20 +32,20 @@ public class loadCaptchaImage {
 	private static final int NUM_CHARS_IN_CAPTCHA = 6; // 6 characters in each Captcha.
 	
 	// For testing only.
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	/*public static void main(String[] args) throws IOException, ClassNotFoundException {
 		readAllTrainingData();
 		readAllCaptchas();
 		System.out.println("Done");
 		
-	}
+	}*/
 	
 	// Constructor.
-	/*public loadCaptchaImage() throws IOException {
+	public loadCaptchaImage() throws IOException {
 		// Reads and breaks up all Captchas for testing.
 		readAllCaptchas();
 		// Reads all the  individual characters for training.
 		readAllTrainingData();
-	}*/
+	}
 
 	// Reads all the captcha images.
 	public static void readAllCaptchas() throws IOException{
