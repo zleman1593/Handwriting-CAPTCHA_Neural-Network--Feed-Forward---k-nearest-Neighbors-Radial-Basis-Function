@@ -6,7 +6,11 @@
  */
 
 //IVY: you will need to uncomment the lines with src, and then comment out the lines missing src in order for this to run on your computer.
-
+// ZACK: It only runs on my computer with the current set up (with src/) - that was my fix for the file reading error we encountered yesterday.
+//TODO: Every some letters in the Captcha sub arrays CHAR_OFFSET = 86 works while others CHAR_OFFSET = 87 works. Why??
+// Reply: Not sure. Can you give an example?
+//TODO: Need to add the ability to add white chars after a training image that is only 7 pixels wide to make it like a 9 px wide image.
+// Reply: Taken care of.
 
 import java.io.IOException;
 import java.io.File;
@@ -72,16 +76,19 @@ public class loadCaptchaImage {
 			ArrayList<DigitImage> oneCaptcha = new ArrayList<DigitImage>(); // List of character images.
 			oneCaptcha.clear();
 			int captchaCharPos = 0; // How many characters of the captcha have been read.
+			int imgWidth = captchaImg.getWidth();
+			if (imgWidth < CHAR_WIDTH) {
+				imgWidth = CHAR_WIDTH;
+			}
 			// Read a single Captcha image.
-			for (int j = 0; j < captchaImg.getWidth(); j++) {
+			for (int j = 0; j < imgWidth; j++) {
 				// Skip white spaces and find where the next character starts, then j jumps to that column.
 				j = findCharCol(captchaImg, j);
 
 				// Reaching the end of the Captcha image. 
-				if (j + CHAR_WIDTH >= captchaImg.getWidth() || captchaCharPos >= NUM_CHARS_IN_CAPTCHA) {
+				if (j + CHAR_WIDTH >= imgWidth || captchaCharPos >= NUM_CHARS_IN_CAPTCHA) {
 					break;
 				}
-				
 				// Stores one character of a Captcha.
 				int[] charPixels = new int[CHAR_WIDTH * CHAR_HEIGHT];
 				BufferedImage charImage = captchaImg.getSubimage(j, 0 , CHAR_WIDTH, CHAR_HEIGHT);
@@ -90,10 +97,6 @@ public class loadCaptchaImage {
 				
 				// Turn a character in a Captcha into a DigitImage and add it to the Captcha's list of DigitImages (characters).
 				int num = charToInt(imgNames, i, captchaCharPos);
-				//watches for errors
-				if (num==48||num==49||num==51||num==52){
-					System.out.println("Numbershould not be: " +num);
-				}
 				oneCaptcha.add(new DigitImage(num, charPixels, false));
 				captchaCharPos++;
 			}
@@ -146,8 +149,6 @@ public class loadCaptchaImage {
 			}
 			scanCharPixels(charImg, charPixels, offsetHeight, offsetWidth);
 			// Turn this training character into a DigitImage and add it to the Captcha's list of chars.
-			
-			
 			int num = charToInt(trainingImgNames, i, 0);
 			alltrainingData.add(new DigitImage(num, charPixels, false));
 		
@@ -188,13 +189,10 @@ public class loadCaptchaImage {
 	// We can't directly cast char to int because according to the setup for our NN 'a' needs to be 10 and the rest follows.
 	public static int charToInt(ArrayList<String> imgName, int imgIndex, int charIndex) {	
 		char c = imgName.get(imgIndex).charAt(charIndex);
-		
-		
-		
 		if (Character.isDigit(c)) {
 			return Character.getNumericValue(c);
 		}
-		return(int)c - CHAR_OFFSET;
+		return (int)c - CHAR_OFFSET;
 	}
 	
 	// Returns all training data - list of character images.
