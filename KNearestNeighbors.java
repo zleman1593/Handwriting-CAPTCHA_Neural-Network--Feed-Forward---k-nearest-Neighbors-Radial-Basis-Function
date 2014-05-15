@@ -298,7 +298,7 @@ public class KNearestNeighbors {
 			}
 			System.out.println("Guess using the closest match: " + output);
 			double number = networkInputData.get(i).getLabel();
-			System.out.println("Thread: 1" );
+			System.out.println("Thread: "+ thread );
 			System.out.println("Correct answer: " + number);
 
 			countOfImagesAnalyzed.set(thread,countOfImagesAnalyzed.get(thread)+1);
@@ -345,75 +345,6 @@ public class KNearestNeighbors {
 			sum = sum + output ;
 		}
 		return sum;
-	}
-
-	//----------------------START UTILITY METHODS---------------------------------------------------------------------------------------------
-	
-	// Initialize the ordered indicies for the hiddenLayerDottedOuput list
-	public static void initializeIndices (int[] indicesArray) {
-		for (int index = 0; index < indicesArray.length; index++) {
-			indicesArray[index] = index;
-		}
-	}
-
-	public static void parallelSorting(int[] indicesToBeSorted, ArrayList<Double> listToBeSorted) {
-		for (int i = 0; i < listToBeSorted.size(); i++) {
-			for (int j = i + 1; j < listToBeSorted.size(); j++) {
-				// Swap so that bigger numbers go in the front.
-				if (listToBeSorted.get(j) > listToBeSorted.get(i)) {
-					Double temp = new Double(listToBeSorted.get(i));
-					listToBeSorted.set(i, listToBeSorted.get(j));
-					listToBeSorted.set(j, temp);
-					int tempIndex = i;
-					indicesToBeSorted[i] = j; 
-					indicesToBeSorted[j] = tempIndex; 
-				}
-			}
-		}
-	}
-
-	
-	/*
-	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
-	 */
-	//public static void write(ArrayList<OutputVector> x) throws IOException {
-	public static void write() throws IOException {
-		BufferedWriter outputWriter = null;
-		String randomString = Double.toString(Math.random());
-		File file = new File(filePathResults + randomString + ".txt");
-
-		// If file does not exists, then create it.
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
-		outputWriter.write("k: " + Double.toString(k));
-		outputWriter.newLine();
-		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
-		outputWriter.newLine();
-		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
-		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
-		outputWriter.newLine();
-		outputWriter.write("Training time: " + trainingTime+ " milliseconds");
-		outputWriter.newLine();
-		outputWriter.write("Testing time: " + executionTime + " milliseconds");
-		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
-		outputWriter.newLine();
-		outputWriter.write("Image data binary: " + binaryInput);
-		outputWriter.newLine();
-		//for (int i = 0; i < x.size(); i++) {
-			//outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
-			//outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
-			//outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
-			outputWriter.newLine();
-		//}
-			
-			for (int m = 0; m < holder.length; m++) {
-				outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
-				outputWriter.newLine();
-			}
-		outputWriter.flush();
-		outputWriter.close();
 	}
 
 	
