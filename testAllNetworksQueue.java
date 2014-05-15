@@ -36,8 +36,6 @@ public class testAllNetworksQueue {
 
 		runRBFTrainingExamplesEx(); //Exp #6
 
-		
-
 
 	}
 
@@ -352,16 +350,16 @@ public class testAllNetworksQueue {
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.1/RbfResults";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.1/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.1,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction ee = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i = new RadialBasisFunction(20,false,1000000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j = new RadialBasisFunction(20,false,700000,5,0.1,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.1,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction ee = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j = new RadialBasisFunction(20,false,700000,5,0.1,2,filePathResults,filePathTrainedOutputWeights);
 		a=null;
 		b=null;
 		c=null;
@@ -377,16 +375,16 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a2 = new RadialBasisFunction(20,false,1000000,5,0.3,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i2 = new RadialBasisFunction(20,false,1000000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j2 = new RadialBasisFunction(20,false,700000,5,0.3,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a2 = new RadialBasisFunction(20,false,1000000,5,0.3,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j2 = new RadialBasisFunction(20,false,700000,5,0.3,2,filePathResults,filePathTrainedOutputWeights);
 		b2=null;
 		c2=null;
 		d2=null;
@@ -402,16 +400,16 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.5/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.5/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a3 = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i3 = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j3 = new RadialBasisFunction(20,false,700000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a3 = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j3 = new RadialBasisFunction(20,false,700000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a3=null;
 		b3=null;
 		c3=null;
@@ -428,16 +426,16 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.9/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.9/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a4 = new RadialBasisFunction(20,false,1000000,5,0.9,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i4 = new RadialBasisFunction(20,false,1000000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j4 = new RadialBasisFunction(20,false,700000,5,0.9,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a4 = new RadialBasisFunction(20,false,1000000,5,0.9,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j4 = new RadialBasisFunction(20,false,700000,5,0.9,2,filePathResults,filePathTrainedOutputWeights);
 		a4=null;
 		b4=null;
 		c4=null;
@@ -467,16 +465,16 @@ public class testAllNetworksQueue {
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/RbfResults";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction ee = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j = new RadialBasisFunction(20,false,700000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction ee = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j = new RadialBasisFunction(20,false,700000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a=null;
 		b=null;
 		c=null;
@@ -492,16 +490,16 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a2 = new RadialBasisFunction(20,false,100000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i2 = new RadialBasisFunction(20,false,100000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j2 = new RadialBasisFunction(20,false,70000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a2 = new RadialBasisFunction(20,false,100000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j2 = new RadialBasisFunction(20,false,70000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a2=null;
 		b2=null;
 		c2=null;
@@ -518,16 +516,16 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a3 = new RadialBasisFunction(20,false,100,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i3 = new RadialBasisFunction(20,false,100,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j3 = new RadialBasisFunction(20,false,70,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a3 = new RadialBasisFunction(20,false,100,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j3 = new RadialBasisFunction(20,false,70,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a3=null;
 		b3=null;
 		c3=null;
@@ -547,16 +545,16 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000000/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000000/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a4 = new RadialBasisFunction(20,false,100000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i4 = new RadialBasisFunction(20,false,100000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j4 = new RadialBasisFunction(20,false,70000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a4 = new RadialBasisFunction(20,false,100000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j4 = new RadialBasisFunction(20,false,70000000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a4=null;
 		b4=null;
 		c4=null;
@@ -583,18 +581,18 @@ public class testAllNetworksQueue {
 		//sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
 		//For binary I am testing with sigam =  between 15-10 (11 seems optimal)
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/20/RbfResults";
-		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/20/TrainedRBFSetOutputWeights.txt";
+		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/20/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction ee = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i = new RadialBasisFunction(20,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j = new RadialBasisFunction(20,false,700000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction ee = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j = new RadialBasisFunction(20,false,700000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a=null;
 		b=null;
 		c=null;
@@ -606,19 +604,19 @@ public class testAllNetworksQueue {
 		i=null;
 		j=null;
 		
-		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/1/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/1/TrainedRBFSetOutputWeights.txt";
+		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/1/RbfResults";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/1/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a2 = new RadialBasisFunction(1,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i2 = new RadialBasisFunction(1,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j2 = new RadialBasisFunction(1,false,700000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a2 = new RadialBasisFunction(1,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j2 = new RadialBasisFunction(1,false,700000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		b2=null;
 		c2=null;
 		d2=null;
@@ -631,19 +629,19 @@ public class testAllNetworksQueue {
 		
 
 
-		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/5/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/5/TrainedRBFSetOutputWeights.txt";
+		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/5/RbfResults";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/5/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a3 = new RadialBasisFunction(5,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i3 = new RadialBasisFunction(5,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j3 = new RadialBasisFunction(5,false,700000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a3 = new RadialBasisFunction(5,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j3 = new RadialBasisFunction(5,false,700000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a3=null;
 		b3=null;
 		c3=null;
@@ -658,19 +656,19 @@ public class testAllNetworksQueue {
 
 
 
-		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/200/RbfResults";
-		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TX/200/TrainedRBFSetOutputWeights.txt";
+		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/200/RbfResults";
+		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/200/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a4 = new RadialBasisFunction(200,false,1000000,5,0.5,false,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction d4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction e4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction f4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction g4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction h4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction i4 = new RadialBasisFunction(200,false,1000000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction j4 = new RadialBasisFunction(200,false,700000,5,0.5,true,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a4 = new RadialBasisFunction(200,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction b4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction c4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction d4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction e4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction f4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction g4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction h4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction i4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction j4 = new RadialBasisFunction(200,false,700000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		a4=null;
 		b4=null;
 		c4=null;

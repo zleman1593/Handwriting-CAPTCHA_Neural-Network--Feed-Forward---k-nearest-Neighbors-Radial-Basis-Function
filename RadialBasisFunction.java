@@ -41,7 +41,7 @@ public class RadialBasisFunction {
 	// The learning rate for the network
 	public static double learningRate;
 	// Whether to use weights that have already been trained or to train network again
-	public static boolean usePriorWeights;
+	public static int usePriorWeights;
 	//Dictates the square standard deviation in the gaussian RBF
 	public static double sigmaSquared;
 	// Number of output nodes (Currently the network depends on 10  or 36 output nodes)
@@ -59,7 +59,7 @@ public class RadialBasisFunction {
 
 	public static int[]  holder=new int[10];
 
-	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, boolean usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
+	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
 		hiddenLayerNodes.clear();
 		outputLayerNodes.clear();
 		trainingData.clear();
@@ -99,22 +99,45 @@ public class RadialBasisFunction {
 
 
 	
+		
+		
+		
 			long startTime = System.currentTimeMillis();
-			if (usePriorWeights) {
+			
+			if (usePriorWeights==1) {
 				readDataFromTrainedFiles();
-			}//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
+			//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
 			writeTrainedWeights();
-
+			
+			// Test the  RBF Network
+			testRBF(testingImages, testingLabels);
+			}
+			
+			
+			if (usePriorWeights==0) {
+				
+			//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
+			trainTheNetwork(trainingData);
+			long endTime = System.currentTimeMillis();
+			executionTime = endTime - startTime;
+			System.out.println("Training time: " + executionTime + " milliseconds");
+			writeTrainedWeights();
+			
+			// Test the  RBF Network
+			testRBF(testingImages, testingLabels);
+			}
 		
 
+			if (usePriorWeights==2) {
+				// Test the  RBF Network
+				testRBF(testingImages, testingLabels);
+			}
 
-
-		// Test the  RBF Network
-		testRBF(testingImages, testingLabels);
+		
 
 		for (int m = 0; m < holder.length; m++) {
 			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
