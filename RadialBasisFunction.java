@@ -58,7 +58,10 @@ public class RadialBasisFunction {
 	public  static int trainingSetReductionFactor;
 
 	public static int[]  holder=new int[10];
+	public static long testingTime;
 
+	public static long startTime;
+	
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
 		hiddenLayerNodes.clear();
 		outputLayerNodes.clear();
@@ -134,6 +137,7 @@ public class RadialBasisFunction {
 		
 
 			if (usePriorWeights==2) {
+				readDataFromTrainedFiles();
 				// Test the  RBF Network
 				System.out.println("Testing only. Using trained files");
 				testRBF(testingImages, testingLabels);
@@ -200,7 +204,7 @@ public class RadialBasisFunction {
 	}
 
 	public static void testRBF(String testingImages, String testingLabels) throws IOException {
-		long startTime = System.currentTimeMillis();
+		 startTime = System.currentTimeMillis();
 		countOfImagesAnalyzed=0;
 		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
@@ -219,8 +223,8 @@ public class RadialBasisFunction {
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		System.out.println("Look in " +filePathResults+  " directory to find  the output.");
 		long endTime = System.currentTimeMillis();
-		executionTime = endTime - startTime;
-		System.out.println("Testing time: " + executionTime + " milliseconds");
+		testingTime = endTime - startTime;
+		System.out.println("Testing time: " + testingTime + " milliseconds");
 	}
 
 	/*
@@ -517,6 +521,8 @@ public class RadialBasisFunction {
 	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
 	 */
 	public static void write(ArrayList<OutputVector> x) throws IOException {
+		long endTime = System.currentTimeMillis();
+		testingTime = endTime - startTime;
 		BufferedWriter outputWriter = null;
 		String randomString = Double.toString(Math.random());
 		File file = new File(filePathResults + randomString + ".txt");
@@ -538,6 +544,8 @@ public class RadialBasisFunction {
 		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
 		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.newLine();
+		outputWriter.write("Testing time: " + testingTime + " milliseconds");
 		outputWriter.newLine();
 		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
 		outputWriter.newLine();
