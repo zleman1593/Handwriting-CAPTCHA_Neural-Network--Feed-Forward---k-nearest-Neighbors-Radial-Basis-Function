@@ -1,6 +1,5 @@
 
 
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -93,9 +92,6 @@ public class KNearestNeighbors {
 		long startTime = System.currentTimeMillis();
 		trainKNearestNeighbours(trainingImages, trainingLabels);
 
-	
-		long endTime = System.currentTimeMillis();
-		long trainingTime = endTime - startTime;
 		
 		
 		//Sets up trackers for each thread
@@ -109,7 +105,7 @@ public class KNearestNeighbors {
 		
 		// Loads test data for the K-Nearest Neighbors Network
 		loadtestDataForKNearestNeighbours(testingImages, testingLabels);
-
+		 startTime = System.currentTimeMillis();
 		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
 		Runnable r1 = new Runnable() {
 			public void run() {
@@ -192,8 +188,8 @@ public class KNearestNeighbors {
 		}
 		
 		
-		 endTime = System.currentTimeMillis();
-		long executionTime = endTime - startTime;
+		 long endTime = System.currentTimeMillis();
+		 executionTime = endTime - startTime;
 		
 		 countOfCorrectImagesAnalyzedTotal=0;
 		 countOfImagesAnalyzedTotal=0;
@@ -247,8 +243,8 @@ public class KNearestNeighbors {
 		}
 
 		long endTime = System.currentTimeMillis();
-		executionTime = endTime - startTime;
-		System.out.println("Training time: " + executionTime + " milliseconds");
+		trainingTime = endTime - startTime;
+		System.out.println("Training time: " + trainingTime + " milliseconds");
 
 	}
 
@@ -398,9 +394,80 @@ public class KNearestNeighbors {
 		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
 		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
-		outputWriter.write("Testing time: " + executionTime + " milliseconds");
+		outputWriter.write("Training time: " + trainingTime+ " milliseconds");
 		outputWriter.newLine();
-		outputWriter.write("Training time: " + trainingTime + " milliseconds");
+		outputWriter.write("Testing time: " + executionTime + " milliseconds");
+		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
+		outputWriter.newLine();
+		outputWriter.write("Image data binary: " + binaryInput);
+		outputWriter.newLine();
+		//for (int i = 0; i < x.size(); i++) {
+			//outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
+			//outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
+			//outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
+			outputWriter.newLine();
+		//}
+			
+			for (int m = 0; m < holder.length; m++) {
+				outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+				outputWriter.newLine();
+			}
+		outputWriter.flush();
+		outputWriter.close();
+	}
+
+	
+	//----------------------START UTILITY METHODS---------------------------------------------------------------------------------------------
+	
+	// Initialize the ordered indicies for the hiddenLayerDottedOuput list
+	public static void initializeIndices (int[] indicesArray) {
+		for (int index = 0; index < indicesArray.length; index++) {
+			indicesArray[index] = index;
+		}
+	}
+
+	public static void parallelSorting(int[] indicesToBeSorted, ArrayList<Double> listToBeSorted) {
+		for (int i = 0; i < listToBeSorted.size(); i++) {
+			for (int j = i + 1; j < listToBeSorted.size(); j++) {
+				// Swap so that bigger numbers go in the front.
+				if (listToBeSorted.get(j) > listToBeSorted.get(i)) {
+					Double temp = new Double(listToBeSorted.get(i));
+					listToBeSorted.set(i, listToBeSorted.get(j));
+					listToBeSorted.set(j, temp);
+					int tempIndex = i;
+					indicesToBeSorted[i] = j; 
+					indicesToBeSorted[j] = tempIndex; 
+				}
+			}
+		}
+	}
+
+	
+	/*
+	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
+	 */
+	//public static void write(ArrayList<OutputVector> x) throws IOException {
+	public static void write() throws IOException {
+		BufferedWriter outputWriter = null;
+		String randomString = Double.toString(Math.random());
+		File file = new File(filePathResults + randomString + ".txt");
+
+		// If file does not exists, then create it.
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		outputWriter = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+		outputWriter.write("k: " + Double.toString(k));
+		outputWriter.newLine();
+		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
+		outputWriter.newLine();
+		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
+		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
+		outputWriter.newLine();
+		outputWriter.write("Testing time: " + trainingTime + " milliseconds");
+		outputWriter.newLine();
+		outputWriter.write("Training time: " + executionTime + " milliseconds");
+		outputWriter.newLine();
 		outputWriter.write("There were " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM");
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);

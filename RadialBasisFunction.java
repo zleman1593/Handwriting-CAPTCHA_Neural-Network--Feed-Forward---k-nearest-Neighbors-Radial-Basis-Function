@@ -105,6 +105,7 @@ public class RadialBasisFunction {
 			long startTime = System.currentTimeMillis();
 			
 			if (usePriorWeights==1) {
+				System.out.println("Reading Data from Trainined Files and continuing Training");
 				readDataFromTrainedFiles();
 			//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
 			trainTheNetwork(trainingData);
@@ -119,7 +120,7 @@ public class RadialBasisFunction {
 			
 			
 			if (usePriorWeights==0) {
-				
+				System.out.println("Training from scratch");
 			//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
@@ -134,6 +135,7 @@ public class RadialBasisFunction {
 
 			if (usePriorWeights==2) {
 				// Test the  RBF Network
+				System.out.println("Testing only. Using trained files");
 				testRBF(testingImages, testingLabels);
 			}
 
