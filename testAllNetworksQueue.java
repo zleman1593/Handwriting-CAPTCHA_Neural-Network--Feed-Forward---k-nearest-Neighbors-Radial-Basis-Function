@@ -13,7 +13,7 @@ public class testAllNetworksQueue {
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/RbfResults";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 	
 		
 
