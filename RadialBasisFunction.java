@@ -111,7 +111,7 @@ public class RadialBasisFunction {
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
-			System.out.println("Training time: " + executionTime + " milliseconds");
+			System.out.println("Total training time" + executionTime + " milliseconds");
 			writeTrainedWeights();
 			
 			// Test the  RBF Network
@@ -125,7 +125,7 @@ public class RadialBasisFunction {
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
-			System.out.println("Training time: " + executionTime + " milliseconds");
+			System.out.println("Total training time" + executionTime + " milliseconds");
 			writeTrainedWeights();
 			
 			// Test the  RBF Network
