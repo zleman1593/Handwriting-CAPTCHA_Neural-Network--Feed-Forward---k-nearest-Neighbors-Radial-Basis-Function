@@ -51,8 +51,6 @@ public class RadialBasisFunction {
 	public static String filePathTrainedOutputWeights;
 
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
-	
-	public static ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
 
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
@@ -61,37 +59,38 @@ public class RadialBasisFunction {
 
 	public static int[]  holder=new int[10];
 
-	public static ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
-
 		hiddenLayerNodes.clear();
 		outputLayerNodes.clear();
 		trainingData.clear();
 		tempOutput.clear();
-		newtworkResults.clear();
-		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
-		for (int m = 0; m < holder.length; m++) {
-			holder[m]=0;
-		}
-
+		
 		binaryInput = binaryInput1;
 		trainingSetReductionFactor = trainingSetReductionFactor1;
+
 		sigmaSquared = sigmaSquared1;
 		epochs = epochs1;
 		learningRate = learningRate1;
 		usePriorWeights = usePriorWeights1;
 		filePathResults=filePathResults1;
 		filePathTrainedOutputWeights=filePathTrainedOutputWeights1;
-
+		
 		String trainingImages = "Training-Images";
 		String testingImages = "Testing-images";
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
-
-
-
+		
+		
+		
+		
+		
+		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
+		for (int m = 0; m < holder.length; m++) {
+			holder[m]=0;
+		}
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
+
 
 
 		initializeRBF(trainingImages, trainingLabels);
@@ -99,34 +98,48 @@ public class RadialBasisFunction {
 		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> less accurate%
 
 
-
-		long startTime = System.currentTimeMillis();
-		if (usePriorWeights==1) {
-			System.out.println("Reading Data from Trainined Files and continuing Training");
-			readDataFromTrainedFiles();
+	
+		
+		
+		
+			long startTime = System.currentTimeMillis();
+			
+			if (usePriorWeights==1) {
+				System.out.println("Reading Data from Trainined Files and continuing Training");
+				readDataFromTrainedFiles();
+			//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
 			writeTrainedWeights();
+			
 			// Test the  RBF Network
 			testRBF(testingImages, testingLabels);
-		}else if (usePriorWeights==0) {
-			System.out.println("Training from scratch");
+			}
+			
+			
+			if (usePriorWeights==0) {
+				System.out.println("Training from scratch");
+			//Only for testing purposes (allows breaks between training epochs) uncomment only when  usePriorWeights is false
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
 			writeTrainedWeights();
+			
 			// Test the  RBF Network
 			testRBF(testingImages, testingLabels);
-		} else if (usePriorWeights==2) {
-			// Test the  RBF Network
-			System.out.println("Testing only. Using trained files");
-			testRBF(testingImages, testingLabels);
-		}
+			}
+		
 
+			if (usePriorWeights==2) {
+				// Test the  RBF Network
+				System.out.println("Testing only. Using trained files");
+				testRBF(testingImages, testingLabels);
+			}
 
+		
 
 		for (int m = 0; m < holder.length; m++) {
 			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
@@ -168,6 +181,7 @@ public class RadialBasisFunction {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
+
 		}
 
 
@@ -180,6 +194,9 @@ public class RadialBasisFunction {
 			}
 			outputLayerNodes.add(weights);
 		}
+
+
+
 	}
 
 	public static void testRBF(String testingImages, String testingLabels) throws IOException {
@@ -188,6 +205,7 @@ public class RadialBasisFunction {
 		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
+		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
 		try {
 			// Our data structure holds the testing data
 			testingData = test.loadDigitImages();
@@ -195,7 +213,7 @@ public class RadialBasisFunction {
 			e.printStackTrace();
 		}
 		// Tests the network with the testing Data and prints results to file
-		write(solveTestingData());
+		write(solveTestingData(testingData));
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
@@ -257,10 +275,10 @@ public class RadialBasisFunction {
 			long startTime = System.currentTimeMillis();
 			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
 
-				calculateErrorForEachOutputNode(trainingData, images);
+				networkOutputError(trainingData, images);
 				
 				
-				//Creates 8 threads and splits the training set into eight parts each of which is handled by a seperate thread 
+				//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
 				Runnable r1 = new Runnable() {
 					public void run() {
 						// Update the weights to the output nodes
@@ -347,14 +365,20 @@ public class RadialBasisFunction {
 												} catch (InterruptedException e) {
 													e.printStackTrace();
 												}
+
 												// Resets temporary data structure
 												tempOutput = new ArrayList<ArrayList<Double>>();
 			}
+
+
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
+
 			System.out.println("Epoch " + (i+1) + " has finished.");
+
 		}
+
 	}
 
 	public static void trainingSubRoutine(int start, int stop)   {
@@ -376,28 +400,25 @@ public class RadialBasisFunction {
 
 
 	/*
-	 * Takes the sum parameter and returns the output of the sigmoid activation function
+	 * Takes the weighted sum as the parameter and returns the output of the sigmoid activation function
 	 */
-	public static double activationFunction(double sum) {
-		double output = 1 / (1 + Math.exp(((-1) * sum)));
+	public static double activationFunction(double weightedSum) {
+		double output = 1 / (1 + Math.exp(((-1) * weightedSum)));
+		return output;
+	}
+
+	/* Returns the derivative of the output of the sigmoid activation function */
+	public static double sigmoidPrime(double input) {
+		double temp = 1 / (1 + Math.exp(((-1) * input)));
+		double output = (temp * (1 - temp));
 		return output;
 	}
 
 
 	/*
-	 * Returns the derivative of the output of the sigmoid activation function but takes as a parameter the already computer sigmoid output
+	 * Returns the summed total error of the output nodes and creates temporary storage for the output of all nodes for a given image
 	 */
-	public static double sigmoidPrimeDynamicProgramming(double sigmoidPrime) {
-		double output = (sigmoidPrime * (1 - sigmoidPrime));
-		return output;
-	}
-
-
-	
-	/*
-	 * Creates temporary storage for the output of all nodes for a given image
-	 */
-	public static void calculateErrorForEachOutputNode(ArrayList<DigitImage> networkInputData, int imageNumber) {
+	public static void networkOutputError(ArrayList<DigitImage> networkInputData, int imageNumber) {
 
 		// Creates an Arraylist holding the output of each node in this layer
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
@@ -427,109 +448,16 @@ public class RadialBasisFunction {
 	/*
 	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
 	 */
-	public static ArrayList<OutputVector> solveTestingData() {		
-		
-
-		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
-		Runnable r1 = new Runnable() {
-			public void run() {
-				for (int i = 0; i < testingData.size()/8; i++) {
-					newtworkResults.add(singleImageBestGuess(testingData, i));
-				}
-			}};
-
-			Runnable r2 = new Runnable() {
-				public void run() {
-					for (int i =  testingData.size()/8; i < testingData.size()/4; i++) {
-						newtworkResults.add(singleImageBestGuess(testingData, i));
-					}
-
-				}};
-
-				Runnable r3 = new Runnable() {
-					public void run() {
-						for (int i =  testingData.size()/4; i < testingData.size()*3/8; i++) {
-							newtworkResults.add(singleImageBestGuess(testingData, i));
-						}
-
-					}};
-
-					Runnable r4  = new Runnable() {
-						public void run() {
-							for (int i =  testingData.size()*3/8; i < testingData.size()/2; i++) {
-								newtworkResults.add(singleImageBestGuess(testingData, i));
-							}
-						}};
-						Runnable r5 =  new Runnable() {
-							public void run() {
-			
-									for (int i =  testingData.size()/2; i < testingData.size()*5/8; i++) {
-										newtworkResults.add(singleImageBestGuess(testingData, i));
-									}
-							}};
-
-							Runnable r6=  new Runnable() {
-								public void run() {
-									for (int i =  testingData.size()*5/8; i < testingData.size()*6/8; i++) {
-										newtworkResults.add(singleImageBestGuess(testingData, i));
-									}
-								}};
-
-								Runnable r7=  new Runnable() {
-									public void run() {
-										for (int i =  testingData.size()*6/8; i < testingData.size()*7/8; i++) {
-											newtworkResults.add(singleImageBestGuess(testingData, i));
-										}
-									}};
-
-
-									Runnable r8 =  new Runnable() {
-										public void run() {
-											
-											for (int i =  testingData.size()*7/8; i < testingData.size(); i++) {
-												newtworkResults.add(singleImageBestGuess(testingData, i));
-											}
-
-										}};
-		
-		
-		
-		//Now run the threads
-		Thread thr1 = new Thread(r1);
-		Thread thr2 = new Thread(r2);
-		Thread thr3 = new Thread(r3);
-		Thread thr4 = new Thread(r4);
-		Thread thr5 = new Thread(r5);
-		Thread thr6 = new Thread(r6);
-		Thread thr7 = new Thread(r7);
-		Thread thr8 = new Thread(r8);
-		thr1.start();
-		thr2.start();
-		thr3.start();
-		thr4.start();
-		thr5.start();
-		thr6.start();
-		thr7.start();
-		thr8.start();
-		try {
-			thr1.join();
-			thr2.join();
-			thr3.join();
-			thr4.join();
-			thr5.join();
-			thr6.join();
-			thr7.join();
-			thr8.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+	public static ArrayList<OutputVector> solveTestingData(ArrayList<DigitImage> networkInputData) {
+		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
+		for (int i = 0; i < networkInputData.size(); i++) {
+			newtworkResults.add(networkSolution(networkInputData, i));
 		}
-		
-		
 		return newtworkResults;
 	}
 
 	/* This looks at one image and reports what number it thinks it is. */
-	public static OutputVector singleImageBestGuess(ArrayList<DigitImage> networkInputData, int imageNumber) {
+	public static OutputVector networkSolution(ArrayList<DigitImage> networkInputData, int imageNumber) {
 
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
 		ArrayList<Double> hidenLayerOutput = outPutOfLayer(hiddenLayerNodes, rawSingleImageData,1);
@@ -562,6 +490,15 @@ public class RadialBasisFunction {
 		return result;
 	}
 
+
+
+	/*
+	 * Returns the derivative of the output of the sigmoid activation function but takes as a parameter the already computer sigmoid output
+	 */
+	public static double sigmoidPrimeDynamicProgramming(double sigmoidPrime) {
+		double output = (sigmoidPrime * (1 - sigmoidPrime));
+		return output;
+	}
 
 
 
