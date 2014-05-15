@@ -148,12 +148,13 @@ public class NeuralNet {
 			readDataFromTrainedFiles();
 			System.out.println("Reading Data from trained files");
 			numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
+			// Test the Feed-Forward network
+			testMultilayerFeedForward(testingImages, testingLabels);
+			//testMultilayerFeedForwardCaptcha();
 		}
 		
 		
-		// Test the Feed-Forward network
-		testMultilayerFeedForward(testingImages, testingLabels);
-		//testMultilayerFeedForwardCaptcha();
+	
 		for (int m = 0; m < holder.length; m++) {
 			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
 		}
@@ -230,58 +231,94 @@ public class NeuralNet {
 
 
 				//Initialize the four threads, each of which will train a fourth of the weights for a given training example.
+
 				Runnable r1 = new Runnable() {
-					public void run() {
-						trainingSubRoutine(0,NUMBER_OF_OUTPUT_NODES / 4,0,hiddenLayerNodes.size() / 4);	
-					}};
+				public void run() {
+				trainingSubRoutine(0,NUMBER_OF_OUTPUT_NODES / 8,0,hiddenLayerNodes.size() / 8);
 
-					Runnable r2 = new Runnable() {
-						public void run() {
-							trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,NUMBER_OF_OUTPUT_NODES / 2,hiddenLayerNodes.size()/4,hiddenLayerNodes.size() / 2);	
-						}};
+				}};
+				Runnable r2 = new Runnable() {
+				public void run() {
+				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/8,NUMBER_OF_OUTPUT_NODES / 4,hiddenLayerNodes.size()/8,hiddenLayerNodes.size() / 4); 
+				}};
+
+				Runnable r3 = new Runnable() {
+				public void run() {
+				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8,hiddenLayerNodes.size()/4,(hiddenLayerNodes.size()*3)/8);
+
+				}};
+				Runnable r4 = new Runnable() {
+				public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2,(hiddenLayerNodes.size()*3)/8,hiddenLayerNodes.size()/2);
+				}};
+
+				Runnable r5 = new Runnable() {
+
+				public void run() {
+				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES /2,(NUMBER_OF_OUTPUT_NODES*5)/8 ,hiddenLayerNodes.size()/2,(hiddenLayerNodes.size()*5) / 8); 
+				}};
+
+				Runnable r6 = new Runnable() {
+				public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8,(hiddenLayerNodes.size()*5) / 8,(hiddenLayerNodes.size()*6) / 8);
+				}};
+
+				Runnable r7 = new Runnable() {
+				public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8,(hiddenLayerNodes.size()*6) / 8,(hiddenLayerNodes.size()*7) / 8);
+				}};
+
+				Runnable r8 = new Runnable() {
+				public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES,(hiddenLayerNodes.size()*7)/8,hiddenLayerNodes.size());
+				}};
 
 
-						Runnable r3 = new Runnable() {
-							public void run() {
-								trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/2,(NUMBER_OF_OUTPUT_NODES*3)/4,hiddenLayerNodes.size()/2,(hiddenLayerNodes.size()*3)/4);	
-							}};
 
-							Runnable r4 = new Runnable() {
-								public void run() {
-									trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/4,NUMBER_OF_OUTPUT_NODES,(hiddenLayerNodes.size()*3)/4,hiddenLayerNodes.size());	
-								}};
+				Thread thr1 = new Thread(r1);
+				Thread thr2 = new Thread(r2);
+				Thread thr3 = new Thread(r3);
+				Thread thr4 = new Thread(r4);
+				Thread thr5 = new Thread(r5);
+				Thread thr6 = new Thread(r6);
+				Thread thr7 = new Thread(r7);
+				Thread thr8 = new Thread(r8);
+				thr1.start();
+				thr2.start();
+				thr3.start();
+				thr4.start();
+				thr5.start();
+				thr6.start();
+				thr7.start();
+				thr8.start();
+				try {
+				thr1.join();
+				thr2.join();
+				thr3.join();
+				thr4.join();
+				thr5.join();
+				thr6.join();
+				thr7.join();
+				thr8.join();
 
-								Thread thr1 = new Thread(r1);
-								Thread thr2 = new Thread(r2);
-								Thread thr3 = new Thread(r3);
-								Thread thr4 = new Thread(r4);
-								thr1.start();
-								thr2.start();
-								thr3.start();
-								thr4.start();
-								try {
-									thr1.join();
-									thr2.join();
-									thr3.join();
-									thr4.join();
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
+				} catch (InterruptedException e) {
 
+				e.printStackTrace();
+
+				}
 					// Resets temporary data structure
 					tempOutput = new ArrayList<ArrayList<Double>>();
 			}
 			// Test the Feed-Forward network
-			/*try {
-				
+			try {
+				long endTime = System.currentTimeMillis();
+				trainingTime = endTime - startTime;
 				testMultilayerFeedForward("Testing-images", "Testing-Labels");
 				
 			} catch (IOException e) {
 				e.printStackTrace();
-			}*/
+			}
 			
-			long endTime = System.currentTimeMillis();
-			trainingTime = endTime - startTime;
 			System.out.println("Training time for epoch " + (i+1) + ": " + trainingTime + " milliseconds");
 			System.out.println("Epoch " + (i+1) + " has finished.");
 
