@@ -10,24 +10,24 @@ public class testAllNetworksQueue {
 	//make sure to pass the argument of 3 GB minimum of Ram
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		
+
 		//To expand the current trail  by another 5 epochs, simply change the first line in each set to make it use the data already written to files: 
 		//(i.e Make sure the fourth parameter is 2 in the first line of every set.)
 		//To run a new trial: First empty the folders that are referred to in this method. Then run the method. Make sure the fourth parameter is zero in the first line of every set.
-		runFFHiddenNodeEx(); //Exp #1
+	//	runFFHiddenNodeEx(); //Exp #1
 
 
 
-		runFFLearningRateEx(); //Exp #2
+		//runFFLearningRateEx(); //Exp #2
 
 
 
-		runFFTrainingExampleEx(); //Exp #3
+	//	runFFTrainingExampleEx(); //Exp #3
 		
 		
-		runKNNKEx();// Exp 7
+	//	runKNNKEx();// Exp 7
 
-		runKNNTrainingExamplesEx(); //Exp 8
+	//	runKNNTrainingExamplesEx(); //Exp 8
 		
 
 		runRBFSigmaEx(); //Exp #4

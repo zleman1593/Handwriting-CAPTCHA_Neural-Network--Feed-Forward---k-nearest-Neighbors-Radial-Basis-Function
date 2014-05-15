@@ -116,7 +116,7 @@ public class RadialBasisFunction {
 			trainTheNetwork(trainingData);
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
-			System.out.println("Total training time" + executionTime + " milliseconds");
+			System.out.println("Training time: " + executionTime + " milliseconds");
 			writeTrainedWeights();
 			// Test the  RBF Network
 			testRBF(testingImages, testingLabels);
@@ -606,13 +606,12 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
-		
-		/*for (int i = 0; i < x.size(); i++) {
+		for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
 			outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
 			outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
 			outputWriter.newLine();
-		}*/
+		}
 		for (int m = 0; m < holder.length; m++) {
 			outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
 			outputWriter.newLine();
