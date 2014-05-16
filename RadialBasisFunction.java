@@ -27,9 +27,6 @@ public class RadialBasisFunction {
 	// Creates a random number generator
 	public static Random random = new Random();
 	// Tracks the number of images processed in the testing set.
-	public static double countOfImagesAnalyzed = 0;
-	// Tracks the number of images correctly identified in the testing set.
-	public static double countOfCorrectImagesAnalyzed = 0;
 	// Tracks running time of the hidden layer construction and training
 	//of weights from the hidden layer to the output layer
 	public static long executionTime;
@@ -65,6 +62,18 @@ public class RadialBasisFunction {
 	public static long startTime;
 	
 	public static ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
+	
+	// Tracks the number of images correctly identified in the testing set.
+		public static ArrayList<Integer> countOfCorrectImagesAnalyzed = new ArrayList<Integer>();
+		// Tracks the number of images processed in the testing set.
+		public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
+	
+		
+		public static  double countOfImagesAnalyzedTotal=0;
+		
+		public static  double countOfCorrectImagesAnalyzedTotal=0;
+	
+		public static final int NUMBER_OF_CORES=8;
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
 
 		hiddenLayerNodes.clear();
@@ -72,6 +81,8 @@ public class RadialBasisFunction {
 		trainingData.clear();
 		tempOutput.clear();
 		newtworkResults.clear();
+		countOfImagesAnalyzed.clear();
+		countOfCorrectImagesAnalyzed.clear();
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
@@ -91,7 +102,11 @@ public class RadialBasisFunction {
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
 
-
+		//Sets up trackers for each thread
+		for(int y=0; y<NUMBER_OF_CORES;y++){
+			countOfImagesAnalyzed.add(0);
+			countOfCorrectImagesAnalyzed.add(0);
+		}
 
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
@@ -188,8 +203,6 @@ public class RadialBasisFunction {
 
 	public static void testRBF(String testingImages, String testingLabels) throws IOException {
 		startTime = System.currentTimeMillis();
-		countOfImagesAnalyzed=0;
-		countOfCorrectImagesAnalyzed=0;
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		try {
@@ -201,8 +214,18 @@ public class RadialBasisFunction {
 		// Tests the network with the testing Data and prints results to file
 		write(solveTestingData());
 		// reports network Performance
-		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
-		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		countOfCorrectImagesAnalyzedTotal=0;
+		 countOfImagesAnalyzedTotal=0;
+		
+		for(int x=0;x< countOfCorrectImagesAnalyzed.size();x++){
+			countOfCorrectImagesAnalyzedTotal=countOfCorrectImagesAnalyzedTotal+countOfCorrectImagesAnalyzed.get(x);
+		}
+		for(int x=0;x< countOfImagesAnalyzed.size();x++){
+			countOfImagesAnalyzedTotal=countOfImagesAnalyzedTotal+countOfImagesAnalyzed.get(x);
+		}
+		//Summarizes results
+				double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
+				System.out.println("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
 		System.out.println("Look in " +filePathResults+  " directory to find  the output.");
 		long endTime = System.currentTimeMillis();
 		testingTime = endTime - startTime;
@@ -438,14 +461,14 @@ public class RadialBasisFunction {
 		Runnable r1 = new Runnable() {
 			public void run() {
 				for (int i = 0; i < testingData.size()/8; i++) {
-					newtworkResults.add(singleImageBestGuess(testingData, i));
+					newtworkResults.add(singleImageBestGuess(testingData, i,0));
 				}
 			}};
 
 			Runnable r2 = new Runnable() {
 				public void run() {
 					for (int i =  testingData.size()/8; i < testingData.size()/4; i++) {
-						newtworkResults.add(singleImageBestGuess(testingData, i));
+						newtworkResults.add(singleImageBestGuess(testingData, i,1));
 					}
 
 				}};
@@ -453,7 +476,7 @@ public class RadialBasisFunction {
 				Runnable r3 = new Runnable() {
 					public void run() {
 						for (int i =  testingData.size()/4; i < testingData.size()*3/8; i++) {
-							newtworkResults.add(singleImageBestGuess(testingData, i));
+							newtworkResults.add(singleImageBestGuess(testingData, i,2));
 						}
 
 					}};
@@ -461,28 +484,28 @@ public class RadialBasisFunction {
 					Runnable r4  = new Runnable() {
 						public void run() {
 							for (int i =  testingData.size()*3/8; i < testingData.size()/2; i++) {
-								newtworkResults.add(singleImageBestGuess(testingData, i));
+								newtworkResults.add(singleImageBestGuess(testingData, i,3));
 							}
 						}};
 						Runnable r5 =  new Runnable() {
 							public void run() {
 			
 									for (int i =  testingData.size()/2; i < testingData.size()*5/8; i++) {
-										newtworkResults.add(singleImageBestGuess(testingData, i));
+										newtworkResults.add(singleImageBestGuess(testingData, i,4));
 									}
 							}};
 
 							Runnable r6=  new Runnable() {
 								public void run() {
 									for (int i =  testingData.size()*5/8; i < testingData.size()*6/8; i++) {
-										newtworkResults.add(singleImageBestGuess(testingData, i));
+										newtworkResults.add(singleImageBestGuess(testingData, i,5));
 									}
 								}};
 
 								Runnable r7=  new Runnable() {
 									public void run() {
 										for (int i =  testingData.size()*6/8; i < testingData.size()*7/8; i++) {
-											newtworkResults.add(singleImageBestGuess(testingData, i));
+											newtworkResults.add(singleImageBestGuess(testingData, i,6));
 										}
 									}};
 
@@ -491,7 +514,7 @@ public class RadialBasisFunction {
 										public void run() {
 											
 											for (int i =  testingData.size()*7/8; i < testingData.size(); i++) {
-												newtworkResults.add(singleImageBestGuess(testingData, i));
+												newtworkResults.add(singleImageBestGuess(testingData, i,7));
 											}
 
 										}};
@@ -533,7 +556,7 @@ public class RadialBasisFunction {
 	}
 
 	/* This looks at one image and reports what number it thinks it is. */
-	public static OutputVector singleImageBestGuess(ArrayList<DigitImage> networkInputData, int imageNumber) {
+	public static OutputVector singleImageBestGuess(ArrayList<DigitImage> networkInputData, int imageNumber, int thread) {
 
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
 		ArrayList<Double> hidenLayerOutput = outPutOfLayer(hiddenLayerNodes, rawSingleImageData,1);
@@ -552,7 +575,7 @@ public class RadialBasisFunction {
 		}
 		if (correctOutput == maxInt) {
 			//System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
-			countOfCorrectImagesAnalyzed++;
+			countOfCorrectImagesAnalyzed.set(thread,countOfCorrectImagesAnalyzed.get(thread)+1);
 		} else {
 
 			holder[(int) maxInt]++;	
@@ -562,7 +585,7 @@ public class RadialBasisFunction {
 		}
 
 		OutputVector result = new OutputVector(correctOutput, maxInt);
-		countOfImagesAnalyzed++;
+		countOfImagesAnalyzed.set(thread,countOfImagesAnalyzed.get(thread)+1);
 		return result;
 	}
 
@@ -604,8 +627,8 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
 		outputWriter.newLine();
-		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
-		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
+		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
 		outputWriter.write("Training time: " + executionTime + " milliseconds");
 		outputWriter.newLine();
