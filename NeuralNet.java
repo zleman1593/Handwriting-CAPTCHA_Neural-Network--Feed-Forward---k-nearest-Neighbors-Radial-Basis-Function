@@ -74,20 +74,21 @@ public class NeuralNet {
 	
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 	
-	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, int trainingSetReductionFactor1) throws IOException, ClassNotFoundException{
+	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, 
+		String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, 
+		int trainingSetReductionFactor1) throws IOException, ClassNotFoundException{
 		
 		hiddenLayerNodes.clear();
 		outputLayerNodes.clear();
-		outputLayerNodes.clear();
 		
-		numberOfNodesInHiddenLayer = numberOfNodesInHiddenLayer1;
-		epochs = epochs1;               //number of epochs to run
-		learningRate =  learningRate1; //learning rate
-		usePriorWeights= usePriorWeights1;
-		binaryInput = binaryInput1;
-		filePathResults=filePathResults1;
-		filePathTrainedOutputWeights =filePathTrainedOutputWeights1;
-		filePathTrainedHiddenWeights =filePathTrainedHiddenWeights1;
+		numberOfNodesInHiddenLayer = numberOfNodesInHiddenLayer1; 
+		epochs = epochs1;               	//number of epochs to run
+		learningRate =  learningRate1; 		//learning rate
+		usePriorWeights = usePriorWeights1; 	// Whether to use priorly trained weights
+		binaryInput = binaryInput1;		// Whether inputs are binary (black/white) or grayscale (0-255)
+		filePathResults = filePathResults1;
+		filePathTrainedOutputWeights = filePathTrainedOutputWeights1;
+		filePathTrainedHiddenWeights = filePathTrainedHiddenWeights1;
 		trainingSetReductionFactor = trainingSetReductionFactor1;
 		
 		//These are just constants
@@ -96,51 +97,38 @@ public class NeuralNet {
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
 
-				
-
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
-			holder[m]=0;
+			holder[m] = 0;
 		}
-		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
-		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
+		System.out.println("There are " + Runtime.getRuntime().availableProcessors() + " cores available to the JVM.");
+		System.out.println("Intel hyperthreading can be responsible for the apparent doubling in cores.");
 
-
-		
-
-		
 		// Trains the Network from scratch
 		if (usePriorWeights == 0) {
 			System.out.println("Training from Scratch");
 			initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			//initializeMultilayerFeedForwardCaptcha();
-			
 			// Trains the network with the training Data
-						long startTimeForTrainingData = System.currentTimeMillis();
-						trainTheNetwork(trainingData);
-						long endTime = System.currentTimeMillis();
-						trainingTime = endTime - startTimeForTrainingData;
-						System.out.println("Training time: " + trainingTime + " milliseconds");
-						// Creates data files that can be reused by the network without
-						// retraining.
-						writeTrainedWeights();
+			long startTimeForTrainingData = System.currentTimeMillis();
+			trainTheNetwork(trainingData);
+			trainingTime = System.currentTimeMillis() - startTimeForTrainingData;
+			System.out.println("Training time: " + trainingTime + " milliseconds");
+			// Creates data files that can be reused by the network without retraining.
+			writeTrainedWeights();
 		} 
 		// Trains the Network starting from weights stored in file
-		else if(usePriorWeights == 2){
+		else if (usePriorWeights == 2) {
 			System.out.println("Training from past trained weights");
-		initializeMultilayerFeedForward(trainingImages, trainingLabels);
+			initializeMultilayerFeedForward(trainingImages, trainingLabels);
 			readDataFromTrainedFiles();
 			// Trains the network with the training Data
 			long startTimeForTrainingData = System.currentTimeMillis();
 			trainTheNetwork(trainingData);
-			long endTime = System.currentTimeMillis();
-			trainingTime = endTime - startTimeForTrainingData;
+			trainingTime = System.currentTimeMillis() - startTimeForTrainingData;
 			System.out.println("Training time: " + trainingTime + " milliseconds");
-			// Creates data files that can be reused by the network without
-			// retraining.
+			// Creates data files that can be reused by the network without retraining.
 			writeTrainedWeights();
-			
-			
 		}
 		// Tests network using weights stored in file without retraining
 		else if ( usePriorWeights == 1)  {
@@ -151,29 +139,23 @@ public class NeuralNet {
 			testMultilayerFeedForward(testingImages, testingLabels);
 			//testMultilayerFeedForwardCaptcha();
 		}
-		
-		
-	
+
 		for (int m = 0; m < holder.length; m++) {
-			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+			System.out.println("Number " + m +" was guessed incorrectly" + holder[m]+ " times."); 
 		}
-
-
 	}
 
-	
+	// Loads training and testing data sets
 	public static void initializeMultilayerFeedForward(String trainingImages, String trainingLabels) throws IOException {
-
-		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages, binaryInput);
 		try {
 			// Our data structure holds the training data
 			trainingData = train.loadDigitImages();
 			// Alters data into proper form
-			if(NUMBER_OF_OUTPUT_NODES==10){
-			for (int i = 0; i < trainingData.size(); i++) {
-				trainingData.get(i).vectorizeTrainingData();
-			}
+			if (NUMBER_OF_OUTPUT_NODES == 10) {
+				for (int i = 0; i < trainingData.size(); i++) {
+					trainingData.get(i).vectorizeTrainingData();
+				}
 			}
 			else{
 				for (int i = 0; i < trainingData.size(); i++) {
@@ -208,9 +190,6 @@ public class NeuralNet {
 			}
 			outputLayerNodes.add(weights);
 		}
-
-
-
 	}
 	
 	/*
@@ -219,61 +198,53 @@ public class NeuralNet {
 	public static void trainTheNetwork(ArrayList<DigitImage> trainingData) {
 		// For each epoch
 		for (int i = 0; i < epochs; i++) { 
-			
 			//Start Training time for this single Epoch
 			long startTime = System.currentTimeMillis();
-			
 			//For every image in the training file
 			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
-
 				calculateErrorForEachOutputNode(trainingData, images);
-
-
 				//Initialize the four threads, each of which will train a fourth of the weights for a given training example.
-
 				Runnable r1 = new Runnable() {
-				public void run() {
-				trainingSubRoutine(0,NUMBER_OF_OUTPUT_NODES / 8,0,hiddenLayerNodes.size() / 8);
-
-				}};
+					public void run() {
+						trainingSubRoutine(0, NUMBER_OF_OUTPUT_NODES / 8, 0, hiddenLayerNodes.size() / 8);
+					}
+				};
 				Runnable r2 = new Runnable() {
-				public void run() {
-				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/8,NUMBER_OF_OUTPUT_NODES / 4,hiddenLayerNodes.size()/8,hiddenLayerNodes.size() / 4); 
-				}};
-
+					public void run() {
+						trainingSubRoutine(NUMBER_OF_OUTPUT_NODES / 8,NUMBER_OF_OUTPUT_NODES / 4, hiddenLayerNodes.size() / 8, hiddenLayerNodes.size() / 4); 
+					}
+				};
 				Runnable r3 = new Runnable() {
-				public void run() {
-				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8,hiddenLayerNodes.size()/4,(hiddenLayerNodes.size()*3)/8);
-
-				}};
+					public void run() {
+						trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8,hiddenLayerNodes.size()/4,(hiddenLayerNodes.size()*3)/8);
+					}
+				};
 				Runnable r4 = new Runnable() {
-				public void run() {
-				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2,(hiddenLayerNodes.size()*3)/8,hiddenLayerNodes.size()/2);
-				}};
-
+					public void run() {
+						trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2,(hiddenLayerNodes.size()*3)/8,hiddenLayerNodes.size()/2);
+					}
+				};
 				Runnable r5 = new Runnable() {
-
-				public void run() {
-				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES /2,(NUMBER_OF_OUTPUT_NODES*5)/8 ,hiddenLayerNodes.size()/2,(hiddenLayerNodes.size()*5) / 8); 
-				}};
-
+					public void run() {
+						trainingSubRoutine(NUMBER_OF_OUTPUT_NODES /2,(NUMBER_OF_OUTPUT_NODES*5)/8 ,hiddenLayerNodes.size()/2,(hiddenLayerNodes.size()*5) / 8); 
+					}
+				};
 				Runnable r6 = new Runnable() {
-				public void run() {
-				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8,(hiddenLayerNodes.size()*5) / 8,(hiddenLayerNodes.size()*6) / 8);
-				}};
-
+					public void run() {
+						trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8,(hiddenLayerNodes.size()*5) / 8,(hiddenLayerNodes.size()*6) / 8);
+					}
+				};
 				Runnable r7 = new Runnable() {
-				public void run() {
-				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8,(hiddenLayerNodes.size()*6) / 8,(hiddenLayerNodes.size()*7) / 8);
-				}};
-
+					public void run() {
+						trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8,(hiddenLayerNodes.size()*6) / 8,(hiddenLayerNodes.size()*7) / 8);
+					}
+				};
 				Runnable r8 = new Runnable() {
-				public void run() {
-				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES,(hiddenLayerNodes.size()*7)/8,hiddenLayerNodes.size());
-				}};
-
-
-
+					public void run() {
+						trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES,(hiddenLayerNodes.size()*7)/8,hiddenLayerNodes.size());
+					}
+				};
+				
 				Thread thr1 = new Thread(r1);
 				Thread thr2 = new Thread(r2);
 				Thread thr3 = new Thread(r3);
@@ -291,81 +262,62 @@ public class NeuralNet {
 				thr7.start();
 				thr8.start();
 				try {
-				thr1.join();
-				thr2.join();
-				thr3.join();
-				thr4.join();
-				thr5.join();
-				thr6.join();
-				thr7.join();
-				thr8.join();
-
+					thr1.join();
+					thr2.join();
+					thr3.join();
+					thr4.join();
+					thr5.join();
+					thr6.join();
+					thr7.join();
+					thr8.join();
 				} catch (InterruptedException e) {
-
-				e.printStackTrace();
-
+					e.printStackTrace();
 				}
-					// Resets temporary data structure
-					tempOutput = new ArrayList<ArrayList<Double>>();
+				// Resets temporary data structure
+				tempOutput = new ArrayList<ArrayList<Double>>();
 			}
 			// Test the Feed-Forward network
 			try {
-				long endTime = System.currentTimeMillis();
-				trainingTime = endTime - startTime;
+				trainingTime = System.currentTimeMillis() - startTime;
 				testMultilayerFeedForward("Testing-images", "Testing-Labels");
-				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			System.out.println("Training time for epoch " + (i+1) + ": " + trainingTime + " milliseconds");
-			System.out.println("Epoch " + (i+1) + " has finished.");
-
+			System.out.println("Training time for epoch " + (i + 1) + ": " + trainingTime + " milliseconds");
+			System.out.println("Epoch " + (i + 1) + " has finished.");
 		}
-
 	}
 
 	/*
 	 * This is the heart of the code that trains the network using gradient descent and back propagation
 	 */
-	public static void trainingSubRoutine(int startIndex1, int endIndex1,int startIndex2, int endIndex2) {
-		
-	// Update the weights to the output nodes
-	for (int ii = endIndex1; ii < endIndex1; ii++) {
-		for (int j = 0; j < hiddenLayerNodes.size(); j++) {
-			// Grabs the error that was calculated for the output of this output node
-			double error = tempOutput.get(tempOutput.size() - 1).get(ii);
-			// Update the weight using gradient descent
-			outputLayerNodes.get(ii).set(j,outputLayerNodes.get(ii).get(j)
-						+ (learningRate
-							* error
-							* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
-							* tempOutput.get(tempOutput.size() - 3).get(j)));
-		}
-	}
-
-	// Update the weights to the nodes going to the hidden nodes
-	for (int ii = startIndex2; ii < endIndex2; ii++) {
-		for (int j = 0; j < numberOfInputNodes; j++) {
-			double error = 0;
-			for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
-				// This is the summed error for the output layer
-				error = error +
-						(sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k))
-						* tempOutput.get(tempOutput.size() - 1).get(k)
-						* outputLayerNodes.get(k).get(ii));
-
+	public static void trainingSubRoutine(int startIndex1, int endIndex1, int startIndex2, int endIndex2) {
+		// Update the weights to the output nodes
+		for (int ii = endIndex1; ii < endIndex1; ii++) {
+			for (int j = 0; j < hiddenLayerNodes.size(); j++) {
+				// Grabs the error that was calculated for the output of this output node
+				double error = tempOutput.get(tempOutput.size() - 1).get(ii);
+				// Update the weight using gradient descent
+				outputLayerNodes.get(ii).set(j, outputLayerNodes.get(ii).get(j)	+ (learningRate * error
+					* sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(ii))
+					* tempOutput.get(tempOutput.size() - 3).get(j)));
 			}
-			//Update the weight using gradient descent back propagation
-			hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j)
-					+ (learningRate 
-							* error
-							* tempOutput.get(0).get(j))
-							* sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
 		}
-	}
-	
-	
+
+		// Update the weights to the nodes going to the hidden nodes
+		for (int ii = startIndex2; ii < endIndex2; ii++) {
+			for (int j = 0; j < numberOfInputNodes; j++) {
+				double error = 0.0;
+				for (int k = 0; k < NUMBER_OF_OUTPUT_NODES; k++) {
+					// This is the summed error for the output layer
+					error = error + (sigmoidPrimeDynamicProgramming(tempOutput.get(tempOutput.size() - 2).get(k)) *
+						tempOutput.get(tempOutput.size() - 1).get(k) * outputLayerNodes.get(k).get(ii));
+				}
+				//Update the weight using gradient descent back propagation
+				hiddenLayerNodes.get(ii).set(j,hiddenLayerNodes.get(ii).get(j) + (learningRate * error
+					* tempOutput.get(0).get(j)) * sigmoidPrimeDynamicProgramming(tempOutput.get(1).get(ii)));
+			}
+		}
 	}
 	
 	/*
@@ -380,10 +332,9 @@ public class NeuralNet {
 		return outputOfCurrentlayer;
 	}
 	
-	
 	/*
-	 * Returns the output from a given node after the input has been summed and processed by the activation functionIt takes the layer that the node
-	 * is in, the index of the node in the layer, and the output from the previous layer
+	 * Returns the output from a given node after the input has been summed and processed by the activation function. 
+	 * It takes the layer that the node is in, the index of the node in the layer, and the output from the previous layer.
 	 */
 	public static double nodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
@@ -401,8 +352,6 @@ public class NeuralNet {
 		return output;
 	}
 	
-
-
 	/*
 	 * Returns the derivative of the output of the sigmoid activation function but takes as a parameter the already computer sigmoid output
 	 */
@@ -410,14 +359,11 @@ public class NeuralNet {
 		double output = (sigmoid * (1 - sigmoid));
 		return output;
 	}
-	
-
 
 	/*
 	 * Creates temporary storage for the output of all nodes for a given image
 	 */
 	public static void calculateErrorForEachOutputNode(ArrayList<DigitImage> networkInputData, int imageNumber) {
-
 		// Creates an Arraylist holding the output of each node in this layer
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
 		//This step may be unnecessary. Be careful when removing as other indicies will need to change.
@@ -441,12 +387,11 @@ public class NeuralNet {
 			errorLayer.add(rawError);
 		}
 		tempOutput.add(errorLayer);
-		
 	}
 	
 	public static void testMultilayerFeedForward(String testingImages, String testingLabels) throws IOException {
-		countOfImagesAnalyzed=0;
-		countOfCorrectImagesAnalyzed=0;
+		countOfImagesAnalyzed = 0;
+		countOfCorrectImagesAnalyzed = 0;
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
@@ -457,16 +402,12 @@ public class NeuralNet {
 			e.printStackTrace();
 		}
 		// Tests the network with the testing Data and prints results to file
-		
-
 		write(solveTestingData(testingData));
-		
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-		System.out.println("Look in" + filePathResults+ " directory to find  the output.");
-	}
-
+		System.out.println("Look in" + filePathResults + " directory to find  the output.");
+	} 
 	
 	/*
 	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
@@ -477,14 +418,10 @@ public class NeuralNet {
 		for (int i = 0; i < networkInputData.size(); i++) {
 			newtworkResults.add(singleImageBestGuess(networkInputData, i));
 		}
-		long endTime = System.currentTimeMillis();
-		solutionTime = endTime - startTime;
+		solutionTime = System.currentTimeMillis() - startTime;
 		System.out.println("Training time: " + solutionTime + " milliseconds");
 		return newtworkResults;
 	}
-
-	
-	
 
 	/* This looks at one image and reports what number it thinks it is. */
 	public static OutputVector singleImageBestGuess(ArrayList<DigitImage> networkInputData, int imageNumber) {
@@ -494,7 +431,7 @@ public class NeuralNet {
 		ArrayList<Double> outputLayerOutput = outPutOfLayer(outputLayerNodes, hidenLayerOutput);
 
 		double networkOutput = 0;
-		double correctOutput = networkInputData.get(imageNumber).getLabel();
+		double correctOutput = networkInputData.get(imageNumber).getLabel(); // Solution
 		int maxInt = 0;
 
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
@@ -508,7 +445,7 @@ public class NeuralNet {
 			System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
 			countOfCorrectImagesAnalyzed++;
 		} else {
-			System.out.println("The network wrongly guessed: " + maxInt + " The correct number was: " + (int) correctOutput);
+			System.out.println("The network guessed incorrectly: " + maxInt + " The correct number was: " + (int) correctOutput);
 			holder[(int) maxInt]++;	
 		}
 
@@ -529,8 +466,6 @@ public class NeuralNet {
 	public static String getCharForNumber(int i) {
 	    return i > 9 && i < 37 ? String.valueOf((char)(i + 55)) : null;
 	}
-
-
 	
 	/*
 	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
@@ -565,36 +500,38 @@ public class NeuralNet {
 		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
 		
-		if(usePriorWeights==0){
+		if (usePriorWeights == 0) {
 			outputWriter.write("Training from scratch");
-		}	else if(usePriorWeights == 2){
+		}	
+		else if (usePriorWeights == 2) {
 			outputWriter.write("Read data from file and continued training");
-		}else if ( usePriorWeights == 1) {
+		} 
+		else if ( usePriorWeights == 1) {
 			outputWriter.write("Read data from File");
 		}
 		outputWriter.newLine();
-	//Writes  letters or numbers
+		//Writes letters or numbers
 		for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
-			if(x.get(i).getNeuralNetOutput()>9){
+			if (x.get(i).getNeuralNetOutput() > 9) {
 				outputWriter.write("Neural net output: " + getCharForNumber(x.get(i).getNeuralNetOutput()) + "   ");
-			}else{
+			}
+			else{
 				outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
 			}
-			
-			if(x.get(i).getExpectedOutput()<=9){
+			if (x.get(i).getExpectedOutput() <= 9){
 				outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
-			}else{
+			}
+			else{
 				outputWriter.write("Expected output: " + getCharForNumber((int)x.get(i).getExpectedOutput()));
 			}
 			outputWriter.newLine();
 		}
 		
 		for (int m = 0; m < holder.length; m++) {
-			outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+			outputWriter.write("Number " + m +" was guessed " + holder[m] + " times, when it should have guessed another number.");
 			outputWriter.newLine();
 		}
-
 		outputWriter.flush();
 		outputWriter.close();
 	}
