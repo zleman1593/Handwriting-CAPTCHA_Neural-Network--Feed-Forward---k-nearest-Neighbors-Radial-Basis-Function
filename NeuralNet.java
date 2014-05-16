@@ -293,7 +293,7 @@ public class NeuralNet {
 	 */
 	public static void trainingSubRoutine(int startIndex1, int endIndex1, int startIndex2, int endIndex2) {
 		// Update the weights to the output nodes
-		for (int ii = endIndex1; ii < endIndex1; ii++) {
+		for (int ii = startIndex1; ii < endIndex1; ii++) {
 			for (int j = 0; j < hiddenLayerNodes.size(); j++) {
 				// Grabs the error that was calculated for the output of this output node
 				double error = tempOutput.get(tempOutput.size() - 1).get(ii);
