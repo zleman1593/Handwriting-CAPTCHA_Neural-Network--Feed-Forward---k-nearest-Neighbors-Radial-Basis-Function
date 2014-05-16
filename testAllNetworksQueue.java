@@ -14,7 +14,7 @@ public class testAllNetworksQueue {
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetHiddenWeights.txt";
 		
-		//NeuralNet secondFF4 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 16-20
+		NeuralNet secondFF4 = new NeuralNet(30,30,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
 		
 		
 		//To expand the current trail  by another 5 epochs, simply change the first line in each set to make it use the data already written to files: 
