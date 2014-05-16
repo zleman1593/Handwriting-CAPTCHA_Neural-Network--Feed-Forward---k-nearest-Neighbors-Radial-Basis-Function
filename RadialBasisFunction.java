@@ -57,10 +57,11 @@ public class RadialBasisFunction {
 	// set to one to use all of the training data to train the network. The number of training examples  is divided by this number
 	public  static int trainingSetReductionFactor;
 
-	public static int[]  holder=new int[10];
+	public static int[]  holder=new int[NUMBER_OF_OUTPUT_NODES];
 	public static long testingTime;
 
 	public static long startTime;
+	public static final int NUMBER_OF_CORES=24;
 	
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
 		hiddenLayerNodes.clear();
@@ -281,94 +282,14 @@ public class RadialBasisFunction {
 
 				networkOutputError(trainingData, images);
 				
-				
-				//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
-				Runnable r1 = new Runnable() {
-					public void run() {
-						// Update the weights to the output nodes
-						trainingSubRoutine(0, NUMBER_OF_OUTPUT_NODES/8);
 
-					}};
-
-					Runnable r2 = new Runnable() {
-						public void run() {
-							// Update the weights to the output nodes
-							trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/8,NUMBER_OF_OUTPUT_NODES/4);
-
-						}};
-
-						Runnable r3 = new Runnable() {
-							public void run() {
-								// Update the weights to the output nodes
-								trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8);
-
-							}};
-
-							Runnable r4  = new Runnable() {
-								public void run() {
-									// Update the weights to the output nodes
-									trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2);
-
-								}};
-								Runnable r5 =  new Runnable() {
-									public void run() {
-										// Update the weights to the output nodes
-										trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/2,(NUMBER_OF_OUTPUT_NODES*5)/8);
-
-									}};
-
-									Runnable r6=  new Runnable() {
-										public void run() {
-											// Update the weights to the output nodes
-											trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8);
-
-										}};
-
-										Runnable r7=  new Runnable() {
-											public void run() {
-												// Update the weights to the output nodes
-												trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8);
-
-											}};
-
-
-											Runnable r8 =  new Runnable() {
-												public void run() {
-													// Update the weights to the output nodes
-													trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES);
-
-												}};
-
-
-												//Now run the threads
-												Thread thr1 = new Thread(r1);
-												Thread thr2 = new Thread(r2);
-												Thread thr3 = new Thread(r3);
-												Thread thr4 = new Thread(r4);
-												Thread thr5 = new Thread(r5);
-												Thread thr6 = new Thread(r6);
-												Thread thr7 = new Thread(r7);
-												Thread thr8 = new Thread(r8);
-												thr1.start();
-												thr2.start();
-												thr3.start();
-												thr4.start();
-												thr5.start();
-												thr6.start();
-												thr7.start();
-												thr8.start();
-												try {
-													thr1.join();
-													thr2.join();
-													thr3.join();
-													thr4.join();
-													thr5.join();
-													thr6.join();
-													thr7.join();
-													thr8.join();
-												} catch (InterruptedException e) {
-													e.printStackTrace();
-												}
+				 if(NUMBER_OF_CORES==8){
+					 eightCores();
+				 }else if (NUMBER_OF_CORES==24) {
+					 twentyFourCores();
+				 }else{
+					 System.out.println("There are not 24 or 8 cores?");
+				 }
 
 												// Resets temporary data structure
 												tempOutput = new ArrayList<ArrayList<Double>>();
@@ -577,6 +498,312 @@ public class RadialBasisFunction {
 
 	}
 	
+	
+	
+	public static void eightCores(){
+		
+		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
+		Runnable r1 = new Runnable() {
+			public void run() {
+				// Update the weights to the output nodes
+				trainingSubRoutine(0, NUMBER_OF_OUTPUT_NODES/8);
+
+			}};
+
+			Runnable r2 = new Runnable() {
+				public void run() {
+					// Update the weights to the output nodes
+					trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/8,NUMBER_OF_OUTPUT_NODES/4);
+
+				}};
+
+				Runnable r3 = new Runnable() {
+					public void run() {
+						// Update the weights to the output nodes
+						trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/4,(NUMBER_OF_OUTPUT_NODES*3)/8);
+
+					}};
+
+					Runnable r4  = new Runnable() {
+						public void run() {
+							// Update the weights to the output nodes
+							trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/8,NUMBER_OF_OUTPUT_NODES/2);
+
+						}};
+						Runnable r5 =  new Runnable() {
+							public void run() {
+								// Update the weights to the output nodes
+								trainingSubRoutine(NUMBER_OF_OUTPUT_NODES/2,(NUMBER_OF_OUTPUT_NODES*5)/8);
+
+							}};
+
+							Runnable r6=  new Runnable() {
+								public void run() {
+									// Update the weights to the output nodes
+									trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*5)/8,(NUMBER_OF_OUTPUT_NODES*6)/8);
+
+								}};
+
+								Runnable r7=  new Runnable() {
+									public void run() {
+										// Update the weights to the output nodes
+										trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/8,(NUMBER_OF_OUTPUT_NODES*7)/8);
+
+									}};
+
+
+									Runnable r8 =  new Runnable() {
+										public void run() {
+											// Update the weights to the output nodes
+											trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*7)/8,NUMBER_OF_OUTPUT_NODES);
+
+										}};
+
+
+										//Now run the threads
+										Thread thr1 = new Thread(r1);
+										Thread thr2 = new Thread(r2);
+										Thread thr3 = new Thread(r3);
+										Thread thr4 = new Thread(r4);
+										Thread thr5 = new Thread(r5);
+										Thread thr6 = new Thread(r6);
+										Thread thr7 = new Thread(r7);
+										Thread thr8 = new Thread(r8);
+										thr1.start();
+										thr2.start();
+										thr3.start();
+										thr4.start();
+										thr5.start();
+										thr6.start();
+										thr7.start();
+										thr8.start();
+										try {
+											thr1.join();
+											thr2.join();
+											thr3.join();
+											thr4.join();
+											thr5.join();
+											thr6.join();
+											thr7.join();
+											thr8.join();
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+		
+		
+	}
+	
+	
+	public static void twentyFourCores(){
+		
+		//Creates 24 threads and splits the test set into 24 parts each of which is handled by a different thread 
+		Runnable r1 = new Runnable() {
+			public void run() {
+				trainingSubRoutine(0, NUMBER_OF_OUTPUT_NODES / 24);
+			}
+		};
+		Runnable r2 = new Runnable() {
+			public void run() {
+				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES / 24,NUMBER_OF_OUTPUT_NODES *2/ 24); 
+			}
+		};
+		Runnable r3 = new Runnable() {
+			public void run() {
+				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES*2/24,(NUMBER_OF_OUTPUT_NODES*3)/24);
+			}
+		};
+		Runnable r4 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*3)/24,NUMBER_OF_OUTPUT_NODES*4/24);
+			}
+		};
+		Runnable r5 = new Runnable() {
+			public void run() {
+				trainingSubRoutine(NUMBER_OF_OUTPUT_NODES*4 /24,(NUMBER_OF_OUTPUT_NODES*5)/24); 
+			}
+		};
+		Runnable r6 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*5 )/24,(NUMBER_OF_OUTPUT_NODES*6 )/24);
+			}
+		};
+		Runnable r7 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*6)/24,(NUMBER_OF_OUTPUT_NODES*7)/8);
+			}
+		};
+		Runnable r8 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES* 7)/24,(NUMBER_OF_OUTPUT_NODES*8 )/24);
+			}
+		};
+		Runnable r9 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*8 )/24,(NUMBER_OF_OUTPUT_NODES*9 )/24);
+			}
+		};
+		Runnable r10 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES* 9)/24,(NUMBER_OF_OUTPUT_NODES* 10)/24);
+			}
+		};
+		Runnable r11 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*10 )/24,(NUMBER_OF_OUTPUT_NODES*11 )/24);
+			}
+		};
+		Runnable r12 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*11 )/24,(NUMBER_OF_OUTPUT_NODES* 12)/24);
+			}
+		};
+	
+		Runnable r13 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*12 )/24,(NUMBER_OF_OUTPUT_NODES*13 )/24);
+			}
+		};
+		Runnable r14 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*13 )/24,(NUMBER_OF_OUTPUT_NODES* 14)/24);
+			}
+		};
+		Runnable r15 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*14 )/24,(NUMBER_OF_OUTPUT_NODES*15 )/24);
+			}
+		};
+		
+		Runnable r16 = new Runnable() {
+			public void run() {
+			trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*15 )/24,(NUMBER_OF_OUTPUT_NODES* 16)/24); 
+				
+			}
+		};
+		Runnable r17 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*16 )/24,(NUMBER_OF_OUTPUT_NODES*17 )/24);
+			}
+		};
+		Runnable r18 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*17 )/24,(NUMBER_OF_OUTPUT_NODES*18 )/24);
+			}
+		};
+		Runnable r19 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*18 )/24,(NUMBER_OF_OUTPUT_NODES*19 )/24);
+			}
+		};
+
+
+		Runnable r20 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*19 )/24,(NUMBER_OF_OUTPUT_NODES*20 )/24);
+			}
+		};
+		Runnable r21 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*20 )/24,(NUMBER_OF_OUTPUT_NODES*21 )/24);
+			}
+		};
+		Runnable r22 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*21 )/24,(NUMBER_OF_OUTPUT_NODES*22 )/24);
+			}
+		};
+	
+		Runnable r23 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*22 )/24,(NUMBER_OF_OUTPUT_NODES*23 )/24);
+			}
+		};
+
+		Runnable r24 = new Runnable() {
+			public void run() {
+				trainingSubRoutine((NUMBER_OF_OUTPUT_NODES*23)/24,NUMBER_OF_OUTPUT_NODES);
+			}
+		};
+		
+		
+		//Starts the 24 threads
+				Thread thr1 = new Thread(r1);
+				Thread thr2 = new Thread(r2);
+				Thread thr3 = new Thread(r3);
+				Thread thr4 = new Thread(r4);
+				Thread thr5 = new Thread(r5);
+				Thread thr6 = new Thread(r6);
+				Thread thr7 = new Thread(r7);
+				Thread thr8 = new Thread(r8);
+				Thread thr9 = new Thread(r9);
+				Thread thr10 = new Thread(r10);
+				Thread thr11 = new Thread(r11);
+				Thread thr12 = new Thread(r12);
+				Thread thr13 = new Thread(r13);
+				Thread thr14 = new Thread(r14);
+				Thread thr15 = new Thread(r15);
+				Thread thr16 = new Thread(r16);
+				Thread thr17 = new Thread(r17);
+				Thread thr18 = new Thread(r18);
+				Thread thr19 = new Thread(r19);
+				Thread thr20 = new Thread(r20);
+				Thread thr21 = new Thread(r21);
+				Thread thr22 = new Thread(r22);
+				Thread thr23 = new Thread(r23);
+				Thread thr24 = new Thread(r24);
+				thr1.start();
+				thr2.start();
+				thr3.start();
+				thr4.start();
+				thr5.start();
+				thr6.start();
+				thr7.start();
+				thr8.start();
+				thr9.start();
+				thr10.start();
+				thr11.start();
+				thr12.start();
+				thr13.start();
+				thr14.start();
+				thr15.start();
+				thr16.start();
+				thr17.start();
+				thr18.start();
+				thr19.start();
+				thr20.start();
+				thr21.start();
+				thr22.start();
+				thr23.start();
+				thr24.start();
+				try {
+					thr1.join();
+					thr2.join();
+					thr3.join();
+					thr4.join();
+					thr5.join();
+					thr6.join();
+					thr7.join();
+					thr8.join();
+					thr9.join();
+					thr10.join();
+					thr11.join();
+					thr12.join();
+					thr13.join();
+					thr14.join();
+					thr15.join();
+					thr16.join();
+					thr17.join();
+					thr18.join();
+					thr19.join();
+					thr20.join();
+					thr21.join();
+					thr22.join();
+					thr23.join();
+					thr24.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	}
 	
 	
 
