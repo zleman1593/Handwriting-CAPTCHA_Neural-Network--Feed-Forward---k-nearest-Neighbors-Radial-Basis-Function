@@ -69,7 +69,7 @@ public class KNearestNeighbors {
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
 		}
-		for (int m = 0; m < 8; m++) {
+		for (int m = 0; m < NUMBER_OF_CORES; m++) {
 			 ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 		hiddenLayerDottedOutputValuesHolderArray.add(hiddenLayerDottedOutputValues);
 		}
