@@ -822,7 +822,7 @@ public static void twentyFourCore(){
 	public static void initializeMultilayerFeedForwardCaptcha() throws IOException {
 		// Loads training and testing data sets
 				loadCaptchaImage dataSets = new loadCaptchaImage();
-				ArrayList<DigitImage> trainingData = dataSets.getTrainingData();
+				trainingData = dataSets.getTrainingData();
 			
 				
 					// Alters data into proper form
