@@ -27,9 +27,6 @@ public class RadialBasisFunction {
 	// Creates a random number generator
 	public static Random random = new Random();
 	// Tracks the number of images processed in the testing set.
-	public static double countOfImagesAnalyzed = 0;
-	// Tracks the number of images correctly identified in the testing set.
-	public static double countOfCorrectImagesAnalyzed = 0;
 	// Tracks running time of the hidden layer construction and training
 	//of weights from the hidden layer to the output layer
 	public static long executionTime;
@@ -51,6 +48,7 @@ public class RadialBasisFunction {
 	public static String filePathTrainedOutputWeights;
 
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
+	public static ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
 
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public static boolean binaryInput;
@@ -62,12 +60,27 @@ public class RadialBasisFunction {
 
 	public static long startTime;
 	public static final int NUMBER_OF_CORES=24;
+	// Tracks the number of images correctly identified in the testing set.
+			public static ArrayList<Integer> countOfCorrectImagesAnalyzed = new ArrayList<Integer>();
+			// Tracks the number of images processed in the testing set.
+			public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
+
+
+			public static  double countOfImagesAnalyzedTotal=0;
+
+			public static  double countOfCorrectImagesAnalyzedTotal=0;
+			public static ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
 	
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
 		hiddenLayerNodes.clear();
 		outputLayerNodes.clear();
 		trainingData.clear();
 		tempOutput.clear();
+		newtworkResults.clear();
+		countOfImagesAnalyzed.clear();
+		countOfCorrectImagesAnalyzed.clear();
+		
+		
 		
 		binaryInput = binaryInput1;
 		trainingSetReductionFactor = trainingSetReductionFactor1;
@@ -84,7 +97,11 @@ public class RadialBasisFunction {
 		String trainingLabels = "Training-Labels";
 		String testingLabels = "Testing-Labels";
 		
-		
+		//Sets up trackers for each thread
+				for(int y=0; y<NUMBER_OF_CORES;y++){
+					countOfImagesAnalyzed.add(0);
+					countOfCorrectImagesAnalyzed.add(0);
+				}
 		
 		
 		
@@ -206,11 +223,10 @@ public class RadialBasisFunction {
 
 	public static void testRBF(String testingImages, String testingLabels) throws IOException {
 		 startTime = System.currentTimeMillis();
-		countOfImagesAnalyzed=0;
-		countOfCorrectImagesAnalyzed=0;
+
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
-		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
+
 		try {
 			// Our data structure holds the testing data
 			testingData = test.loadDigitImages();
@@ -218,11 +234,13 @@ public class RadialBasisFunction {
 			e.printStackTrace();
 		}
 		// Tests the network with the testing Data and prints results to file
-		write(solveTestingData(testingData));
+		write(solveTestingData());
 		// reports network Performance
-		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
-		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-		System.out.println("Look in " +filePathResults+  " directory to find  the output.");
+	
+		//Summarizes results
+				double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
+				System.out.println("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
+System.out.println("Look in " +filePathResults+  " directory to find  the output.");
 		long endTime = System.currentTimeMillis();
 		testingTime = endTime - startTime;
 		System.out.println("Testing time: " + testingTime + " milliseconds");
@@ -280,7 +298,7 @@ public class RadialBasisFunction {
 			long startTime = System.currentTimeMillis();
 			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
 
-				networkOutputError(trainingData, images);
+				calculateErrorForEachOutputNode(trainingData, images);
 				
 
 				 if(NUMBER_OF_CORES==8){
@@ -341,9 +359,9 @@ public class RadialBasisFunction {
 
 
 	/*
-	 * Returns the summed total error of the output nodes and creates temporary storage for the output of all nodes for a given image
+	 * * Creates temporary storage for the output of all nodes for a given image
 	 */
-	public static void networkOutputError(ArrayList<DigitImage> networkInputData, int imageNumber) {
+	public static void calculateErrorForEachOutputNode(ArrayList<DigitImage> networkInputData, int imageNumber) {
 
 		// Creates an Arraylist holding the output of each node in this layer
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
@@ -373,16 +391,23 @@ public class RadialBasisFunction {
 	/*
 	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
 	 */
-	public static ArrayList<OutputVector> solveTestingData(ArrayList<DigitImage> networkInputData) {
-		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
-		for (int i = 0; i < networkInputData.size(); i++) {
-			newtworkResults.add(networkSolution(networkInputData, i));
-		}
+public static ArrayList<OutputVector> solveTestingData() {		
+		
+	
+	 if(NUMBER_OF_CORES==8){
+		 eightCoreSolve();
+	 }else if (NUMBER_OF_CORES==24) {
+		 twentyFourCoreSolve();
+	 }else{
+		 System.out.println("There are not 24 or 8 cores?");
+	 }
+		
+		
 		return newtworkResults;
 	}
 
 	/* This looks at one image and reports what number it thinks it is. */
-	public static OutputVector networkSolution(ArrayList<DigitImage> networkInputData, int imageNumber) {
+	public static OutputVector singleImageBestGuess(ArrayList<DigitImage> networkInputData, int imageNumber, int thread) {
 
 		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
 		ArrayList<Double> hidenLayerOutput = outPutOfLayer(hiddenLayerNodes, rawSingleImageData,1);
@@ -401,7 +426,7 @@ public class RadialBasisFunction {
 		}
 		if (correctOutput == maxInt) {
 			//System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
-			countOfCorrectImagesAnalyzed++;
+			countOfCorrectImagesAnalyzed.set(thread,countOfCorrectImagesAnalyzed.get(thread)+1);
 		} else {
 
 			holder[(int) maxInt]++;	
@@ -411,7 +436,7 @@ public class RadialBasisFunction {
 		}
 
 		OutputVector result = new OutputVector(correctOutput, maxInt);
-		countOfImagesAnalyzed++;
+		countOfImagesAnalyzed.set(thread,countOfImagesAnalyzed.get(thread)+1);
 		return result;
 	}
 
@@ -442,6 +467,15 @@ public class RadialBasisFunction {
 	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
 	 */
 	public static void write(ArrayList<OutputVector> x) throws IOException {
+		countOfCorrectImagesAnalyzedTotal=0;
+		 countOfImagesAnalyzedTotal=0;
+		
+		for(int y=0;y< countOfCorrectImagesAnalyzed.size();y++){
+			countOfCorrectImagesAnalyzedTotal=countOfCorrectImagesAnalyzedTotal+countOfCorrectImagesAnalyzed.get(y);
+		}
+		for(int y=0;y< countOfImagesAnalyzed.size();y++){
+			countOfImagesAnalyzedTotal=countOfImagesAnalyzedTotal+countOfImagesAnalyzed.get(y);
+		}
 		long endTime = System.currentTimeMillis();
 		testingTime = endTime - startTime;
 		BufferedWriter outputWriter = null;
@@ -461,8 +495,8 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
 		outputWriter.newLine();
-		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
-		outputWriter.write("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
+		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
 		outputWriter.write("Training time: " + executionTime + " milliseconds");
 		outputWriter.newLine();
@@ -472,12 +506,12 @@ public class RadialBasisFunction {
 		outputWriter.newLine();
 		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
-		for (int i = 0; i < x.size(); i++) {
+		/*for (int i = 0; i < x.size(); i++) {
 			outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
 			outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
 			outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
 			outputWriter.newLine();
-		}
+		}*/
 		for (int m = 0; m < holder.length; m++) {
 			outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
 			outputWriter.newLine();
@@ -806,8 +840,370 @@ public class RadialBasisFunction {
 	}
 	
 	
+	public static void eightCoreSolve(){
+		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
+				Runnable r1 = new Runnable() {
+					public void run() {
+						for (int i = 0; i < testingData.size()/8; i++) {
+							newtworkResults.add(singleImageBestGuess(testingData, i,0));
+						}
+					}};
+
+					Runnable r2 = new Runnable() {
+						public void run() {
+							for (int i =  testingData.size()/8; i < testingData.size()/4; i++) {
+								newtworkResults.add(singleImageBestGuess(testingData, i,1));
+							}
+
+						}};
+
+						Runnable r3 = new Runnable() {
+							public void run() {
+								for (int i =  testingData.size()/4; i < testingData.size()*3/8; i++) {
+									newtworkResults.add(singleImageBestGuess(testingData, i,2));
+								}
+
+							}};
+
+							Runnable r4  = new Runnable() {
+								public void run() {
+									for (int i =  testingData.size()*3/8; i < testingData.size()/2; i++) {
+										newtworkResults.add(singleImageBestGuess(testingData, i,3));
+									}
+								}};
+								Runnable r5 =  new Runnable() {
+									public void run() {
+					
+											for (int i =  testingData.size()/2; i < testingData.size()*5/8; i++) {
+												newtworkResults.add(singleImageBestGuess(testingData, i,4));
+											}
+									}};
+
+									Runnable r6=  new Runnable() {
+										public void run() {
+											for (int i =  testingData.size()*5/8; i < testingData.size()*6/8; i++) {
+												newtworkResults.add(singleImageBestGuess(testingData, i,5));
+											}
+										}};
+
+										Runnable r7=  new Runnable() {
+											public void run() {
+												for (int i =  testingData.size()*6/8; i < testingData.size()*7/8; i++) {
+													newtworkResults.add(singleImageBestGuess(testingData, i,6));
+												}
+											}};
+
+
+											Runnable r8 =  new Runnable() {
+												public void run() {
+													
+													for (int i =  testingData.size()*7/8; i < testingData.size(); i++) {
+														newtworkResults.add(singleImageBestGuess(testingData, i,7));
+													}
+
+												}};
+				
+				
+				
+				//Now run the threads
+				Thread thr1 = new Thread(r1);
+				Thread thr2 = new Thread(r2);
+				Thread thr3 = new Thread(r3);
+				Thread thr4 = new Thread(r4);
+				Thread thr5 = new Thread(r5);
+				Thread thr6 = new Thread(r6);
+				Thread thr7 = new Thread(r7);
+				Thread thr8 = new Thread(r8);
+				thr1.start();
+				thr2.start();
+				thr3.start();
+				thr4.start();
+				thr5.start();
+				thr6.start();
+				thr7.start();
+				thr8.start();
+				try {
+					thr1.join();
+					thr2.join();
+					thr3.join();
+					thr4.join();
+					thr5.join();
+					thr6.join();
+					thr7.join();
+					thr8.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+		
+	}
+	
+	public static void twentyFourCoreSolve(){
+		//Creates 24 threads and splits the test set into 24 parts each of which is handled by a seperate thread 
+		Runnable r1 = new Runnable() {
+			public void run() {
+				for (int i = 0; i < testingData.size()/24; i++) {
+					newtworkResults.add(singleImageBestGuess(testingData, i,0));
+				}
+			}};
+
+			Runnable r2 = new Runnable() {
+				public void run() {
+					for (int i =  testingData.size()/24; i < testingData.size()/12; i++) {
+						newtworkResults.add(singleImageBestGuess(testingData, i,1));
+					}
+
+				}};
+
+				Runnable r3 = new Runnable() {
+					public void run() {
+						for (int i =  testingData.size()/12; i < testingData.size()*3/24; i++) {
+							newtworkResults.add(singleImageBestGuess(testingData, i,2));
+						}
+
+					}};
+
+					Runnable r4  = new Runnable() {
+						public void run() {
+							for (int i =  testingData.size()*3/24; i < testingData.size()*4/24; i++) {
+								newtworkResults.add(singleImageBestGuess(testingData, i,3));
+							}
+						}};
+						Runnable r5 =  new Runnable() {
+							public void run() {
+			
+									for (int i =  testingData.size()*4/24; i < testingData.size()*5/24; i++) {
+										newtworkResults.add(singleImageBestGuess(testingData, i,4));
+									}
+							}};
+
+							Runnable r6=  new Runnable() {
+								public void run() {
+									for (int i =  testingData.size()*5/24; i < testingData.size()*6/24; i++) {
+										newtworkResults.add(singleImageBestGuess(testingData, i,5));
+									}
+								}};
+
+								Runnable r7=  new Runnable() {
+									public void run() {
+										for (int i =  testingData.size()*6/24; i < testingData.size()*7/24; i++) {
+											newtworkResults.add(singleImageBestGuess(testingData, i,6));
+										}
+									}};
+
+
+									Runnable r8 =  new Runnable() {
+										public void run() {
+											
+											for (int i =  testingData.size()*7/24; i < testingData.size()*8/24; i++) {
+												newtworkResults.add(singleImageBestGuess(testingData, i,7));
+											}
+
+										}};
+		
+
+		Runnable r9 = new Runnable() {
+			public void run() {
+				for (int i = testingData.size()*8/24; i < testingData.size()*9/24; i++) {
+					newtworkResults.add(singleImageBestGuess(testingData, i,8));
+				}
+			}};
+
+			Runnable r10 = new Runnable() {
+				public void run() {
+					for (int i =  testingData.size()*9/24; i < testingData.size()*10/24; i++) {
+						newtworkResults.add(singleImageBestGuess(testingData, i,9));
+					}
+
+				}};
+
+				Runnable r11 = new Runnable() {
+					public void run() {
+						for (int i = testingData.size()*10/24; i < testingData.size()*11/24; i++) {
+							newtworkResults.add(singleImageBestGuess(testingData, i,10));
+						}
+
+					}};
+
+					Runnable r12  = new Runnable() {
+						public void run() {
+							for (int i =  testingData.size()*11/24; i < testingData.size()12*/24; i++) {
+								newtworkResults.add(singleImageBestGuess(testingData, i,11));
+							}
+						}};
+						Runnable r13 =  new Runnable() {
+							public void run() {
+			
+									for (int i =  testingData.size()*12/24; i < testingData.size()*13/24; i++) {
+										newtworkResults.add(singleImageBestGuess(testingData, i,12));
+									}
+							}};
+
+							Runnable r14=  new Runnable() {
+								public void run() {
+									for (int i =  testingData.size()*13/24; i < testingData.size()*14/24; i++) {
+										newtworkResults.add(singleImageBestGuess(testingData, i,13))
+									}
+								}};
+
+								Runnable r15=  new Runnable() {
+									public void run() {
+										for (int i =  testingData.size()*14/24; i < testingData.size()*15/24; i++) {
+											newtworkResults.add(singleImageBestGuess(testingData, i,14));
+										}
+									}};
+
+
+									Runnable r16 =  new Runnable() {
+										public void run() {
+											
+											for (int i =  testingData.size()*15/24; i < testingData.size()*16/24; i++) {
+												newtworkResults.add(singleImageBestGuess(testingData, i,15));
+											}
+
+										}};
+
+					Runnable r17 = new Runnable() {
+			public void run() {
+				for (int i = testingData.size()*16/24; i < testingData.size()*17/24; i++) {
+					newtworkResults.add(singleImageBestGuess(testingData, i,16));
+				}
+			}};
+
+			Runnable r18 = new Runnable() {
+				public void run() {
+					for (int i =  testingData.size()*17/24; i < testingData.size()*18/24; i++) {
+						newtworkResults.add(singleImageBestGuess(testingData, i,17));
+					}
+
+				}};
+
+				Runnable r19 = new Runnable() {
+					public void run() {
+						for (int i =  testingData.size()*18/24; i < testingData.size()*19/24; i++) {
+							newtworkResults.add(singleImageBestGuess(testingData, i,18));
+						}
+
+					}};
+
+					Runnable r20  = new Runnable() {
+						public void run() {
+							for (int i =  testingData.size()*19/24; i < testingData.size()*20/24; i++) {
+								newtworkResults.add(singleImageBestGuess(testingData, i,19));
+							}
+						}};
+						Runnable r21 =  new Runnable() {
+							public void run() {
+			
+									for (int i =  testingData.size()*20/24; i < testingData.size()*21/24; i++) {
+										newtworkResults.add(singleImageBestGuess(testingData, i,20));
+									}
+							}};
+
+							Runnable r22=  new Runnable() {
+								public void run() {
+									for (int i =  testingData.size()*21/24; i < testingData.size()*22/24; i++) {
+										newtworkResults.add(singleImageBestGuess(testingData, i,21));
+									}
+								}};
+
+								Runnable r23=  new Runnable() {
+									public void run() {
+										for (int i =  testingData.size()*22/24; i < testingData.size()*23/24; i++) {
+											newtworkResults.add(singleImageBestGuess(testingData, i,22));
+										}
+									}};
+
+
+									Runnable r24 =  new Runnable() {
+										public void run() {
+											
+											for (int i =  testingData.size()*23/24; i < testingData.size(); i++) {
+												newtworkResults.add(singleImageBestGuess(testingData, i,23));
+											}
+
+										}};
+		
+		
+										//Starts the 24 threads
+										Thread thr1 = new Thread(r1);
+										Thread thr2 = new Thread(r2);
+										Thread thr3 = new Thread(r3);
+										Thread thr4 = new Thread(r4);
+										Thread thr5 = new Thread(r5);
+										Thread thr6 = new Thread(r6);
+										Thread thr7 = new Thread(r7);
+										Thread thr8 = new Thread(r8);
+										Thread thr9 = new Thread(r9);
+										Thread thr10 = new Thread(r10);
+										Thread thr11 = new Thread(r11);
+										Thread thr12 = new Thread(r12);
+										Thread thr13 = new Thread(r13);
+										Thread thr14 = new Thread(r14);
+										Thread thr15 = new Thread(r15);
+										Thread thr16 = new Thread(r16);
+										Thread thr17 = new Thread(r17);
+										Thread thr18 = new Thread(r18);
+										Thread thr19 = new Thread(r19);
+										Thread thr20 = new Thread(r20);
+										Thread thr21 = new Thread(r21);
+										Thread thr22 = new Thread(r22);
+										Thread thr23 = new Thread(r23);
+										Thread thr24 = new Thread(r24);
+										thr1.start();
+										thr2.start();
+										thr3.start();
+										thr4.start();
+										thr5.start();
+										thr6.start();
+										thr7.start();
+										thr8.start();
+										thr9.start();
+										thr10.start();
+										thr11.start();
+										thr12.start();
+										thr13.start();
+										thr14.start();
+										thr15.start();
+										thr16.start();
+										thr17.start();
+										thr18.start();
+										thr19.start();
+										thr20.start();
+										thr21.start();
+										thr22.start();
+										thr23.start();
+										thr24.start();
+										try {
+											thr1.join();
+											thr2.join();
+											thr3.join();
+											thr4.join();
+											thr5.join();
+											thr6.join();
+											thr7.join();
+											thr8.join();
+											thr9.join();
+											thr10.join();
+											thr11.join();
+											thr12.join();
+											thr13.join();
+											thr14.join();
+											thr15.join();
+											thr16.join();
+											thr17.join();
+											thr18.join();
+											thr19.join();
+											thr20.join();
+											thr21.join();
+											thr22.join();
+											thr23.join();
+											thr24.join();
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+
+
+		 
+	 }
 
 }
-
-
-

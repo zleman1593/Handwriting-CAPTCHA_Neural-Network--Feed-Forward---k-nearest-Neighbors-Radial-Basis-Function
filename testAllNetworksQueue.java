@@ -24,15 +24,15 @@ public class testAllNetworksQueue {
 		
 		
 		
-		runKNNKEx();// Exp 7
+		//runKNNKEx();// Exp 7
 
-		runKNNTrainingExamplesEx(); //Exp 8
-		runFFHiddenNodeEx(); //Exp #1
+		//runKNNTrainingExamplesEx(); //Exp 8
+		//runFFHiddenNodeEx(); //Exp #1
 				//runFFLearningRateEx(); //Exp #2
 				//runFFTrainingExampleEx(); //Exp #3
 		
 
-		//runRBFSigmaEx(); //Exp #4
+		runRBFSigmaEx(); //Exp #4
 
 		//runRBFLearningRateEx(); //Exp #5
 
@@ -467,7 +467,7 @@ public class testAllNetworksQueue {
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/RbfResults";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/TrainedRBFSetOutputWeights.txt";
 
-		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction d = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
