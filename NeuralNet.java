@@ -31,7 +31,7 @@ public class NeuralNet {
 	// Tracks running time of the training
 	public static long trainingTime;
 	// Tracks running time of the training
-		public static long solutionTime;
+	public static long solutionTime;
 	// The number of times the network is trained with the training Data
 	public static int epochs;
 	// Creates a random number generator
@@ -70,7 +70,7 @@ public class NeuralNet {
 	// Is true if the input into the network consists of binary images. False if Grayscale.
 	public  static boolean binaryInput;
 	
-	public static int[]  holder=new int[10];//Should make this the size of the number of outputs 36
+	public static int[]  holder = new int[NUMBER_OF_OUTPUT_NODES];//Should make this the size of the number of outputs 36
 	
 	
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
