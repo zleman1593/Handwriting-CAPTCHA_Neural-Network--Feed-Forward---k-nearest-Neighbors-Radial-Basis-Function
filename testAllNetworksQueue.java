@@ -10,9 +10,9 @@ public class testAllNetworksQueue {
 	//make sure to pass the argument of 3 GB minimum of Ram
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		//String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/Results";
-		//String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetOutputWeights.txt";
-		//String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetHiddenWeights.txt";
+		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/Results";
+		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetOutputWeights.txt";
+		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetHiddenWeights.txt";
 		
 		//NeuralNet secondFF4 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 16-20
 		
@@ -32,7 +32,7 @@ public class testAllNetworksQueue {
 				//runFFTrainingExampleEx(); //Exp #3
 		
 
-		runRBFSigmaEx(); //Exp #4
+		//runRBFSigmaEx(); //Exp #4
 
 		//runRBFLearningRateEx(); //Exp #5
 

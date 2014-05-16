@@ -1026,7 +1026,7 @@ public static ArrayList<OutputVector> solveTestingData() {
 
 					Runnable r12  = new Runnable() {
 						public void run() {
-							for (int i =  testingData.size()*11/24; i < testingData.size()12*/24; i++) {
+							for (int i =  testingData.size()*11/24; i < testingData.size()*12/24; i++) {
 								newtworkResults.add(singleImageBestGuess(testingData, i,11));
 							}
 						}};
@@ -1041,7 +1041,7 @@ public static ArrayList<OutputVector> solveTestingData() {
 							Runnable r14=  new Runnable() {
 								public void run() {
 									for (int i =  testingData.size()*13/24; i < testingData.size()*14/24; i++) {
-										newtworkResults.add(singleImageBestGuess(testingData, i,13))
+										newtworkResults.add(singleImageBestGuess(testingData, i,13));
 									}
 								}};
 
