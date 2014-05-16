@@ -34,7 +34,7 @@ public class loadCaptchaImage {
 	private static final int BLACK_BINARY = 1; // Binary representation of a black pixel. 
 	private static final int CHAR_OFFSET = 87; // Convert char to int so that a is 10, b is 11, etc.
 	private static final int NUM_CHARS_IN_CAPTCHA = 6; // 6 characters in each Captcha.
-	
+	private static final boolean BINARY_ON =  true; // Whether pixel color values are binary (black and white) or grayscale.
 	// For testing only.
 	/*public static void main(String[] args) throws IOException, ClassNotFoundException {
 		readAllTrainingData();
@@ -97,7 +97,7 @@ public class loadCaptchaImage {
 				
 				// Turn a character in a Captcha into a DigitImage and add it to the Captcha's list of DigitImages (characters).
 				int num = charToInt(imgNames, i, captchaCharPos);
-				oneCaptcha.add(new DigitImage(num, charPixels, false));
+				oneCaptcha.add(new DigitImage(num, charPixels, BINARY_ON));
 				captchaCharPos++;
 			}
 			// Add one Captcha to the list of Captchas.
@@ -150,7 +150,7 @@ public class loadCaptchaImage {
 			scanCharPixels(charImg, charPixels, offsetHeight, offsetWidth);
 			// Turn this training character into a DigitImage and add it to the Captcha's list of chars.
 			int num = charToInt(trainingImgNames, i, 0);
-			alltrainingData.add(new DigitImage(num, charPixels, false));
+			alltrainingData.add(new DigitImage(num, charPixels, BINARY_ON));
 		
 		}
 	}
