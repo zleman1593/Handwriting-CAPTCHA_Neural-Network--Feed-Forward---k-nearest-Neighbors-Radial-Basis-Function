@@ -24,7 +24,7 @@ public class loadCaptchaImage {
 	// List of captchas fed to the Neural Networks.
 	private static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
 	// List of training set of characters fed to the Neural Networks.
-	private static ArrayList<DigitImage> alltrainingData = new ArrayList<DigitImage>();
+	private static ArrayList<DigitImage> allTrainingData = new ArrayList<DigitImage>();
 	
 	private static final int CHAR_WIDTH = 9; // Cut-off width of a character.
 	private static final int CHAR_HEIGHT = 22; // Cut-off height of a character.
@@ -45,6 +45,8 @@ public class loadCaptchaImage {
 	
 	// Constructor.
 	public loadCaptchaImage() throws IOException {
+		allCaptchas.clear();
+		allTrainingData.clear();
 		// Reads and breaks up all Captchas for testing.
 		readAllCaptchas();
 		// Reads all the  individual characters for training.
@@ -150,7 +152,7 @@ public class loadCaptchaImage {
 			scanCharPixels(charImg, charPixels, offsetHeight, offsetWidth);
 			// Turn this training character into a DigitImage and add it to the Captcha's list of chars.
 			int num = charToInt(trainingImgNames, i, 0);
-			alltrainingData.add(new DigitImage(num, charPixels, BINARY_ON));
+			allTrainingData.add(new DigitImage(num, charPixels, BINARY_ON));
 		
 		}
 	}
