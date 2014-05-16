@@ -67,11 +67,10 @@ public class NeuralNet {
 	public static String filePathTrainedOutputWeights; 
 	public static String filePathTrainedHiddenWeights; 
 	
-	// Is true if the input into the network consists of binary images. False if Grayscale.
+	// Is true if the input into the network consists of binary (black and white) images. False if Grayscale.
 	public  static boolean binaryInput;
 	
-	public static int[]  holder = new int[NUMBER_OF_OUTPUT_NODES];//Should make this the size of the number of outputs 36
-	
+	public static int[]  holder = new int[NUMBER_OF_OUTPUT_NODES];
 	
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 	
