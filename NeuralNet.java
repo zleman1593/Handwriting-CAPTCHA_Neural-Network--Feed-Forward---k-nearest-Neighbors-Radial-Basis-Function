@@ -270,6 +270,7 @@ public class NeuralNet {
 	 */
 	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
 		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
+		outputOfCurrentlayer.clear(); 
 		for (int i = 0; i < currentLayer.size(); i++) {
 			double output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
 			outputOfCurrentlayer.add(output);
