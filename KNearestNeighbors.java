@@ -46,6 +46,9 @@ public class KNearestNeighbors {
 	public static String filePathResults;
 	
 	public static long trainingTime;
+	
+	public static final int NUMBER_OF_CORES=24;
+	
 	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1, String filePathResults1) throws IOException, ClassNotFoundException {
 		//These lines are needed to prevent errors where objects refrence
 		//each others' data structures
@@ -66,7 +69,7 @@ public class KNearestNeighbors {
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
 		}
-		for (int m = 0; m < 8; m++) {
+		for (int m = 0; m < NUMBER_OF_CORES; m++) {
 			 ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
 		hiddenLayerDottedOutputValuesHolderArray.add(hiddenLayerDottedOutputValues);
 		}
@@ -95,7 +98,7 @@ public class KNearestNeighbors {
 		
 		
 		//Sets up trackers for each thread
-		for(int y=0; y<8;y++){
+		for(int y=0; y<NUMBER_OF_CORES;y++){
 			countOfImagesAnalyzed.add(0);
 			countOfCorrectImagesAnalyzed.add(0);
 		}
@@ -106,87 +109,13 @@ public class KNearestNeighbors {
 		// Loads test data for the K-Nearest Neighbors Network
 		loadtestDataForKNearestNeighbours(testingImages, testingLabels);
 		 startTime = System.currentTimeMillis();
-		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
-		Runnable r1 = new Runnable() {
-			public void run() {
-				//Tests the first quarter of the input data
-				solveTestingData(testingData, k, 0, 0, numberOfImagesToTest/8);
-			}
-		};
-		Runnable r2 = new Runnable() {
-			public void run() {
-				//Tests the second fourth of the input data
-				solveTestingData(testingData, k, 1,(numberOfImagesToTest*1)/8,(numberOfImagesToTest*2)/8);
-			}
-		};
-		Runnable r3 = new Runnable() {
-			public void run() {
-				//Tests the third fourth of the input data
-				solveTestingData(testingData, k, 2,(numberOfImagesToTest*2)/8,(numberOfImagesToTest*3)/8);
-			}
-		};
-		Runnable r4 = new Runnable() {
-			public void run() {
-				//Tests the last fourth of the input data
-				solveTestingData(testingData, k, 3,(numberOfImagesToTest*3)/8,(numberOfImagesToTest*4)/8);
-			}
-		};
-
-		Runnable r5 = new Runnable() {
-			public void run() {
-				//Tests the first quarter of the input data
-				solveTestingData(testingData, k, 4,(numberOfImagesToTest*4)/8,(numberOfImagesToTest*5)/8);
-			}
-		};
-		Runnable r6 = new Runnable() {
-			public void run() {
-				//Tests the second fourth of the input data
-				solveTestingData(testingData, k, 5,(numberOfImagesToTest*5)/8,(numberOfImagesToTest*6)/8);
-			}
-		};
-		Runnable r7 = new Runnable() {
-			public void run() {
-				//Tests the third fourth of the input data
-				solveTestingData(testingData, k, 6,(numberOfImagesToTest*6)/8,(numberOfImagesToTest*7)/8);
-			}
-		};
-		Runnable r8 = new Runnable() {
-			public void run() {
-				//Tests the last fourth of the input data
-				solveTestingData(testingData, k, 7,(numberOfImagesToTest*7)/8,numberOfImagesToTest);
-			}
-		};
-
-		//Starts the 8 threads
-		Thread thr1 = new Thread(r1);
-		Thread thr2 = new Thread(r2);
-		Thread thr3 = new Thread(r3);
-		Thread thr4 = new Thread(r4);
-		Thread thr5 = new Thread(r5);
-		Thread thr6 = new Thread(r6);
-		Thread thr7 = new Thread(r7);
-		Thread thr8 = new Thread(r8);
-		thr1.start();
-		thr2.start();
-		thr3.start();
-		thr4.start();
-		thr5.start();
-		thr6.start();
-		thr7.start();
-		thr8.start();
-		try {
-			thr1.join();
-			thr2.join();
-			thr3.join();
-			thr4.join();
-			thr5.join();
-			thr6.join();
-			thr7.join();
-			thr8.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
+		 if(NUMBER_OF_CORES==8){
+			 eightCore();
+		 }else if (NUMBER_OF_CORES==24) {
+			 twentyFourCore();
+		 }else{
+			 System.out.println("There are not 24 or 8 cores?");
+		 }
 		
 		 long endTime = System.currentTimeMillis();
 		 executionTime = endTime - startTime;
@@ -453,7 +382,335 @@ public class KNearestNeighbors {
 	}
 
 	
+	public static void eightCore(){
+		
+		
+		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
+		Runnable r1 = new Runnable() {
+			public void run() {
+				//Tests the first quarter of the input data
+				solveTestingData(testingData, k, 0, 0, numberOfImagesToTest/8);
+			}
+		};
+		Runnable r2 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 1,(numberOfImagesToTest*1)/8,(numberOfImagesToTest*2)/8);
+			}
+		};
+		Runnable r3 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 2,(numberOfImagesToTest*2)/8,(numberOfImagesToTest*3)/8);
+			}
+		};
+		Runnable r4 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 3,(numberOfImagesToTest*3)/8,(numberOfImagesToTest*4)/8);
+			}
+		};
+
+		Runnable r5 = new Runnable() {
+			public void run() {
+				//Tests the first quarter of the input data
+				solveTestingData(testingData, k, 4,(numberOfImagesToTest*4)/8,(numberOfImagesToTest*5)/8);
+			}
+		};
+		Runnable r6 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 5,(numberOfImagesToTest*5)/8,(numberOfImagesToTest*6)/8);
+			}
+		};
+		Runnable r7 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 6,(numberOfImagesToTest*6)/8,(numberOfImagesToTest*7)/8);
+			}
+		};
+		Runnable r8 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 7,(numberOfImagesToTest*7)/8,numberOfImagesToTest);
+			}
+		};
+
+		//Starts the 8 threads
+		Thread thr1 = new Thread(r1);
+		Thread thr2 = new Thread(r2);
+		Thread thr3 = new Thread(r3);
+		Thread thr4 = new Thread(r4);
+		Thread thr5 = new Thread(r5);
+		Thread thr6 = new Thread(r6);
+		Thread thr7 = new Thread(r7);
+		Thread thr8 = new Thread(r8);
+		thr1.start();
+		thr2.start();
+		thr3.start();
+		thr4.start();
+		thr5.start();
+		thr6.start();
+		thr7.start();
+		thr8.start();
+		try {
+			thr1.join();
+			thr2.join();
+			thr3.join();
+			thr4.join();
+			thr5.join();
+			thr6.join();
+			thr7.join();
+			thr8.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+
 	
+public static void twentyFourCore(){
+		
+		
+		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
+		Runnable r1 = new Runnable() {
+			public void run() {
+				//Tests the first quarter of the input data
+				solveTestingData(testingData, k, 0, 0, numberOfImagesToTest/24);
+			}
+		};
+		Runnable r2 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 1,(numberOfImagesToTest*1)/24,(numberOfImagesToTest*2)/24);
+			}
+		};
+		Runnable r3 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 2,(numberOfImagesToTest*2)/24,(numberOfImagesToTest*3)/24);
+			}
+		};
+		Runnable r4 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 3,(numberOfImagesToTest*3)/24,(numberOfImagesToTest*4)/24);
+			}
+		};
+
+		Runnable r5 = new Runnable() {
+			public void run() {
+				//Tests the first quarter of the input data
+				solveTestingData(testingData, k, 4,(numberOfImagesToTest*4)/24,(numberOfImagesToTest*5)/24);
+			}
+		};
+		Runnable r6 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 5,(numberOfImagesToTest*5)/24,(numberOfImagesToTest*6)/24);
+			}
+		};
+		Runnable r7 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 6,(numberOfImagesToTest*6)/24,(numberOfImagesToTest*7)/24);
+			}
+		};
+		Runnable r8 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 7,(numberOfImagesToTest*7)/24,(numberOfImagesToTest*8)/24);
+			}
+		};
+		
+		Runnable r9 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 8,(numberOfImagesToTest*8)/24,(numberOfImagesToTest*9)/24);
+			}
+		};
+		
+		
+		Runnable r10 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 9,(numberOfImagesToTest*9)/24,(numberOfImagesToTest*10)/24);
+			}
+		};
+		Runnable r11 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 10,(numberOfImagesToTest*10)/24,(numberOfImagesToTest*11)/24);
+			}
+		};
+		Runnable r12 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 11,(numberOfImagesToTest*11)/24,(numberOfImagesToTest*12)/24);
+			}
+		};
+
+		Runnable r13 = new Runnable() {
+			public void run() {
+				//Tests the first quarter of the input data
+				solveTestingData(testingData, k, 12,(numberOfImagesToTest*12)/24,(numberOfImagesToTest*13)/24);
+			}
+		};
+		Runnable r14 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 13,(numberOfImagesToTest*13)/24,(numberOfImagesToTest*14)/24);
+			}
+		};
+		Runnable r15 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 14,(numberOfImagesToTest*14)/24,(numberOfImagesToTest*15)/24);
+			}
+		};
+		Runnable r16 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 15,(numberOfImagesToTest*15)/24,(numberOfImagesToTest*16)/24);
+			}
+		};
+		
+		
+		Runnable r17 = new Runnable() {
+			public void run() {
+				//Tests the first quarter of the input data
+				solveTestingData(testingData, k, 16,(numberOfImagesToTest*16)/24,(numberOfImagesToTest*17)/24);
+			}
+		};
+		Runnable r18 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 17,(numberOfImagesToTest*17)/24,(numberOfImagesToTest*18)/24);
+			}
+		};
+		Runnable r19 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 18,(numberOfImagesToTest*18)/24,(numberOfImagesToTest*19)/24);
+			}
+		};
+		Runnable r20 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 19,(numberOfImagesToTest*19)/24,(numberOfImagesToTest*20)/24);
+			}
+		};
+
+		Runnable r21 = new Runnable() {
+			public void run() {
+				//Tests the first quarter of the input data
+				solveTestingData(testingData, k, 20,(numberOfImagesToTest*20)/24,(numberOfImagesToTest*21)/24);
+			}
+		};
+		Runnable r22 = new Runnable() {
+			public void run() {
+				//Tests the second fourth of the input data
+				solveTestingData(testingData, k, 21,(numberOfImagesToTest*21)/24,(numberOfImagesToTest*22)/24);
+			}
+		};
+		Runnable r23 = new Runnable() {
+			public void run() {
+				//Tests the third fourth of the input data
+				solveTestingData(testingData, k, 22,(numberOfImagesToTest*22)/24,(numberOfImagesToTest*23)/24);
+			}
+		};
+		Runnable r24 = new Runnable() {
+			public void run() {
+				//Tests the last fourth of the input data
+				solveTestingData(testingData, k, 23,(numberOfImagesToTest*23)/24,numberOfImagesToTest);
+			}
+		};
+		
+
+		//Starts the 24 threads
+		Thread thr1 = new Thread(r1);
+		Thread thr2 = new Thread(r2);
+		Thread thr3 = new Thread(r3);
+		Thread thr4 = new Thread(r4);
+		Thread thr5 = new Thread(r5);
+		Thread thr6 = new Thread(r6);
+		Thread thr7 = new Thread(r7);
+		Thread thr8 = new Thread(r8);
+		Thread thr9 = new Thread(r9);
+		Thread thr10 = new Thread(r10);
+		Thread thr11 = new Thread(r11);
+		Thread thr12 = new Thread(r12);
+		Thread thr13 = new Thread(r13);
+		Thread thr14 = new Thread(r14);
+		Thread thr15 = new Thread(r15);
+		Thread thr16 = new Thread(r16);
+		Thread thr17 = new Thread(r17);
+		Thread thr18 = new Thread(r18);
+		Thread thr19 = new Thread(r19);
+		Thread thr20 = new Thread(r20);
+		Thread thr21 = new Thread(r21);
+		Thread thr22 = new Thread(r22);
+		Thread thr23 = new Thread(r23);
+		Thread thr24 = new Thread(r24);
+		thr1.start();
+		thr2.start();
+		thr3.start();
+		thr4.start();
+		thr5.start();
+		thr6.start();
+		thr7.start();
+		thr8.start();
+		thr9.start();
+		thr10.start();
+		thr11.start();
+		thr12.start();
+		thr13.start();
+		thr14.start();
+		thr15.start();
+		thr16.start();
+		thr17.start();
+		thr18.start();
+		thr19.start();
+		thr20.start();
+		thr21.start();
+		thr22.start();
+		thr23.start();
+		thr24.start();
+		try {
+			thr1.join();
+			thr2.join();
+			thr3.join();
+			thr4.join();
+			thr5.join();
+			thr6.join();
+			thr7.join();
+			thr8.join();
+			thr9.join();
+			thr10.join();
+			thr11.join();
+			thr12.join();
+			thr13.join();
+			thr14.join();
+			thr15.join();
+			thr16.join();
+			thr17.join();
+			thr18.join();
+			thr19.join();
+			thr20.join();
+			thr21.join();
+			thr22.join();
+			thr23.join();
+			thr24.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
 
 	
 }
