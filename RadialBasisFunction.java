@@ -62,7 +62,7 @@ public class RadialBasisFunction {
 	public static long testingTime;
 
 	public static long startTime;
-	public static final int NUMBER_OF_CORES=24;
+	public static final int NUMBER_OF_CORES=8;
 	// Tracks the number of images correctly identified in the testing set.
 			public static ArrayList<Integer> countOfCorrectImagesAnalyzed = new ArrayList<Integer>();
 			// Tracks the number of images processed in the testing set.

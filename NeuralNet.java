@@ -83,10 +83,10 @@ public class NeuralNet {
 		learningRate =  learningRate1; 		//learning rate
 		usePriorWeights = usePriorWeights1; 	// Whether to use priorly trained weights
 		binaryInput = binaryInput1;		// Whether inputs are binary (black/white) or grayscale (0-255)
-		filePathResults = filePathResults1;
+		filePathResults = filePathResults1; 
 		filePathTrainedOutputWeights = filePathTrainedOutputWeights1;
 		filePathTrainedHiddenWeights = filePathTrainedHiddenWeights1;
-		trainingSetReductionFactor = trainingSetReductionFactor1;
+		trainingSetReductionFactor = trainingSetReductionFactor1; //How much of the training data the network should train on
 		
 		
 
@@ -201,8 +201,6 @@ public class NeuralNet {
 				 }else{
 					 System.out.println("There are not 24 or 8 cores?");
 				 }
-				
-				
 				// Resets temporary data structure
 				tempOutput = new ArrayList<ArrayList<Double>>();
 			}
@@ -387,7 +385,6 @@ public class NeuralNet {
 		return result;
 	}
 
-	
 	
 	
 	

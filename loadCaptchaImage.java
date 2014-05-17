@@ -1,6 +1,6 @@
 /*
  *This class will read in CAPTCHA image files.
- *It will parse the image, isolate individual letters, and put them in a data structure for the neural net to process.
+ *It will parse the image, isolate individual letters and numbers, and put them in a data structure for the neural net to process.
  *For training data, it will load single letter image files. 
  */
 
@@ -20,7 +20,6 @@ public class loadCaptchaImage {
 	private static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
 	// List of training set of characters fed to the Neural Networks.
 	private static ArrayList<DigitImage> alltrainingData = new ArrayList<DigitImage>();
-	
 	private static final int CHAR_WIDTH = 9; // Cut-off width of a character.
 	private static final int CHAR_HEIGHT = 22; // Cut-off height of a character.
 	//private static final int WHITE_COLOR = 255; // RGB value for white: 255, 255, 255.
@@ -59,7 +58,6 @@ public class loadCaptchaImage {
 		for (int f = 0; f < listOfFiles.length; f++) {
 			if (listOfFiles[f].isFile() && !(listOfFiles[f].getName().contentEquals(".DS_Store"))
 					&& !(listOfFiles[f].getName().contentEquals("Thumbs.db"))) {
-//				System.out.println("File " + listOfFiles[f].getName());
 //				imgs.add(ImageIO.read(new File("src/Captcha Testing Data/" + listOfFiles[f].getName())));
 				imgs.add(ImageIO.read(new File("Captcha Testing Data/" + listOfFiles[f].getName())));
 				imgNames.add(listOfFiles[f].getName());
