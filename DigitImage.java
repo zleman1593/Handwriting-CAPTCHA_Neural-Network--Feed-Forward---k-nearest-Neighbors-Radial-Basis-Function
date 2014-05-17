@@ -1,5 +1,9 @@
 /*
- * Adapted from IntelliJ IDEA user vivin ( 11/11/11).
+ * Hand Writing Recognition and Simple CAPTCHA Neural Network
+ * CS 3425 Final project
+ * Spring 2014
+ * Min "Ivy" Xing, Zackery Leman
+ * 
  * This is a class which stores a single image and corresponding value for the training and testing data.
  * It can convert the image data to a binary representation.
  */

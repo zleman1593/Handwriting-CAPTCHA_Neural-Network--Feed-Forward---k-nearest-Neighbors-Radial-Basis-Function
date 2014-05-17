@@ -1,5 +1,11 @@
 /*
- * Adapted from IntelliJ IDEA user vivin.
+ * Hand Writing Recognition and Simple CAPTCHA Neural Network
+ * CS 3425 Final project
+ * Spring 2014
+ * Min "Ivy" Xing, Zackery Leman
+ * 
+ * Class adapted from IntelliJ IDEA user vivin.
+ * 
  * There is no good reason to read this code.
  *  It simply reads in the MNIST file into reasonable data structures. 
  *  It is specific for this file format and confusing to understand.

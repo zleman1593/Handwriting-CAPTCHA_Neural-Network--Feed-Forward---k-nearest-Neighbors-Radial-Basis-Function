@@ -1,4 +1,11 @@
-
+/*
+ * Hand Writing Recognition and Simple CAPTCHA Neural Network
+ * CS 3425 Final project
+ * Spring 2014
+ * Min "Ivy" Xing, Zackery Leman
+ * This is a K-Nearest Neighbor network that reads the MNIST data.
+ * Notes: The way threads are  implemented, the code is optimized for either 8 or 24 real cores. 
+ */
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -48,6 +55,11 @@ public class KNearestNeighbors {
 	public static long trainingTime;
 	
 	public static final int NUMBER_OF_CORES=24;
+	//These are just constants
+	public static final String  trainingImages = "Training-Images";
+	public static final	String testingImages = "Testing-images";
+	public static final	String trainingLabels = "Training-Labels";
+	public static final	String testingLabels = "Testing-Labels";
 	
 	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1, String filePathResults1) throws IOException, ClassNotFoundException {
 		//These lines are needed to prevent errors where objects refrence
@@ -64,7 +76,7 @@ public class KNearestNeighbors {
 	trainingSetReductionFactor=trainingSetReductionFactor1;
 	numberOfImagesToTest = numberOfImagesToTest1;
 	filePathResults=filePathResults1;
-		
+
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
 			holder[m]=0;
@@ -81,11 +93,7 @@ public class KNearestNeighbors {
 		
 		
 	
-		
-		String trainingImages = "Training-Images";
-		String testingImages = "Testing-images";
-		String trainingLabels = "Training-Labels";
-		String testingLabels = "Testing-Labels";
+
 		
 		if(!binaryInput){
 			System.out.println("It is normal for this network to not preform well with binary data.");
@@ -93,7 +101,7 @@ public class KNearestNeighbors {
 		
 		// "Train" the network AKA create hidden layer
 		long startTime = System.currentTimeMillis();
-		trainKNearestNeighbours(trainingImages, trainingLabels);
+		trainKNearestNeighbours();
 
 		
 		
@@ -144,7 +152,7 @@ public class KNearestNeighbors {
 
 	}
 
-	public static void trainKNearestNeighbours(String trainingImages, String trainingLabels) throws IOException {
+	public static void trainKNearestNeighbours() throws IOException {
 
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);

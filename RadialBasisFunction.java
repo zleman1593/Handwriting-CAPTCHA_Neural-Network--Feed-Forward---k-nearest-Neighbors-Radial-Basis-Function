@@ -73,6 +73,12 @@ public class RadialBasisFunction {
 
 			public static  double countOfCorrectImagesAnalyzedTotal=0;
 			public static ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
+			//These are just constants
+			public static final String  trainingImages = "Training-Images";
+			public static final	String testingImages = "Testing-images";
+			public static final	String trainingLabels = "Training-Labels";
+			public static final	String testingLabels = "Testing-Labels";
+			
 	
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
 		hiddenLayerNodes.clear();
@@ -95,10 +101,7 @@ public class RadialBasisFunction {
 		filePathResults=filePathResults1;
 		filePathTrainedOutputWeights=filePathTrainedOutputWeights1;
 		
-		String trainingImages = "Training-Images";
-		String testingImages = "Testing-images";
-		String trainingLabels = "Training-Labels";
-		String testingLabels = "Testing-Labels";
+	
 		
 		//Sets up trackers for each thread
 				for(int y=0; y<NUMBER_OF_CORES;y++){
@@ -117,7 +120,7 @@ public class RadialBasisFunction {
 
 
 
-		initializeRBF(trainingImages, trainingLabels);
+		initializeRBF();
 
 		//After reaching 92.12% accuracy when training on 1000000 with learning rate of 1. I started testing on 700000 =>93.0%  500000=> less accurate%
 
@@ -171,7 +174,7 @@ public class RadialBasisFunction {
 		}
 	}
 
-	public static void initializeRBF(String trainingImages, String trainingLabels) throws IOException {
+	public static void initializeRBF() throws IOException {
 
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
