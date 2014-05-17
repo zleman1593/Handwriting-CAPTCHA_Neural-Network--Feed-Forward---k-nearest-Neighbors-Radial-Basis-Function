@@ -10,12 +10,12 @@ public class testAllNetworksQueue {
 	//make sure to pass the argument of 3 GB minimum of Ram
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/Results";
-		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetOutputWeights.txt";
-		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetHiddenWeights.txt";
+		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/Results";
+		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/TrainedSetOutputWeights.txt";
+		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/TrainedSetHiddenWeights.txt";
 		
-		NeuralNet secondFF4 = new NeuralNet(30,30,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
-		
+		//NeuralNet secondFF4 = new NeuralNet(20,500,0.4,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
+		NeuralNet secondFF4 = new NeuralNet(21,500,0.4,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
 		
 		//To expand the current trail  by another 5 epochs, simply change the first line in each set to make it use the data already written to files: 
 		//(i.e Make sure the fourth parameter is 2 in the first line of every set.)

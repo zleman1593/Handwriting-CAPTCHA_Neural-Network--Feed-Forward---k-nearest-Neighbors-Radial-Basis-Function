@@ -76,6 +76,7 @@ public class NeuralNet {
 	
 	
 	public static final int NUMBER_OF_CORES=8;
+	public static  int imageNumber123;
 	
 	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, 
 		String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, 
@@ -83,7 +84,7 @@ public class NeuralNet {
 		
 		hiddenLayerNodes.clear();
 		outputLayerNodes.clear();
-		
+		trainingData.clear();
 		numberOfNodesInHiddenLayer = numberOfNodesInHiddenLayer1; 
 		epochs = epochs1;               	//number of epochs to run
 		learningRate =  learningRate1; 		//learning rate
@@ -95,10 +96,10 @@ public class NeuralNet {
 		trainingSetReductionFactor = trainingSetReductionFactor1;
 		
 		//These are just constants
-		String  trainingImages = "Training-Images";
-		String testingImages = "Testing-images";
-		String trainingLabels = "Training-Labels";
-		String testingLabels = "Testing-Labels";
+		//String  trainingImages = "Training-Images";
+		//String testingImages = "Testing-images";
+		//String trainingLabels = "Training-Labels";
+		//String testingLabels = "Testing-Labels";
 
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
@@ -114,14 +115,14 @@ public class NeuralNet {
 			initializeMultilayerFeedForwardCaptcha();
 			// Trains the network with the training Data
 			long startTimeForTrainingData = System.currentTimeMillis();
-			trainTheNetwork(trainingData);
+			trainTheNetwork();
 			trainingTime = System.currentTimeMillis() - startTimeForTrainingData;
 			System.out.println("Training time: " + trainingTime + " milliseconds");
 			// Creates data files that can be reused by the network without retraining.
 			writeTrainedWeights();
 		} 
 		// Trains the Network starting from weights stored in file
-		else if (usePriorWeights == 2) {
+		/*else if (usePriorWeights == 2) {
 			System.out.println("Training from past trained weights");
 			initializeMultilayerFeedForward(trainingImages, trainingLabels);
 
@@ -133,19 +134,19 @@ public class NeuralNet {
 			System.out.println("Training time: " + trainingTime + " milliseconds");
 			// Creates data files that can be reused by the network without retraining.
 			writeTrainedWeights();
-		}
+		}*/
 		// Tests network using weights stored in file without retraining
-		else if ( usePriorWeights == 1)  {
+		/*else if ( usePriorWeights == 1)  {
 			readDataFromTrainedFiles();
 			System.out.println("Reading Data from trained files");
 			numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
 			// Test the Feed-Forward network
 			testMultilayerFeedForward(testingImages, testingLabels);
 	
-		}
+		}*/
 
 		for (int m = 0; m < holder.length; m++) {
-			System.out.println("Number " + m +" was guessed incorrectly" + holder[m]+ " times."); 
+			System.out.println("Number " + m +" was guessed incorrectly " + holder[m]+ " times."); 
 		}
 	}
 
@@ -199,14 +200,14 @@ public class NeuralNet {
 	/*
 	 * This takes the training data and attempts to train the neural net to learn how to recognize characters from images.
 	 */
-	public static void trainTheNetwork(ArrayList<DigitImage> trainingData) {
+	public static void trainTheNetwork() {
 		// For each epoch
 		for (int i = 0; i < epochs; i++) { 
 			//Start Training time for this single Epoch
 			long startTime = System.currentTimeMillis();
 			//For every image in the training file
 			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
-				calculateErrorForEachOutputNode(trainingData, images);
+				calculateErrorForEachOutputNode(images);
 				
 				
 				if(NUMBER_OF_CORES==8){
@@ -224,7 +225,11 @@ public class NeuralNet {
 			// Test the Feed-Forward network
 			try {
 				trainingTime = System.currentTimeMillis() - startTime;
-				testMultilayerFeedForward("Testing-images", "Testing-Labels");
+				 holder = new int[NUMBER_OF_OUTPUT_NODES];
+				for (int m = 0; m < holder.length; m++) {
+					holder[m] = 0;
+				}
+				testMultilayerFeedForwardCaptcha();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -272,6 +277,9 @@ public class NeuralNet {
 		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
 		outputOfCurrentlayer.clear(); 
 		for (int i = 0; i < currentLayer.size(); i++) {
+			if (outputFromPreviousLayer.size()>198){
+				int w=1;
+			}
 			double output = nodeOutput(currentLayer, outputFromPreviousLayer, i);
 			outputOfCurrentlayer.add(output);
 		}
@@ -285,6 +293,7 @@ public class NeuralNet {
 	public static double nodeOutput(ArrayList<ArrayList<Double>> layerOfNodes, ArrayList<Double> outputFromPreviousLayer, int indexOfNodeinlayer) {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
+	
 			sum = sum + (layerOfNodes.get(indexOfNodeinlayer).get(i) * outputFromPreviousLayer.get(i));
 		}
 		return activationFunction(sum);
@@ -309,16 +318,19 @@ public class NeuralNet {
 	/*
 	 * Creates temporary storage for the output of all nodes for a given image
 	 */
-	public static void calculateErrorForEachOutputNode(ArrayList<DigitImage> networkInputData, int imageNumber) {
+	public static void calculateErrorForEachOutputNode(int imageNumber) {
 		// Creates an Arraylist holding the output of each node in this layer
-		ArrayList<Double> rawSingleImageData = networkInputData.get(imageNumber).getArrayListData();
+		imageNumber123=imageNumber;
+		
+		ArrayList<Double> rawSingleImageData = trainingData.get(imageNumber).getArrayListData();
 		//This step may be unnecessary. Be careful when removing as other indicies will need to change.
 		tempOutput.add(rawSingleImageData);
-
+		
 		// Stores result to be used later(This will be moved into the "outPutOfLayer" method at some point.)
 		ArrayList<Double> hidenLayerOutput = outPutOfLayer(hiddenLayerNodes, rawSingleImageData);
 		tempOutput.add(hidenLayerOutput);
 		// Just like the others
+		
 		ArrayList<Double> outputLayerOutput = outPutOfLayer(outputLayerNodes, hidenLayerOutput);
 		tempOutput.add(outputLayerOutput);
 
@@ -327,7 +339,7 @@ public class NeuralNet {
 		ArrayList<Double> errorLayer = new ArrayList<Double>();
 
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
-			double correctOutput = networkInputData.get(imageNumber).getSolutionVector().get(i);
+			double correctOutput = trainingData.get(imageNumber).getSolutionVector().get(i);
 			double output = outputLayerOutput.get(i);
 			double rawError = correctOutput - output;
 			errorLayer.add(rawError);
@@ -873,8 +885,8 @@ public static void twentyFourCore(){
 		// Loads testing data set
 
 		
-		loadCaptchaImage dataSets = new loadCaptchaImage();
-		ArrayList<DigitImage> testingData = dataSets.getTrainingData();
+		//loadCaptchaImage dataSets = new loadCaptchaImage();
+		ArrayList<DigitImage> testingData = trainingData;
 		
 		// Loads testing data set
 				//loadCaptchaImage dataSets = new loadCaptchaImage();
