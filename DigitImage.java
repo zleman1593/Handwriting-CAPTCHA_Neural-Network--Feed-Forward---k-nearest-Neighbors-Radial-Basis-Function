@@ -1,7 +1,7 @@
 /*
  * Adapted from IntelliJ IDEA user vivin ( 11/11/11).
  * This is a class which stores a single image and corresponding value for the training and testing data.
- * It converts the image data to a binary representation.
+ * It can convert the image data to a binary representation.
  */
 
 import java.util.*;
@@ -12,13 +12,14 @@ import java.util.List;
 
 public class DigitImage {
 
-	// Is the number that is in the image
+	// Is the number or letter that is in the image
 	private int label;
-	// This vector represents the number that is in the image in a vector form.
+	// This vector represents the number or letter that is in the image in a vector form.
 	private ArrayList<Integer> solutionVector = new ArrayList<Integer>(10);
 	// This is an array of pixels with value 0 or 1
 	private double[] data;
-
+	
+	//This will be the constructor for MNIST Data
 	public DigitImage(int label, byte[] data, boolean binary) {
 		this.label = label;
 		this.data = new double[data.length];
@@ -36,11 +37,9 @@ public class DigitImage {
 		for (int i = 0; i < this.data.length; i++) {
 			this.data[i] = data[i];
 		}
-		
 	}
 
-	// Uses Otsu's Threshold algorithm to convert from grayscale to black and
-	// white
+	// Uses Otsu's Threshold algorithm to convert from grayscale to black and white
 	private void otsu() {
 		int[] histogram = new int[256];
 
@@ -97,22 +96,22 @@ public class DigitImage {
 
 	}
 
-	// return number in image
+	//Return number in image
 	public int getLabel() {
 		return label;
 	}
 
-	// return image as a plain array
+	//Return image as a plain array
 	public double[] getData() {
 		return data;
 	}
 
-	// return number in image in vector form
+	//Return number in image in vector form
 	public ArrayList<Integer> getSolutionVector() {
 		return solutionVector;
 	}
 
-	// return image as an ArrayList
+	//Return image as an ArrayList
 	public ArrayList<Double> getArrayListData() {
 
 		ArrayList<Double> doubleList = new ArrayList<Double>(data.length);
@@ -136,7 +135,12 @@ public class DigitImage {
 	}
 
 
-
+	/*
+	 * Creates 36-dimensional unit vector with a 1.0 in the jth position and
+	 * zeroes elsewhere. This is used to convert a digit (0...z) into a
+	 * corresponding desired output from the neural network, making the training
+	 * data easier to work with.
+	 */
 public void vectorizeTrainingDataAlphaNum() {
 	for (int i = 0; i < 36; i++) {
 		solutionVector.add(0);

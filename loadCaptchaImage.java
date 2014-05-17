@@ -1,16 +1,11 @@
 /*
  *This class will read in CAPTCHA image files.
  *It will parse the image, isolate individual letters, and put them in a data structure for the neural net to process.
- *For training data, it will load single letter image files. It will also have the ability to train on full CAPTCHA's if also provided the solution.
- *Currently this is a nonfunctional class and the entirety of the below code may likely be replaced.
+ *For training data, it will load single letter image files. 
  */
 
-//IVY: you will need to uncomment the lines with src, and then comment out the lines missing src in order for this to run on your computer.
-// ZACK: It only runs on my computer with the current set up (with src/) - that was my fix for the file reading error we encountered yesterday.
-//TODO: Every some letters in the Captcha sub arrays CHAR_OFFSET = 86 works while others CHAR_OFFSET = 87 works. Why??
-// Reply: Not sure. Can you give an example?
-//TODO: Need to add the ability to add white chars after a training image that is only 7 pixels wide to make it like a 9 px wide image.
-// Reply: Taken care of.
+//If you get an error for reading files: You will need to uncomment the lines with src, and then comment out the lines missing src in order for this to run on your computer.
+
 
 import java.io.IOException;
 import java.io.File;

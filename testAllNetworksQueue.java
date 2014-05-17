@@ -1,42 +1,31 @@
 import java.io.IOException;
 
 /*
- * This class creates multiple instances of each  network and allows tests to be run one after another and have the results neatly collected in output files in subfolders.
+ * This class creates multiple instances of each network and allows tests to be run one after another and have the results neatly collected in output files in subfolders.
+ * Make sure to pass the argument of 3 GB minimum of Ram.
+ * 1. First unzip the NeuralNetOutput.zip in a directory.
+ * 2. Change  "/Users/zackeryleman/Desktop" with the file path of the NeuralNetOutput folder.
+ * 3. Change the NUMBER_OF_CORES to 24 or 8 in each neural net class, depending on your machine.
  */
 public class testAllNetworksQueue {
 
-	
-	
-	//make sure to pass the argument of 3 GB minimum of Ram
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/Results";
-		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetOutputWeights.txt";
-		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/1t/TrainedSetHiddenWeights.txt";
 		
-		//NeuralNet secondFF4 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 16-20
-		
-		
-		//To expand the current trail  by another 5 epochs, simply change the first line in each set to make it use the data already written to files: 
-		//(i.e Make sure the fourth parameter is 2 in the first line of every set.)
-		//To run a new trial: First empty the folders that are referred to in this method. Then run the method. Make sure the fourth parameter is zero in the first line of every set.
-		
-		
+		//runFFHiddenNodeEx(); //Exp #1
+		//runFFLearningRateEx(); //Exp #2
+		//runFFTrainingExampleEx(); //Exp #3
+			
+		//runRBFSigmaEx(); //Exp #4
+
+		//runRBFLearningRateEx(); //Exp #5
+
+		//runRBFTrainingExamplesEx(); //Exp #6
 		
 		
 		//runKNNKEx();// Exp 7
 
 		//runKNNTrainingExamplesEx(); //Exp 8
-		//runFFHiddenNodeEx(); //Exp #1
-				//runFFLearningRateEx(); //Exp #2
-				//runFFTrainingExampleEx(); //Exp #3
-		
-
-		//runRBFSigmaEx(); //Exp #4
-
-		//runRBFLearningRateEx(); //Exp #5
-
-		//runRBFTrainingExamplesEx(); //Exp #6*/
 
 
 	}

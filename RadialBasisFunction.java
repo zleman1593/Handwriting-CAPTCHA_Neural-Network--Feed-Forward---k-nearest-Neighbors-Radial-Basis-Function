@@ -1,8 +1,11 @@
-/*This is a Radial Basis Function Neural Network trained by gradient descent on the weights from the hidden layer to the output nodes*/
-
-//Notes: This has only been tested on non thresholded images. Need to experiment with binary
-//Notes: The way threads are being implemented, up to ten cores can be used. Any more will not provide an advantage as only ten threads can be created.
-//If more than ten cores are available we could think about change the way we do multi-threading.
+/*
+ * Hand Writing Recognition and Simple CAPTCHA Neural Network
+ * CS 3425 Final project
+ * Spring 2014
+ * Min "Ivy" Xing, Zackery Leman
+ * This is a Radial Basis Function Neural Network trained by gradient descent on the weights from the hidden layer to the output nodes
+ * Notes: The way threads are being implemented, the code is optimized for either 8 virtual or 24 real cores. 
+ */
 
 import java.util.*;
 import java.io.IOException;
