@@ -923,11 +923,12 @@ public static void twentyFourCore(){
 	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
 	 */
 	public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
+		numImgAnalyzed=0;
 		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
 		for (int i = 0; i < networkInputData.size(); i++) {
 			for(int j=0; j<networkInputData.get(i).size();j++){
 			newtworkResults.add(singleImageBestGuess(networkInputData.get(i), j));
-			numCaptchasAnalyzed++;
+			numImgAnalyzed++;
 			}
 		}
 		System.out.println("num images analyzed" + numImgAnalyzed);
