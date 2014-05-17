@@ -199,7 +199,7 @@ public class loadCaptchaImage {
 	
 	// Returns all training data - list of character images.
 	public ArrayList<DigitImage> getTrainingData() {
-		return alltrainingData;
+		return allTrainingData;
 	}
 	
 	// Returns all Captchas - list of Captcha arrays, each array is a list of character images.

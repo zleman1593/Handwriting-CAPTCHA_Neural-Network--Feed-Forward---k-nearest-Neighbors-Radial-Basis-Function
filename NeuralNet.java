@@ -46,9 +46,13 @@ public class NeuralNet {
 	// Number of output nodes (Currently the network depends on 10 or 36 output nodes)
 	public static final int NUMBER_OF_OUTPUT_NODES = 36;
 	
-	// Create array of Nodes in first layer and output layer
+	// Create array network guessed incorrectlyof Nodes in first layer and output layer
 	private static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	private static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
+	
+	
+	//TEST
+	public static int numImgAnalyzed = 0;
 	
 	// The learning rate for the network
 	public  static double learningRate;
@@ -77,6 +81,7 @@ public class NeuralNet {
 	
 	public static final int NUMBER_OF_CORES=8;
 	public static  int imageNumber123;
+	public static  ArrayList<ArrayList<DigitImage>> testingData= new ArrayList<ArrayList<DigitImage>>();
 	
 	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, 
 		String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, 
@@ -275,7 +280,7 @@ public class NeuralNet {
 	 */
 	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
 		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
-		outputOfCurrentlayer.clear(); 
+		//outputOfCurrentlayer.clear(); 
 		for (int i = 0; i < currentLayer.size(); i++) {
 			if (outputFromPreviousLayer.size()>198){
 				int w=1;
@@ -339,8 +344,14 @@ public class NeuralNet {
 		ArrayList<Double> errorLayer = new ArrayList<Double>();
 
 		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
+			//System.out.println("solution vector size:" + trainingData.get(imageNumber).getSolutionVector().size());
+			if (trainingData.get(imageNumber).getSolutionVector().size() == 0) {
+				System.out.println("HERE");
+			}
 			double correctOutput = trainingData.get(imageNumber).getSolutionVector().get(i);
 			double output = outputLayerOutput.get(i);
+			//System.out.println("solution vector size:" + trainingData.get(imageNumber).getSolutionVector().size());
+			//System.out.println("training data size: " + trainingData.size());
 			double rawError = correctOutput - output;
 			errorLayer.add(rawError);
 		}
@@ -400,10 +411,10 @@ public class NeuralNet {
 			}
 		}
 		if (correctOutput == maxInt) {
-			System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
+		//	System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
 			countOfCorrectImagesAnalyzed++;
 		} else {
-			System.out.println("The network guessed incorrectly: " + maxInt + " The correct number was: " + (int) correctOutput);
+		//	System.out.println("The network guessed incorrectly: " + maxInt + " The correct number was: " + (int) correctOutput);
 			holder[(int) maxInt]++;	
 		}
 
@@ -836,8 +847,8 @@ public static void twentyFourCore(){
 		// Loads training and testing data sets
 				loadCaptchaImage dataSets = new loadCaptchaImage();
 				trainingData = dataSets.getTrainingData();
-			
 				
+		testingData = dataSets.getTestingData();
 					// Alters data into proper form
 					if(NUMBER_OF_OUTPUT_NODES==10){
 					for (int i = 0; i < trainingData.size(); i++) {
@@ -849,6 +860,7 @@ public static void twentyFourCore(){
 							trainingData.get(i).vectorizeTrainingDataAlphaNum();
 						}
 					}
+					System.out.println("BREAKING...");
 
 		// Looks at a representation of an image
 		// and determines how many pixels and thus how many input nodes are
@@ -885,18 +897,14 @@ public static void twentyFourCore(){
 		// Loads testing data set
 
 		
-		//loadCaptchaImage dataSets = new loadCaptchaImage();
-		ArrayList<DigitImage> testingData = trainingData;
 		
-		// Loads testing data set
-				//loadCaptchaImage dataSets = new loadCaptchaImage();
-				//ArrayList<ArrayList<DigitImage>> testingData = dataSets.getTestingData();
-				
+		
+	
 		
 		
 		// Tests the network with the testing Data and prints results to file
 		//write(solveTestingData(testingData));
-		solveTestingData(testingData);
+		solveTestingDataCaptcha(testingData);
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
@@ -914,16 +922,18 @@ public static void twentyFourCore(){
 	/*
 	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
 	 */
-	/*(public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
+	public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
 		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
 		for (int i = 0; i < networkInputData.size(); i++) {
 			for(int j=0; j<networkInputData.get(i).size();j++){
 			newtworkResults.add(singleImageBestGuess(networkInputData.get(i), j));
+			numCaptchasAnalyzed++;
 			}
 		}
+		System.out.println("num images analyzed" + numImgAnalyzed);
 		return newtworkResults;
 	}
-	*/
+	
 	
 	
 }
