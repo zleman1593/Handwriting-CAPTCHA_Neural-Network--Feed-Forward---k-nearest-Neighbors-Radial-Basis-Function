@@ -3,8 +3,8 @@
  * CS 3425 Final project
  * Spring 2014
  * Min "Ivy" Xing, Zackery Leman
- * This is a Radial Basis Function Neural Network trained by gradient descent on the weights from the hidden layer to the output nodes
- * Notes: The way threads are being implemented, the code is optimized for either 8 virtual or 24 real cores. 
+ * This is a Radial Basis Function Neural Network trained by gradient descent on the weights from the hidden layer to the output nodes.
+ * Notes: The way threads are  implemented, the code is optimized for either 8 or 24 real cores. 
  */
 
 import java.util.*;

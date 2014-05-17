@@ -1,18 +1,13 @@
 /*
- Hand Writing Recognition and Simple CAPTCHA Neural Network
-  CS 3425 Final project
-  Spring 2014
-  Min "Ivy" Xing, Zackery Leman
-  This network works by reading in an image and then selecting the number 0-9 that corresponds to the output node with greatest activation.
-  It is a feed-forward neural network that uses back propagation.
+ * Hand Writing Recognition and Simple CAPTCHA Neural Network
+ * CS 3425 Final project
+ * Spring 2014
+ * Min "Ivy" Xing, Zackery Leman
+ * This network works by reading in an image and then selecting the number 0-9, or letter a-z, that corresponds to the output node with greatest activation.
+ * It is a feed-forward neural network that uses back propagation.
+ * NOTES: To run this we had to pass the argument " -Xmx800M"  to the java virtual machine.
+ * Notes: The way threads are implemented, the code is optimized for either 8 or 24 real cores. 
  */
-
-// NOTES: To run this we had to pass the argument " -Xmx800M"  to the java virtual machine
-// NOTES: I got 89 percent accuracy when I set epochs to 30 and hidden nodes to 15. But it took 30 minutes to run.
-
-// IVY NOTE: You will need to change the user name to your user name in all paths like "/Users/zackeryleman/Desktop/NeuralNetOutput/TrainedSetOutputWeights.txt"
-//ALSO: Add the folder NeuralNetOutput that is currently in the same folder as this file to your desktop.
-//ALSO: set epochs to 5 and hidden nodes to 6 for a fairly quick run to see how it works..
 
 import java.util.*;
 import java.io.IOException;
@@ -28,53 +23,45 @@ public class NeuralNet {
 	public static double countOfImagesAnalyzed = 0;
 	// Tracks the number of images correctly identified in the testing set.
 	public static double countOfCorrectImagesAnalyzed = 0;
-	// Tracks running time of the training
+	// Tracks running time of the training.
 	public static long trainingTime;
-	// Tracks running time of the training
+	// Tracks running time of the testing.
 	public static long solutionTime;
-	// The number of times the network is trained with the training Data
+	// The number of times the network is trained with the training data.
 	public static int epochs;
-	// Creates a random number generator
+	// Creates a random number generator.
 	public static Random random = new Random();
-	// The number of input nodes will be equal to the number of pixels in the
-	// image
+	// The number of input nodes will be equal to the number of pixels in the image.
 	public static int numberOfInputNodes;
 	// Number of hidden layers
 	public static final int NUMBER_OF_HIDDEN_LAYERS = 1;
 	// Number of hidden nodes in second layer (first hidden layer)
 	public  static int numberOfNodesInHiddenLayer;
-	// Number of output nodes (Currently the network depends on 10 or 36 output nodes)
-	public static final int NUMBER_OF_OUTPUT_NODES = 10;
-	
-	// Create array of Nodes in first layer and output layer
+	// Number of output nodes (Currently the network depends on 10 or 36 output nodes. Either only number or alphanumeric)
+	public static final int NUMBER_OF_OUTPUT_NODES = 10; //=36;
+	// Create array of nodes in first hidden layer and output layer. Each node will hold an array of weights.
 	private static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	private static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
-	
-	// The learning rate for the network
+	// The learning rate for the network.
 	public  static double learningRate;
-	// Whether to use weights that have already been trained or to train network again in order to test the network
-	//or as the starting weights to continue a break in training
-	public static int usePriorWeights;
-
-	// For a given training image this array is filled with the output for each
-	// layer and then reset for the next image.
-	// Prevents duplicate calculations from being performed.
+	// Whether to use weights that have already been trained (by ready from a file) or to train network again (from scratch) in order to test the network
+	public static int usePriorWeights;// 0=Trains the Network from scratch, 2=Trains the Network starting from weights stored in file, 1=Tests network using weights stored in file without retraining
+	// For a given training image this array is filled with the output for each layer and then reset for the next image.
+	// This prevents duplicate calculations from being performed.
 	public static ArrayList<ArrayList<Double>> tempOutput = new ArrayList<ArrayList<Double>>();
-	
+	// Divide the number of avalible training examples by htis number
 	public static int trainingSetReductionFactor;
-	
+	//File paths four both output and input files
 	public static String filePathResults; 
 	public static String filePathTrainedOutputWeights; 
 	public static String filePathTrainedHiddenWeights; 
-	
 	// Is true if the input into the network consists of binary (black and white) images. False if Grayscale.
 	public  static boolean binaryInput;
-	
-	public static int[]  holder = new int[NUMBER_OF_OUTPUT_NODES];
-	
+	// Keeps track of false positive guesses for each alphanumeric character
+	public static int[]  falsePositiveCount = new int[NUMBER_OF_OUTPUT_NODES];
+	//Stores raw training data
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
-	
-	
+	//This is set to either 8 or 24. If the machine has at least this
 	public static final int NUMBER_OF_CORES=24;
 	
 	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, 
@@ -101,8 +88,8 @@ public class NeuralNet {
 		String testingLabels = "Testing-Labels";
 
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
-		for (int m = 0; m < holder.length; m++) {
-			holder[m] = 0;
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			falsePositiveCount[m] = 0;
 		}
 		System.out.println("There are " + Runtime.getRuntime().availableProcessors() + " cores available to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling in cores.");
@@ -143,8 +130,8 @@ public class NeuralNet {
 			//testMultilayerFeedForwardCaptcha();
 		}
 
-		for (int m = 0; m < holder.length; m++) {
-			System.out.println("Number " + m +" was guessed incorrectly" + holder[m]+ " times."); 
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			System.out.println("Number " + m +" was guessed incorrectly" + falsePositiveCount[m]+ " times."); 
 		}
 	}
 
@@ -391,7 +378,7 @@ public class NeuralNet {
 			countOfCorrectImagesAnalyzed++;
 		} else {
 			System.out.println("The network guessed incorrectly: " + maxInt + " The correct number was: " + (int) correctOutput);
-			holder[(int) maxInt]++;	
+			falsePositiveCount[(int) maxInt]++;	
 		}
 
 		OutputVector result = new OutputVector(correctOutput, maxInt);
@@ -473,8 +460,8 @@ public class NeuralNet {
 			outputWriter.newLine();
 		}
 		
-		for (int m = 0; m < holder.length; m++) {
-			outputWriter.write("Number " + m +" was guessed " + holder[m] + " times, when it should have guessed another number.");
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			outputWriter.write("Number " + m +" was guessed " + falsePositiveCount[m] + " times, when it should have guessed another number.");
 			outputWriter.newLine();
 		}
 		outputWriter.flush();

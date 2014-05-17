@@ -1,11 +1,11 @@
 import java.io.IOException;
 
 /*
- * This class creates multiple instances of each network and allows tests to be run one after another and have the results neatly collected in output files in subfolders.
- * Make sure to pass the argument of 3 GB minimum of Ram.
+ * This class creates multiple instances of each network type and allows tests to be run one after another and have the results neatly collected in output files in subfolders.
+ * Make sure to pass the argument of 3 GB minimum of Ram to the JVM, in order to run properly.
  * 1. First unzip the NeuralNetOutput.zip in a directory.
- * 2. Change  "/Users/zackeryleman/Desktop" with the file path of the NeuralNetOutput folder.
- * 3. Change the NUMBER_OF_CORES to 24 or 8 in each neural net class, depending on your machine.
+ * 2. Change  "/Users/zackeryleman/Desktop" to be the file path of the NeuralNetOutput folder.
+ * 3. Change the NUMBER_OF_CORES to 24 or 8 in each neural net class, depending on your machine. The processors are required to share memory and thus must be run on the same machine.
  */
 public class testAllNetworksQueue {
 
@@ -40,7 +40,7 @@ public class testAllNetworksQueue {
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/15/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/15/TrainedSetHiddenWeights.txt";
 
-		//	15 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
+		// 15 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet firstFF1 = new NeuralNet(15,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet firstFF2 = new NeuralNet(15,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet firstFF3 = new NeuralNet(15,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -54,7 +54,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet firstFF1A = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet firstFF2A = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet firstFF3A = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -68,7 +68,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/50/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/50/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/50/TrainedSetHiddenWeights.txt";
-		// 50 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
+		// 50 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet firstFF1AA = new NeuralNet(50,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet firstFF2AA = new NeuralNet(50,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet firstFF22AA = new NeuralNet(50,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -82,7 +82,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/100/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/100/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/100/TrainedSetHiddenWeights.txt";
-		// 100 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
+		// 100 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet FF1B = new NeuralNet(100,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet FF2B = new NeuralNet(100,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet FF3B = new NeuralNet(100,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -107,7 +107,7 @@ public class testAllNetworksQueue {
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.1/Results";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.1/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.1/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.1, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.1, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet secondFF1 = new NeuralNet(30,5,0.1,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet secondFF2 = new NeuralNet(30,5,0.1,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet secondFF3 = new NeuralNet(30,5,0.1,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -123,7 +123,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.2/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.2/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.2/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.2, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.2, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet secondFF1B = new NeuralNet(30,5,0.2,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet secondFF2B = new NeuralNet(30,5,0.2,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet secondFF3B = new NeuralNet(30,5,0.2,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -138,7 +138,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.5/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.5, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.5, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet secondFF1C = new NeuralNet(30,5,0.5,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet secondFF2C = new NeuralNet(30,5,0.5,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet secondFF3C = new NeuralNet(30,5,0.5,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -153,7 +153,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/0.7/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.7, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.7, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet secondFF1D = new NeuralNet(30,5,0.7,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet secondFF2D = new NeuralNet(30,5,0.7,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet secondFF3D = new NeuralNet(30,5,0.7,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -170,7 +170,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 1, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 1, binary input, continue training 5 epochs at a time on the full data set
 		NeuralNet secondFF1E = new NeuralNet(30,5,1,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 1-5
 		NeuralNet secondFF2E = new NeuralNet(30,5,1,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 6-10
 		NeuralNet secondFF3E = new NeuralNet(30,5,1,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 11-15
@@ -192,7 +192,7 @@ public class testAllNetworksQueue {
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1t/Results";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1t/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/1t/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time on a 1000th of the data set
 		NeuralNet secondFF1 = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 1-5
 		NeuralNet secondFF2 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 6-10
 		NeuralNet secondFF3 = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1000);//epochs 11-15
@@ -207,7 +207,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/2t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/2t/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/2t/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time on a half of the data set
 		NeuralNet secondFF1B = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,2);//epochs 1-5
 		NeuralNet secondFF2B = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,2);//epochs 6-10
 		NeuralNet secondFF3B = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,2);//epochs 11-15
@@ -221,7 +221,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/10t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/10t/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/10t/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.3, binary input, continue training 5 epochs at a time on a tenth of the data set
 		NeuralNet secondFF1C = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,10);//epochs 1-5
 		NeuralNet secondFF2C = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,10);//epochs 6-10
 		NeuralNet secondFF3C = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,10);//epochs 11-15
@@ -236,7 +236,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30t/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30t/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.7, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 0.7, binary input, continue training 5 epochs at a time on a 30th of the data set
 		NeuralNet secondFF1D = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,30);//epochs 1-5
 		NeuralNet secondFF2D = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,30);//epochs 6-10
 		NeuralNet secondFF3D = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,30);//epochs 11-15
@@ -251,7 +251,7 @@ public class testAllNetworksQueue {
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/60t/Results";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/60t/TrainedSetOutputWeights.txt";
 		filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/60t/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 1, binary input, continue training 5 epochs at a time
+		// 30 Hidden Nodes, learning rate 1, binary input, continue training 5 epochs at a time on a 60th of the data set
 		NeuralNet secondFF1E = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,60);//epochs 1-5
 		NeuralNet secondFF2E = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,60);//epochs 6-10
 		NeuralNet secondFF3E = new NeuralNet(30,5,0.3,2,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,60);//epochs 11-15
@@ -271,6 +271,7 @@ public class testAllNetworksQueue {
 	 *  Runs Experiment #7
 	 */
 	public static void runKNNKEx() throws IOException, ClassNotFoundException{
+		//Runs K-NN networks with multiple K values on the 12,000 images in the training set using raw gray scale images. Tests using 1000 images.
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNN/k/KNNResults";
 		KNearestNeighbors a = new KNearestNeighbors(1,false,5,1000,filePathResults);
 		KNearestNeighbors b = new KNearestNeighbors(2,false,5,1000,filePathResults);
@@ -304,6 +305,7 @@ public class testAllNetworksQueue {
 	 *  Runs Experiment #8
 	 */
 	public static void runKNNTrainingExamplesEx() throws IOException, ClassNotFoundException{
+		//Runs K-NN networks with multiple K=3  on the various number of images in the training set using raw gray scale images. Tests using 1000 images.
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNN/trainingExamples/KNNResults";
 		KNearestNeighbors a = new KNearestNeighbors(3,false,1,1000,filePathResults);
 		KNearestNeighbors b = new KNearestNeighbors(3,false,2,1000,filePathResults);
@@ -334,13 +336,12 @@ public class testAllNetworksQueue {
 	 *  Runs Experiment #5
 	 */
 	public static void runRBFLearningRateEx() throws IOException, ClassNotFoundException{
+		//50 epochs for each learning rate
 
-
-		//sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
-		//For binary I am testing with sigam =  between 15-10 (11 seems optimal)
+	
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.1/RbfResults";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.1/TrainedRBFSetOutputWeights.txt";
-
+		//Learning rate=0.1
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.1,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.1,1,filePathResults,filePathTrainedOutputWeights);
@@ -365,7 +366,7 @@ public class testAllNetworksQueue {
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.3/TrainedRBFSetOutputWeights.txt";
-
+		//Learning rate=0.3
 		RadialBasisFunction a2 = new RadialBasisFunction(20,false,1000000,5,0.3,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c2 = new RadialBasisFunction(20,false,1000000,5,0.3,1,filePathResults,filePathTrainedOutputWeights);
@@ -390,7 +391,7 @@ public class testAllNetworksQueue {
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.5/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.5/TrainedRBFSetOutputWeights.txt";
-
+		//Learning rate=0.5
 		RadialBasisFunction a3 = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c3 = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -416,7 +417,7 @@ public class testAllNetworksQueue {
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.9/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/LR/0.9/TrainedRBFSetOutputWeights.txt";
-
+		//Learning rate=0.9
 		RadialBasisFunction a4 = new RadialBasisFunction(20,false,1000000,5,0.9,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c4 = new RadialBasisFunction(20,false,1000000,5,0.9,1,filePathResults,filePathTrainedOutputWeights);
@@ -449,13 +450,11 @@ public class testAllNetworksQueue {
 	 *  Runs Experiment #4
 	 */
 	public static void runRBFSigmaEx() throws IOException, ClassNotFoundException{
-
-		//sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
-		//For binary I am testing with sigam =  between 15-10 (11 seems optimal)
+		//50 epochs for each  sigmaSquared
 
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/RbfResults";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/1000000/TrainedRBFSetOutputWeights.txt";
-
+//sigmaSquared=1000000
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,2,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -480,7 +479,7 @@ public class testAllNetworksQueue {
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000/TrainedRBFSetOutputWeights.txt";
-
+		//sigmaSquared=100000
 		RadialBasisFunction a2 = new RadialBasisFunction(20,false,100000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c2 = new RadialBasisFunction(20,false,100000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -506,7 +505,7 @@ public class testAllNetworksQueue {
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100/TrainedRBFSetOutputWeights.txt";
-
+		//sigmaSquared=100
 		RadialBasisFunction a3 = new RadialBasisFunction(20,false,100,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c3 = new RadialBasisFunction(20,false,100,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -527,15 +526,12 @@ public class testAllNetworksQueue {
 		h3=null;
 		i3=null;
 		j3=null;
-		System.gc();
-		try{Thread.sleep(10000); // Sleep for one second
-		}catch (InterruptedException e){Thread.currentThread().interrupt();}
 
 
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000000/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/Sigma/100000000/TrainedRBFSetOutputWeights.txt";
-
+		//sigmaSquared=100000000
 		RadialBasisFunction a4 = new RadialBasisFunction(20,false,100000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c4 = new RadialBasisFunction(20,false,100000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -567,13 +563,12 @@ public class testAllNetworksQueue {
 	 *  Runs Experiment #6
 	 */
 	public static void runRBFTrainingExamplesEx() throws IOException, ClassNotFoundException{
+		// 50 epochs for each number of training examples
 
-
-		//sigmaSquaredSquared = 1000000; //:  Experiment with numbers for this value 1000000     (sigmaSquared=100000 gave 29.86%)   (sigmaSquared=1000000 gave 86.36% another 20 epochs or so brings it to 92% with leanring at 1)
-		//For binary I am testing with sigam =  between 15-10 (11 seems optimal)
+	
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/20/RbfResults";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/20/TrainedRBFSetOutputWeights.txt";
-
+		 // Training data set reduction factor = 20
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -597,7 +592,7 @@ public class testAllNetworksQueue {
 		
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/1/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/1/TrainedRBFSetOutputWeights.txt";
-
+		 // Training data set reduction factor = 1
 		RadialBasisFunction a2 = new RadialBasisFunction(1,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c2 = new RadialBasisFunction(1,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -622,7 +617,7 @@ public class testAllNetworksQueue {
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/5/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/5/TrainedRBFSetOutputWeights.txt";
-
+		 // Training data set reduction factor = 5
 		RadialBasisFunction a3 = new RadialBasisFunction(5,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c3 = new RadialBasisFunction(5,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
@@ -650,7 +645,7 @@ public class testAllNetworksQueue {
 
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/200/RbfResults";
 		filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/200/TrainedRBFSetOutputWeights.txt";
-
+		 // Training data set reduction factor = 200
 		RadialBasisFunction a4 = new RadialBasisFunction(200,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c4 = new RadialBasisFunction(200,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
