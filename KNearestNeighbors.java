@@ -4,7 +4,7 @@
  * Spring 2014
  * Min "Ivy" Xing, Zackery Leman
  * This is a K-Nearest Neighbor network that reads the MNIST data.
- * Notes: The way threads are  implemented, the code is optimized for either 8 or 24 real cores. 
+ * Notes: The way threads are implemented, the code is optimized for either 8 or 24 real cores. 
  */
 
 import java.io.BufferedWriter;
@@ -25,7 +25,6 @@ public class KNearestNeighbors {
 	// Create array of Nodes in first layer and associated one that points to the correct output
 	public static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<Integer> hiddenLayerToOutput = new ArrayList<Integer>();
-	
 	// Holds the image data set that will be used to test the network
 	public static ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
 	//How many nearest Neighbors to use.
@@ -35,125 +34,105 @@ public class KNearestNeighbors {
 	// set to one to use all of the training data to train the network. The number of training examples  is divided by this number
 	public  static int trainingSetReductionFactor;
 	//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
-	public static int[]  holder=new int[10];
-	
+	public static int[]  falsePositiveCount=new int[10];
 	//These allow each thread to manipulate its own version of a similar data structure
-	public static ArrayList<ArrayList<Double>> hiddenLayerDottedOutputValuesHolderArray = new ArrayList<ArrayList<Double>>();
-
-	
+	public static ArrayList<ArrayList<Double>> hiddenLayerDottedOutputValuesfalsePositiveCountArray = new ArrayList<ArrayList<Double>>();
 	// Tracks the number of images correctly identified in the testing set.
 	public static ArrayList<Integer> countOfCorrectImagesAnalyzed = new ArrayList<Integer>();
 	// Tracks the number of images processed in the testing set.
 	public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
-	
-	public static  double countOfImagesAnalyzedTotal=0;
-	
-	public static  double countOfCorrectImagesAnalyzedTotal=0;
-	
+	public static  double totalCountOfImagesAnalyzed=0;
+	public static  double totalCountOfCorrectImagesAnalyzed=0;
 	public static String filePathResults;
-	
 	public static long trainingTime;
-	
-	public static final int NUMBER_OF_CORES=24;
-	//These are just constants
+	public static final int NUMBER_OF_CORES=8;
+	//These are just the data files that hold the MNIST testing and training sets
 	public static final String  trainingImages = "Training-Images";
 	public static final	String testingImages = "Testing-images";
 	public static final	String trainingLabels = "Training-Labels";
 	public static final	String testingLabels = "Testing-Labels";
-	
+
 	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1, String filePathResults1) throws IOException, ClassNotFoundException {
-		//These lines are needed to prevent errors where objects refrence
-		//each others' data structures
+
 		hiddenLayerNodes.clear();
 		hiddenLayerToOutput.clear();
-		hiddenLayerDottedOutputValuesHolderArray.clear();
+		hiddenLayerDottedOutputValuesfalsePositiveCountArray.clear();
 		countOfImagesAnalyzed.clear();
 		countOfCorrectImagesAnalyzed.clear();
 		testingData.clear();
-		
-	k = k1;
-	binaryInput=binaryInput1;
-	trainingSetReductionFactor=trainingSetReductionFactor1;
-	numberOfImagesToTest = numberOfImagesToTest1;
-	filePathResults=filePathResults1;
+
+		k = k1;
+		binaryInput=binaryInput1;
+		trainingSetReductionFactor=trainingSetReductionFactor1;
+		numberOfImagesToTest = numberOfImagesToTest1;
+		filePathResults=filePathResults1;
 
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
-		for (int m = 0; m < holder.length; m++) {
-			holder[m]=0;
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			falsePositiveCount[m]=0;
 		}
+
 		for (int m = 0; m < NUMBER_OF_CORES; m++) {
-			 ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
-		hiddenLayerDottedOutputValuesHolderArray.add(hiddenLayerDottedOutputValues);
+			ArrayList<Double> hiddenLayerDottedOutputValues = new ArrayList<Double>();
+			hiddenLayerDottedOutputValuesfalsePositiveCountArray.add(hiddenLayerDottedOutputValues);
 		}
-		
-		
+
+
 		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
-	
-		
-		
-	
 
-		
-		if(!binaryInput){
-			System.out.println("It is normal for this network to not preform well with binary data.");
-			}
-		
+
+
 		// "Train" the network AKA create hidden layer
 		long startTime = System.currentTimeMillis();
 		trainKNearestNeighbours();
 
-		
-		
+
 		//Sets up trackers for each thread
 		for(int y=0; y<NUMBER_OF_CORES;y++){
 			countOfImagesAnalyzed.add(0);
 			countOfCorrectImagesAnalyzed.add(0);
 		}
-		
-		
-		
-		
+
+
 		// Loads test data for the K-Nearest Neighbors Network
 		loadtestDataForKNearestNeighbours(testingImages, testingLabels);
-		 startTime = System.currentTimeMillis();
-		 if(NUMBER_OF_CORES==8){
-			 eightCore();
-		 }else if (NUMBER_OF_CORES==24) {
-			 twentyFourCore();
-		 }else{
-			 System.out.println("There are not 24 or 8 cores?");
-		 }
-		
-		 long endTime = System.currentTimeMillis();
-		 executionTime = endTime - startTime;
-		
-		 countOfCorrectImagesAnalyzedTotal=0;
-		 countOfImagesAnalyzedTotal=0;
-		
+		startTime = System.currentTimeMillis();
+		if(NUMBER_OF_CORES==8){
+			eightCore();
+		}else if (NUMBER_OF_CORES==24) {
+			twentyFourCore();
+		}else{
+			System.out.println("There are not 24 or 8 cores?");
+		}
+
+		long endTime = System.currentTimeMillis();
+		executionTime = endTime - startTime;
+		totalCountOfCorrectImagesAnalyzed=0;
+		totalCountOfImagesAnalyzed=0;
+		//Calculates the total number of images analyzed and correct by each thread
 		for(int x=0;x< countOfCorrectImagesAnalyzed.size();x++){
-			countOfCorrectImagesAnalyzedTotal=countOfCorrectImagesAnalyzedTotal+countOfCorrectImagesAnalyzed.get(x);
+			totalCountOfCorrectImagesAnalyzed=totalCountOfCorrectImagesAnalyzed+countOfCorrectImagesAnalyzed.get(x);
 		}
 		for(int x=0;x< countOfImagesAnalyzed.size();x++){
-			countOfImagesAnalyzedTotal=countOfImagesAnalyzedTotal+countOfImagesAnalyzed.get(x);
+			totalCountOfImagesAnalyzed=totalCountOfImagesAnalyzed+countOfImagesAnalyzed.get(x);
 		}
-		
+
 		//Summarizes results
-		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
-		System.out.println("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
+		double percentCorrect = (totalCountOfCorrectImagesAnalyzed / totalCountOfImagesAnalyzed) * 100;
+		System.out.println("Analyzed " + totalCountOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		System.out.println("Solution time: " + executionTime + " milliseconds");
-		System.out.println("# Correct: " + countOfCorrectImagesAnalyzedTotal);
-		
+		System.out.println("# Correct: " + totalCountOfCorrectImagesAnalyzed);
+
 		write();
 		//Prints out the stats for each number
-		for (int m = 0; m < holder.length; m++) {
-			System.out.println("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			System.out.println("Number " + m+" was guessed " +falsePositiveCount[m]+ " times, when it should have guessed another number.");
 		}
 
 	}
 
 	public static void trainKNearestNeighbours() throws IOException {
-
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
 		ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
@@ -163,7 +142,6 @@ public class KNearestNeighbors {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		// Looks at a representation of an image
 		// and determines how many pixels and thus how many input nodes are needed
 		// (one per pixel)
@@ -171,14 +149,12 @@ public class KNearestNeighbors {
 
 		long startTime = System.currentTimeMillis();
 		// Initialize weights with values corresponding to the binary pixel value for all nodes in the first hidden layer.
-		// Currently dividing by 2 to only use a half of the training set so we don't run out of memory. We likely don't need that many anyway.
 		for (int i = 0; i < trainingData.size()/trainingSetReductionFactor; i++) {
 			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
 			weights = trainingData.get(i).getArrayListData();
 			hiddenLayerNodes.add(weights);
 			hiddenLayerToOutput.add((int) trainingData.get(i).getLabel());
 		}
-
 		long endTime = System.currentTimeMillis();
 		trainingTime = endTime - startTime;
 		System.out.println("Training time: " + trainingTime + " milliseconds");
@@ -186,7 +162,6 @@ public class KNearestNeighbors {
 	}
 
 	public static void loadtestDataForKNearestNeighbours(String testingImages, String testingLabels) throws IOException {
-
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		testingData = new ArrayList<DigitImage>();
@@ -198,38 +173,32 @@ public class KNearestNeighbors {
 		}		
 	}
 
-	
+
 	public static void solveTestingData(ArrayList<DigitImage> networkInputData, int k, int thread, int startIndex, int EndIndex) {
 		//	long startTime = System.currentTimeMillis();
 		for (int i = startIndex; i <EndIndex; i++) {
 			ArrayList<Double> temp = networkInputData.get(i).getArrayListData();
-			hiddenLayerDottedOutputValuesHolderArray.set(thread,outPutOfLayer(hiddenLayerNodes, temp));
-
-
-			//I IF K=1 just run this code because it is faster	
+			
+			hiddenLayerDottedOutputValuesfalsePositiveCountArray.set(thread,outPutOfLayer(hiddenLayerNodes, temp));
+			
 			double output = 0;
+			//I IF K=1 just run this code because it is faster	
 			if(k==1){	
-
-
 				//Find which node has the maximum output and then
 				//return the number that is at that node position in the associated output array.
-
 				double currentMax = 0;
-				for (int j = 0; j < hiddenLayerDottedOutputValuesHolderArray.get(thread).size(); j++) {
-					if (hiddenLayerDottedOutputValuesHolderArray.get(thread).get(j) > currentMax) {
-						currentMax = hiddenLayerDottedOutputValuesHolderArray.get(thread).get(j);
+				for (int j = 0; j < hiddenLayerDottedOutputValuesfalsePositiveCountArray.get(thread).size(); j++) {
+					if (hiddenLayerDottedOutputValuesfalsePositiveCountArray.get(thread).get(j) > currentMax) {
+						currentMax = hiddenLayerDottedOutputValuesfalsePositiveCountArray.get(thread).get(j);
 						output = hiddenLayerToOutput.get(j);
 					}
 				}
 			}
 			else{
-
-				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValuesHolderArray.get(thread).size()];
+				int[] indicesOfDottedOutputList = new int[hiddenLayerDottedOutputValuesfalsePositiveCountArray.get(thread).size()];
 				ArrayList<Integer> bestKOutputs = new ArrayList<Integer>();
-
-
 				initializeIndices(indicesOfDottedOutputList);
-				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValuesHolderArray.get(thread));
+				parallelSorting(indicesOfDottedOutputList, hiddenLayerDottedOutputValuesfalsePositiveCountArray.get(thread));
 				findBestKOutputs(indicesOfDottedOutputList, hiddenLayerToOutput, bestKOutputs, k);
 				output = findMostCommonOccurrenceAmongKOutputs(bestKOutputs);
 			}
@@ -244,15 +213,15 @@ public class KNearestNeighbors {
 				System.out.println("Network was Correct");
 			} else {
 				System.out.println(" Network was Wrong");
-				holder[(int) output]++;	
+				falsePositiveCount[(int) output]++;	
 			}
 			System.out.println(" ");
 		}
 
 	}
 
-	
-	
+
+
 	/* This returns an array representing the output of all nodes in the given layer */
 	public static ArrayList<Double> outPutOfLayer(ArrayList<ArrayList<Double>> currentLayer, ArrayList<Double> outputFromPreviousLayer) {
 		ArrayList<Double> outputOfCurrentlayer = new ArrayList<Double>();
@@ -264,8 +233,8 @@ public class KNearestNeighbors {
 		return outputOfCurrentlayer;
 	}
 
-	
-	
+
+
 	/*
 	 * Returns the output from a given node after the input has been summed.It takes the layer that the node is in, the index of the node in the
 	 * layer, and the output from the previous layer
@@ -275,6 +244,9 @@ public class KNearestNeighbors {
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
 			double output= Math.abs((layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i)));
 			if(output<=20){
+				//If two pixels are within 20 pixel intensity values of each other, they are considered to be the same and overlap.
+				//Thus we increment by one to make the output of this node higher.
+				//Thus nodes with higher outputs have more pixels that are close in value.
 				output=1;
 			}else{
 				output=0;
@@ -284,9 +256,9 @@ public class KNearestNeighbors {
 		return sum;
 	}
 
-	
+
 	//----------------------START UTILITY METHODS---------------------------------------------------------------------------------------------
-	
+
 	// Initialize the ordered indicies for the hiddenLayerDottedOuput list
 	public static void initializeIndices (int[] indicesArray) {
 		for (int index = 0; index < indicesArray.length; index++) {
@@ -310,7 +282,7 @@ public class KNearestNeighbors {
 		}
 	}
 
-	
+
 	/*
 	 * Writes the output of the Neural Net stored in an array of OutputVectors to a text file
 	 */
@@ -329,8 +301,8 @@ public class KNearestNeighbors {
 		outputWriter.newLine();
 		outputWriter.write("Number of nodes (training examples used) in hidden layer: " + Integer.toString(60000/trainingSetReductionFactor));
 		outputWriter.newLine();
-		double percentCorrect = (countOfCorrectImagesAnalyzedTotal / countOfImagesAnalyzedTotal) * 100;
-		outputWriter.write("Analyzed " + countOfImagesAnalyzedTotal + " images with " + percentCorrect + " percent accuracy.");
+		double percentCorrect = (totalCountOfCorrectImagesAnalyzed / totalCountOfImagesAnalyzed) * 100;
+		outputWriter.write("Analyzed " + totalCountOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
 		outputWriter.newLine();
 		outputWriter.write("Testing time: " + trainingTime + " milliseconds");
 		outputWriter.newLine();
@@ -341,23 +313,23 @@ public class KNearestNeighbors {
 		outputWriter.write("Image data binary: " + binaryInput);
 		outputWriter.newLine();
 		//for (int i = 0; i < x.size(); i++) {
-			//outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
-			//outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
-			//outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
-			outputWriter.newLine();
+		//outputWriter.write("Correct: " + x.get(i).getCorrect() + "  ");
+		//outputWriter.write("Neural net output: " + Integer.toString(x.get(i).getNeuralNetOutput()) + "   ");
+		//outputWriter.write("Expected output: " + Double.toString(x.get(i).getExpectedOutput()));
+		outputWriter.newLine();
 		//}
-			
-			for (int m = 0; m < holder.length; m++) {
-				outputWriter.write("Number " + m+" was guessed " +holder[m]+ " times, when it should have guessed another number.");
-				outputWriter.newLine();
-			}
+
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			outputWriter.write("Number " + m+" was guessed " +falsePositiveCount[m]+ " times, when it should have guessed another number.");
+			outputWriter.newLine();
+		}
 		outputWriter.flush();
 		outputWriter.close();
 	}
 
-	
+
 	//----------------------END UTILITY METHODS-----------------------------------------------------------------------------------------------
-	
+
 	// The bestKOutputsList is constructed from the sorted hiddenLaYerDottedOutput lists's indices and the 
 	// values of hiddenLayerToOutput list at the corresponding indices. 	
 	public static void findBestKOutputs(int[] sortedIndices, ArrayList<Integer> outputsList, ArrayList<Integer> bestKOutputsList, int k) {
@@ -369,30 +341,26 @@ public class KNearestNeighbors {
 	// This method finds the most commonly occurred output among the best K outputs.
 	public static int findMostCommonOccurrenceAmongKOutputs (ArrayList<Integer> bestKOutputsList) {
 		//This is simpler:
-		int[]  holder=new int[10];
-		for (int m = 0; m < holder.length; m++) {
-			holder[m]=0;
+		int[]  falsePositiveCount=new int[10];
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			falsePositiveCount[m]=0;
 		}
 		for (int m = 0; m < bestKOutputsList.size(); m++) {
-			holder[bestKOutputsList.get(m)]++;	
+			falsePositiveCount[bestKOutputsList.get(m)]++;	
 		}
 		int mostCommonValue=0;
 		int max=0;
-		for (int m = 0; m < holder.length; m++) {
-			if(holder[m]>max){
-				max=holder[m];
+		for (int m = 0; m < falsePositiveCount.length; m++) {
+			if(falsePositiveCount[m]>max){
+				max=falsePositiveCount[m];
 				mostCommonValue=m;
 			}
 		}
 		return mostCommonValue;
-
-
 	}
 
-	
+
 	public static void eightCore(){
-		
-		
 		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
 		Runnable r1 = new Runnable() {
 			public void run() {
@@ -473,16 +441,16 @@ public class KNearestNeighbors {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
+
+
 	}
 
 
-	
-public static void twentyFourCore(){
-		
-		
+
+	public static void twentyFourCore(){
+
+
 		//Creates 8 threads and splits the test set into eight parts each of which is handled by a seperate thread 
 		Runnable r1 = new Runnable() {
 			public void run() {
@@ -533,15 +501,15 @@ public static void twentyFourCore(){
 				solveTestingData(testingData, k, 7,(numberOfImagesToTest*7)/24,(numberOfImagesToTest*8)/24);
 			}
 		};
-		
+
 		Runnable r9 = new Runnable() {
 			public void run() {
 				//Tests the second fourth of the input data
 				solveTestingData(testingData, k, 8,(numberOfImagesToTest*8)/24,(numberOfImagesToTest*9)/24);
 			}
 		};
-		
-		
+
+
 		Runnable r10 = new Runnable() {
 			public void run() {
 				//Tests the second fourth of the input data
@@ -585,8 +553,8 @@ public static void twentyFourCore(){
 				solveTestingData(testingData, k, 15,(numberOfImagesToTest*15)/24,(numberOfImagesToTest*16)/24);
 			}
 		};
-		
-		
+
+
 		Runnable r17 = new Runnable() {
 			public void run() {
 				//Tests the first quarter of the input data
@@ -636,7 +604,7 @@ public static void twentyFourCore(){
 				solveTestingData(testingData, k, 23,(numberOfImagesToTest*23)/24,numberOfImagesToTest);
 			}
 		};
-		
+
 
 		//Starts the 24 threads
 		Thread thr1 = new Thread(r1);
@@ -715,13 +683,13 @@ public static void twentyFourCore(){
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
+
+
 	}
 
-	
+
 }
-	
+
 
 

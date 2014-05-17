@@ -57,14 +57,13 @@ public class NeuralNet {
 	public static String filePathTrainedHiddenWeights; 
 	// Is true if the input into the network consists of binary (black and white) images. False if Grayscale.
 	public  static boolean binaryInput;
-	// Keeps track of false positive guesses for each alphanumeric character
+	// Keeps track of false positive guesses for each alphanumeric character.
 	public static int[]  falsePositiveCount = new int[NUMBER_OF_OUTPUT_NODES];
 	//Stores raw training data
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 	//This is set to either 8 or 24. If the machine has at least this
 	public static final int NUMBER_OF_CORES=24;
-	
-	//These are just the data files that hold the MNIST d testing and trainign sets
+	//These are just the data files that hold the MNIST testing and training sets
 	public static final String  trainingImages = "Training-Images";
 	public static final	String testingImages = "Testing-images";
 	public static final	String trainingLabels = "Training-Labels";
