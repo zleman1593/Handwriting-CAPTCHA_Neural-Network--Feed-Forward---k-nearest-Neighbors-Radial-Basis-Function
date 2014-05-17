@@ -122,7 +122,6 @@ public class RadialBasisFunction {
 	
 		
 		
-		
 			long startTime = System.currentTimeMillis();
 			
 			if (usePriorWeights==1) {

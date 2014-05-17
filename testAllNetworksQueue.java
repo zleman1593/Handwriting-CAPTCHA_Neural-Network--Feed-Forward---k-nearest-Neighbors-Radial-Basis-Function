@@ -17,9 +17,9 @@ public class testAllNetworksQueue {
  //NeuralNet secondFF4 = new NeuralNet(25,1000,0.4,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20 //88.76
 		//NeuralNet secondFF4 = new NeuralNet(21,500,0.4,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
 		
-		//NeuralNet secondFF4 = new NeuralNet(30,500,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20 //20 percent for captchas
-		NeuralNet secondFF4 = new NeuralNet(30,500,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
-		
+		NeuralNet secondFF4 = new NeuralNet(30,500,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20 //20 percent for captchas
+		//NeuralNet secondFF4 = new NeuralNet(30,500,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
+		//KNearestNeighbors c = new KNearestNeighbors(3,false,1,40,filePathResults);
 		//To expand the current trail  by another 5 epochs, simply change the first line in each set to make it use the data already written to files: 
 		//(i.e Make sure the fourth parameter is 2 in the first line of every set.)
 		//To run a new trial: First empty the folders that are referred to in this method. Then run the method. Make sure the fourth parameter is zero in the first line of every set.

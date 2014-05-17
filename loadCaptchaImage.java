@@ -15,6 +15,7 @@
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
@@ -22,6 +23,8 @@ import javax.imageio.ImageIO;
 
 public class loadCaptchaImage {
 	// List of captchas fed to the Neural Networks.
+	// Creates a random number generator
+	public static Random random = new Random();
 	private static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
 	// List of training set of characters fed to the Neural Networks.
 	private static ArrayList<DigitImage> allTrainingData = new ArrayList<DigitImage>();
@@ -41,7 +44,7 @@ public class loadCaptchaImage {
 		readAllCaptchas();
 		System.out.println("Done");
 		
-	}*/
+	}*/ 
 	
 	// Constructor.
 	public loadCaptchaImage() throws IOException {
@@ -96,6 +99,11 @@ public class loadCaptchaImage {
 				BufferedImage charImage = captchaImg.getSubimage(j, 0 , CHAR_WIDTH, CHAR_HEIGHT);
 				scanCharPixels(charImage, charPixels, 0, 0);
 				j = j + CHAR_WIDTH;
+				String randomString = Double.toString(Math.random());
+
+				  File outputfile = new File("Captcha Testing Data/here/here" + randomString+ ".gif");
+				    ImageIO.write(charImage,"gif",outputfile);
+				
 				
 				// Turn a character in a Captcha into a DigitImage and add it to the Captcha's list of DigitImages (characters).
 				int num = charToInt(imgNames, i, captchaCharPos);

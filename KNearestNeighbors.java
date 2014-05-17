@@ -28,7 +28,7 @@ public class KNearestNeighbors {
 	// set to one to use all of the training data to train the network. The number of training examples  is divided by this number
 	public  static int trainingSetReductionFactor;
 	//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
-	public static int[]  holder=new int[10];
+	public static int[]  holder=new int[36];
 	
 	//These allow each thread to manipulate its own version of a similar data structure
 	public static ArrayList<ArrayList<Double>> hiddenLayerDottedOutputValuesHolderArray = new ArrayList<ArrayList<Double>>();
@@ -47,7 +47,7 @@ public class KNearestNeighbors {
 	
 	public static long trainingTime;
 	
-	public static final int NUMBER_OF_CORES=24;
+	public static final int NUMBER_OF_CORES=8;
 	
 	public KNearestNeighbors(int k1,boolean binaryInput1, int trainingSetReductionFactor1, int numberOfImagesToTest1, String filePathResults1) throws IOException, ClassNotFoundException {
 		//These lines are needed to prevent errors where objects refrence
@@ -147,14 +147,16 @@ public class KNearestNeighbors {
 	public static void trainKNearestNeighbours(String trainingImages, String trainingLabels) throws IOException {
 
 		// Loads training and testing data sets
-		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
+		//DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
 		ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
-		try {
+		/*try {
 			// Our data structure holds the training data
 			trainingData = train.loadDigitImages();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
+		loadCaptchaImage dataSets = new loadCaptchaImage();
+		trainingData = dataSets.getTrainingData();
 
 		// Looks at a representation of an image
 		// and determines how many pixels and thus how many input nodes are needed
@@ -180,14 +182,17 @@ public class KNearestNeighbors {
 	public static void loadtestDataForKNearestNeighbours(String testingImages, String testingLabels) throws IOException {
 
 		// Loads testing data set
-		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
+		//DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
+		//testingData = new ArrayList<DigitImage>();
 		testingData = new ArrayList<DigitImage>();
-		try {
+		/*try {
 			// Our data structure holds the testing data
 			testingData = test.loadDigitImages();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}	*/
+		loadCaptchaImage dataSets = new loadCaptchaImage();
+		testingData = dataSets.getTrainingData();
 	}
 
 	
