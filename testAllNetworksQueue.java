@@ -15,19 +15,26 @@ public class testAllNetworksQueue {
 		
 		//These are for demonstration purposes:--------------------------------
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/Results";
-		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/TrainedSetOutputWeights.txt";
-		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/TrainedSetHiddenWeights.txt";
+		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedSetOutputWeights.txt";
+		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedSetHiddenWeights.txt";
 		// 30 Hidden Nodes, learning rate 0.3, binary input,  training 5 epochs on the full data set
 		NeuralNet firstFF1A = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
 		
-		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/KNN/k/KNNResults";
+		//Runs a FF on CAPTCHAS
+		NeuralNet secondFF4 = new NeuralNet(30,1000,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
+				
+		
+		
+		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/KNNResults";
 		KNearestNeighbors c1 = new KNearestNeighbors(3,false,5,1000,filePathResults);
 		
-		 filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/20/RbfResults";
-		 filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/RBF/TE/20/TrainedRBFSetOutputWeights.txt";
+		 filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/RbfResults";
+		 filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedRBFSetOutputWeights.txt";
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		
+		
 		
 		//These are all tests--------------------------------
 		
@@ -47,7 +54,7 @@ public class testAllNetworksQueue {
 		//runKNNTrainingExamplesEx(); //Exp 8
 
 		//This class will then read the individual human readable output files and summarize the data in a way that makes it easier to graph.
-		
+		//This does not work with the Demo
 
 	}
 
