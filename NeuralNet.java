@@ -38,7 +38,7 @@ public class NeuralNet {
 	// Number of hidden nodes in second layer (first hidden layer)
 	public  static int numberOfNodesInHiddenLayer;
 	// Number of output nodes (Currently the network depends on 10 or 36 output nodes. Either only number or alphanumeric)
-	public static final int NUMBER_OF_OUTPUT_NODES = 36; //=36;
+	public static final int NUMBER_OF_OUTPUT_NODES = 10; //=36;
 	// Create array of nodes in first hidden layer and output layer. Each node will hold an array of weights.
 	private static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	private static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
@@ -128,12 +128,16 @@ public class NeuralNet {
 			System.out.println("Reading Data from trained files");
 			readDataFromTrainedFiles();
 			numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
-			testMultilayerFeedForward(testingImages, testingLabels);
-			//testMultilayerFeedForwardCaptcha();
+			testMultilayerFeedForward(true);
 		}
 
 		for (int m = 0; m < falsePositiveCount.length; m++) {
-			System.out.println("Number " + m +" was guessed incorrectly" + falsePositiveCount[m]+ " times."); 
+			if(m>9){
+				String letter =getCharForNumber(m);
+				System.out.println("Letter " + letter +" was guessed " + falsePositiveCount[m] + " times, when it should have guessed another number.");
+			} else{
+				System.out.println("Number " + m +" was guessed " + falsePositiveCount[m] + " times, when it should have guessed another number.");
+			}
 		}
 	}
 
@@ -207,7 +211,12 @@ public class NeuralNet {
 			// Test the Feed-Forward network
 			try {
 				trainingTime = System.currentTimeMillis() - startTime;
-				testMultilayerFeedForward("Testing-images", "Testing-Labels");
+				if(i < epochs-1){
+				testMultilayerFeedForward(false);
+			} else {
+				//Prints results on last epoch
+				testMultilayerFeedForward(true);
+			}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -317,7 +326,7 @@ public class NeuralNet {
 	/*
 	 * Tests the network.
 	 */
-	public static void testMultilayerFeedForward(String testingImages, String testingLabels) throws IOException {
+	public static void testMultilayerFeedForward(boolean printResults) throws IOException {
 		countOfImagesAnalyzed = 0;
 		countOfCorrectImagesAnalyzed = 0;
 		
@@ -331,10 +340,18 @@ public class NeuralNet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		if (printResults){
 		// Tests the network with the testing Data and prints results to file
 		write(solveTestingData(testingData));
 		} else{
-			solveTestingDataCaptcha(captchaTestingData);
+			solveTestingData(testingData);
+		}
+		} else{
+			if (printResults){
+			write(solveTestingDataCaptcha(captchaTestingData));
+			} else{
+				solveTestingDataCaptcha(captchaTestingData);
+			}
 			
 		}
 		
@@ -395,10 +412,10 @@ public class NeuralNet {
 			}
 		}
 		if (correctOutput == maxInt) {
-			System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
+		//	System.out.println("The network is correct. The correct number is: " + (int) correctOutput);
 			countOfCorrectImagesAnalyzed++;
 		} else {
-			System.out.println("The network guessed incorrectly: " + maxInt + " The correct number was: " + (int) correctOutput);
+		//	System.out.println("The network guessed incorrectly: " + maxInt + " The correct number was: " + (int) correctOutput);
 			falsePositiveCount[(int) maxInt]++;	
 		}
 

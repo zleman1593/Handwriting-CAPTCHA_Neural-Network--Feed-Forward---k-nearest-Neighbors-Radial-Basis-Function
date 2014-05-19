@@ -19,7 +19,7 @@ public class loadCaptchaImage {
 	// List of captchas fed to the Neural Networks.
 	private static ArrayList<ArrayList<DigitImage>> allCaptchas = new ArrayList<ArrayList<DigitImage>> ();
 	// List of training set of characters fed to the Neural Networks.
-	private static ArrayList<DigitImage> alltrainingData = new ArrayList<DigitImage>();
+	private static ArrayList<DigitImage> allTrainingData = new ArrayList<DigitImage>();
 	private static final int CHAR_WIDTH = 9; // Cut-off width of a character.
 	private static final int CHAR_HEIGHT = 22; // Cut-off height of a character.
 	//private static final int WHITE_COLOR = 255; // RGB value for white: 255, 255, 255.
@@ -31,7 +31,7 @@ public class loadCaptchaImage {
 	private static final boolean BINARY_ON =  true; // Whether pixel color values are binary (black and white) or grayscale.
 	// For testing only.
 	/*public static void main(String[] args) throws IOException, ClassNotFoundException {
-		readAllTrainingData();
+		readallTrainingData();
 		readAllCaptchas();
 		System.out.println("Done");
 		
@@ -42,7 +42,7 @@ public class loadCaptchaImage {
 		// Reads and breaks up all Captchas for testing.
 		readAllCaptchas();
 		// Reads all the  individual characters for training.
-		readAllTrainingData();
+		readallTrainingData();
 	}
 
 	// Reads all the captcha images.
@@ -99,7 +99,7 @@ public class loadCaptchaImage {
 	}
 	
 	// Read all the training images (characters).
-	public static void readAllTrainingData() throws IOException{
+	public static void readallTrainingData() throws IOException{
 		// Holds all the Captcha images.
 		ArrayList<BufferedImage> trainingImgs = new ArrayList<BufferedImage>();
 		// Holds all the Captcha names (correct answers).
@@ -146,7 +146,7 @@ public class loadCaptchaImage {
 			scanCharPixels(charImg, charPixels, offsetHeight, offsetWidth);
 			// Turn this training character into a DigitImage and add it to the Captcha's list of chars.
 			int num = charToInt(trainingImgNames, i, 0);
-			alltrainingData.add(new DigitImage(num, charPixels, BINARY_ON));
+			allTrainingData.add(new DigitImage(num, charPixels, BINARY_ON));
 			}
 		}
 	}
@@ -193,7 +193,7 @@ public class loadCaptchaImage {
 	
 	// Returns all training data - list of character images.
 	public ArrayList<DigitImage> getTrainingData() {
-		return alltrainingData;
+		return allTrainingData;
 	}
 	
 	// Returns all Captchas - list of Captcha arrays, each array is a list of character images.

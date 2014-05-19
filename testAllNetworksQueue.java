@@ -19,6 +19,7 @@ public class testAllNetworksQueue {
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedSetHiddenWeights.txt";
 		
 		//Runs a FF on CAPTCHAS
+		// Need to set NUMBER_OF_OUTPUT_NODES=36 for this to work.
 		NeuralNet secondFF4 = new NeuralNet(30,1000,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
 						
 		
