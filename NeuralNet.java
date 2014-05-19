@@ -68,7 +68,8 @@ public class NeuralNet {
 	public static final	String testingImages = "Testing-images";
 	public static final	String trainingLabels = "Training-Labels";
 	public static final	String testingLabels = "Testing-Labels";
-	
+	//CAPTCHA testing Data
+	public static  ArrayList<ArrayList<DigitImage>> captchaTestingData= new ArrayList<ArrayList<DigitImage>>();
 	//Constructor for a FF neural net
 	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, 
 		String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, 
@@ -138,24 +139,24 @@ public class NeuralNet {
 
 	// Loads training and testing data sets
 	public static void initializeMultilayerFeedForward() throws IOException {
-		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages, binaryInput);
-		try {
-			// Our data structure holds the training data
-			trainingData = train.loadDigitImages();
-			// Alters data into proper form
-			if (NUMBER_OF_OUTPUT_NODES == 10) {
-				for (int i = 0; i < trainingData.size(); i++) {
-					trainingData.get(i).vectorizeTrainingData();
-				}
-			}
-			else{
-				for (int i = 0; i < trainingData.size(); i++) {
-					trainingData.get(i).vectorizeTrainingDataAlphaNum();
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Alters data into proper form
+					if (NUMBER_OF_OUTPUT_NODES == 10) {
+						DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages, binaryInput);
+						// Our data structure holds the training data
+						trainingData = train.loadDigitImages();
+						for (int i = 0; i < trainingData.size(); i++) {
+							trainingData.get(i).vectorizeTrainingData();
+						}
+					}
+					else{
+						loadCaptchaImage dataSets = new loadCaptchaImage();
+						trainingData = dataSets.getTrainingData();
+						captchaTestingData = dataSets.getTestingData();
+						// Alters data into proper form
+						for (int i = 0; i < trainingData.size(); i++) {
+							trainingData.get(i).vectorizeTrainingDataAlphaNum();
+						}
+					}
 
 		// Looks at a representation of an image
 		// and determines how many pixels and thus how many input nodes are
@@ -319,6 +320,8 @@ public class NeuralNet {
 	public static void testMultilayerFeedForward(String testingImages, String testingLabels) throws IOException {
 		countOfImagesAnalyzed = 0;
 		countOfCorrectImagesAnalyzed = 0;
+		
+		if(NUMBER_OF_OUTPUT_NODES==10){
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
@@ -330,6 +333,11 @@ public class NeuralNet {
 		}
 		// Tests the network with the testing Data and prints results to file
 		write(solveTestingData(testingData));
+		} else{
+			solveTestingDataCaptcha(captchaTestingData);
+			
+		}
+		
 		// reports network Performance
 		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
@@ -790,7 +798,24 @@ public static void twentyFourCore(){
 	//----------------------END UTILITY METHODS-----------------------------------------------------------------------------------------------
 
 	
-	
+	//The method below are slightly altered methods from above,
+		//tailored to starting and testing the network with captchas.
+		//No need to read the code, as it is almost identical to the previous  methods
+
+
+
+	/*
+	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
+	 */
+	public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
+		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
+		for (int i = 0; i < networkInputData.size(); i++) {
+			for(int j=0; j<networkInputData.get(i).size();j++){
+				newtworkResults.add(singleImageBestGuess(networkInputData.get(i), j));
+			}
+		}
+		return newtworkResults;
+	}
 	
 	
 	

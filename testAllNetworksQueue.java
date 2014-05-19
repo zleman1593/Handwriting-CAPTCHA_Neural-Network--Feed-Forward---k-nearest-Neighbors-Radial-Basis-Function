@@ -33,10 +33,10 @@ public class testAllNetworksQueue {
 		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		//-------------------------------------------------------------
 		
 		
-		
-		//These are all tests--------------------------------
+		//These are all tests--------------------------------  
 		
 		//runFFHiddenNodeEx(); //Exp #1
 		//runFFLearningRateEx(); //Exp #2
@@ -55,6 +55,7 @@ public class testAllNetworksQueue {
 
 		//This class will then read the individual human readable output files and summarize the data in a way that makes it easier to graph.
 		//This does not work with the Demo
+		
 
 	}
 
