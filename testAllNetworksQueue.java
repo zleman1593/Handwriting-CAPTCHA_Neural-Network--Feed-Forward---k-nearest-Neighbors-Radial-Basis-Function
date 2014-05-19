@@ -14,7 +14,7 @@ public class testAllNetworksQueue {
 		
 		
 		//These are for demonstration purposes:--------------------------------
-		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/30/Results";
+		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/Results";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedSetHiddenWeights.txt";
 		

@@ -134,6 +134,9 @@ public class loadCaptchaImage {
 			int[] charPixels = new int[CHAR_WIDTH * CHAR_HEIGHT];
 			// If the image is wider/taller than the width range, only look at the width/height range. 
 			int offsetHeight = 0, offsetWidth = 0;
+			
+			
+			if(charImg != null){
 			if (charImg.getWidth() > CHAR_WIDTH) {
 				offsetWidth = charImg.getWidth() - CHAR_WIDTH;
 			}
@@ -144,7 +147,7 @@ public class loadCaptchaImage {
 			// Turn this training character into a DigitImage and add it to the Captcha's list of chars.
 			int num = charToInt(trainingImgNames, i, 0);
 			alltrainingData.add(new DigitImage(num, charPixels, BINARY_ON));
-		
+			}
 		}
 	}
 	

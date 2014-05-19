@@ -38,7 +38,7 @@ public class NeuralNet {
 	// Number of hidden nodes in second layer (first hidden layer)
 	public  static int numberOfNodesInHiddenLayer;
 	// Number of output nodes (Currently the network depends on 10 or 36 output nodes. Either only number or alphanumeric)
-	public static final int NUMBER_OF_OUTPUT_NODES = 10; //=36;
+	public static final int NUMBER_OF_OUTPUT_NODES = 36; //=36;
 	// Create array of nodes in first hidden layer and output layer. Each node will hold an array of weights.
 	private static ArrayList<ArrayList<Double>> hiddenLayerNodes = new ArrayList<ArrayList<Double>>();
 	private static ArrayList<ArrayList<Double>> outputLayerNodes = new ArrayList<ArrayList<Double>>();
