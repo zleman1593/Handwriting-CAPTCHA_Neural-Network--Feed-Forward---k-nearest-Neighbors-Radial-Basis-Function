@@ -23,21 +23,21 @@ public class testAllNetworksQueue {
 		//NeuralNet secondFF4 = new NeuralNet(30,1000,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
 						
 		
-		
+	
 		// 30 Hidden Nodes, learning rate 0.3, binary input,  training 5 epochs on the full data set
-		NeuralNet firstFF1A = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
+		NeuralNet FFdemo = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
 		
 		
 		
 		
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/KNNResults";
-		KNearestNeighbors c1 = new KNearestNeighbors(3,false,5,1000,filePathResults);
+		KNearestNeighbors kNNDemo = new KNearestNeighbors(3,false,5,1000,filePathResults);
 		
 		 filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/RbfResults";
 		 filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedRBFSetOutputWeights.txt";
-		RadialBasisFunction a = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction b = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
-		RadialBasisFunction c = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction RBFa = new RadialBasisFunction(20,false,1000000,5,0.5,0,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction RBFb = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
+		RadialBasisFunction RBFc = new RadialBasisFunction(20,false,1000000,5,0.5,1,filePathResults,filePathTrainedOutputWeights);
 		
 		//-------------------------------------------------------------
 		
