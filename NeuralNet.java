@@ -62,7 +62,7 @@ public class NeuralNet {
 	//Stores raw training data
 	public static ArrayList<DigitImage> trainingData = new ArrayList<DigitImage>();
 	//This is set to either 8 or 24. If the machine has at least this
-	public static final int NUMBER_OF_CORES=24;
+	public static final int NUMBER_OF_CORES=8;
 	//These are just the data files that hold the MNIST testing and training sets
 	public static final String  trainingImages = "Training-Images";
 	public static final	String testingImages = "Testing-images";
@@ -358,6 +358,21 @@ public class NeuralNet {
 		System.out.println("Training time: " + solutionTime + " milliseconds");
 		return newtworkResults;
 	}
+	
+	/*
+	 * Takes an image and returns the results of the neural network on the Testing Data in an object
+	 *  that can then be read and written to a file
+	 */
+	public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
+		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
+		for (int i = 0; i < networkInputData.size(); i++) {
+			for(int j=0; j<networkInputData.get(i).size();j++){
+				newtworkResults.add(singleImageBestGuess(networkInputData.get(i), j));
+			}
+		}
+		return newtworkResults;
+	}
+	
 
 	/* 
 	 * This looks at one image and reports what number it thinks it is based on its current weights.
@@ -797,25 +812,9 @@ public static void twentyFourCore(){
 	
 	//----------------------END UTILITY METHODS-----------------------------------------------------------------------------------------------
 
-	
-	//The method below are slightly altered methods from above,
-		//tailored to starting and testing the network with captchas.
-		//No need to read the code, as it is almost identical to the previous  methods
 
 
 
-	/*
-	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
-	 */
-	public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
-		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
-		for (int i = 0; i < networkInputData.size(); i++) {
-			for(int j=0; j<networkInputData.get(i).size();j++){
-				newtworkResults.add(singleImageBestGuess(networkInputData.get(i), j));
-			}
-		}
-		return newtworkResults;
-	}
 	
 	
 	

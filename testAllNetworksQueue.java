@@ -14,15 +14,19 @@ public class testAllNetworksQueue {
 		
 		
 		//These are for demonstration purposes:--------------------------------
-		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/FF/30/Results";
+		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/30/Results";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/TrainedSetHiddenWeights.txt";
-		// 30 Hidden Nodes, learning rate 0.3, binary input,  training 5 epochs on the full data set
-		NeuralNet firstFF1A = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
 		
 		//Runs a FF on CAPTCHAS
 		NeuralNet secondFF4 = new NeuralNet(30,1000,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
-				
+						
+		
+		
+		// 30 Hidden Nodes, learning rate 0.3, binary input,  training 5 epochs on the full data set
+		NeuralNet firstFF1A = new NeuralNet(30,5,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
+		
+		
 		
 		
 		filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/Demo/KNNResults";
