@@ -46,6 +46,8 @@ public class testAllNetworksQueue {
 
 		//runKNNTrainingExamplesEx(); //Exp 8
 
+		//This class will then read the individual human readable output files and summarize the data in a way that makes it easier to graph.
+		
 
 	}
 
