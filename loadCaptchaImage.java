@@ -85,12 +85,16 @@ public class loadCaptchaImage {
 			if (imgWidth < CHAR_WIDTH) {
 				imgWidth = CHAR_WIDTH;
 			}
+			/*String randomString = Double.toString(Math.random());
+			File outputfile = new File("Captcha Testing Data/here/here" + randomString+ ".gif");
+		    ImageIO.write(captchaImg,"gif",outputfile);*/
+			
 			// Read a single Captcha image.
 			for (int j = 0; j < imgWidth; j++) {
 				// Skip white spaces and find where the next character starts, then j jumps to that column.
 				j = findCharCol(captchaImg, j);
 
-				// Reaching the end of the Captcha image. 
+//				// Reaching the end of the Captcha image. 
 				if (j + CHAR_WIDTH >= imgWidth || captchaCharPos >= NUM_CHARS_IN_CAPTCHA) {
 					break;
 				}
@@ -99,11 +103,9 @@ public class loadCaptchaImage {
 				BufferedImage charImage = captchaImg.getSubimage(j, 0 , CHAR_WIDTH, CHAR_HEIGHT);
 				scanCharPixels(charImage, charPixels, 0, 0);
 				j = j + CHAR_WIDTH;
-				String randomString = Double.toString(Math.random());
-
-				  File outputfile = new File("Captcha Testing Data/here/here" + randomString+ ".gif");
-				    ImageIO.write(charImage,"gif",outputfile);
-				
+				//String randomString = Double.toString(Math.random());
+				//File outputfile = new File("Captcha Testing Data/here/here" + randomString+ ".gif");
+			   // ImageIO.write(charImage,"gif",outputfile);
 				
 				// Turn a character in a Captcha into a DigitImage and add it to the Captcha's list of DigitImages (characters).
 				int num = charToInt(imgNames, i, captchaCharPos);
@@ -151,6 +153,8 @@ public class loadCaptchaImage {
 			int[] charPixels = new int[CHAR_WIDTH * CHAR_HEIGHT];
 			// If the image is wider/taller than the width range, only look at the width/height range. 
 			int offsetHeight = 0, offsetWidth = 0;
+			if(charImg != null){
+			
 			if (charImg.getWidth() > CHAR_WIDTH) {
 				offsetWidth = charImg.getWidth() - CHAR_WIDTH;
 			}
@@ -161,7 +165,7 @@ public class loadCaptchaImage {
 			// Turn this training character into a DigitImage and add it to the Captcha's list of chars.
 			int num = charToInt(trainingImgNames, i, 0);
 			allTrainingData.add(new DigitImage(num, charPixels, BINARY_ON));
-		
+			}
 		}
 	}
 	

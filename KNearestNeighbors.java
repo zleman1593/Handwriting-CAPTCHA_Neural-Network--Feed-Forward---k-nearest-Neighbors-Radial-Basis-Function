@@ -155,9 +155,15 @@ public class KNearestNeighbors {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
+		// Loads training and testing data sets
 		loadCaptchaImage dataSets = new loadCaptchaImage();
 		trainingData = dataSets.getTrainingData();
-
+		//testingData = dataSets.getTestingData();
+			// Alters data into proper form
+				for (int i = 0; i < trainingData.size(); i++) {
+					trainingData.get(i).vectorizeTrainingDataAlphaNum();
+				}
+				
 		// Looks at a representation of an image
 		// and determines how many pixels and thus how many input nodes are needed
 		// (one per pixel)
@@ -184,15 +190,16 @@ public class KNearestNeighbors {
 		// Loads testing data set
 		//DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		//testingData = new ArrayList<DigitImage>();
-		testingData = new ArrayList<DigitImage>();
 		/*try {
 			// Our data structure holds the testing data
 			testingData = test.loadDigitImages();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	*/
+		
 		loadCaptchaImage dataSets = new loadCaptchaImage();
 		testingData = dataSets.getTrainingData();
+		//testingData = dataSets.getTestingData();
 	}
 
 	

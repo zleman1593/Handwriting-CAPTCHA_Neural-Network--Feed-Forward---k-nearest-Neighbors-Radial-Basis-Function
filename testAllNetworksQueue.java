@@ -13,11 +13,15 @@ public class testAllNetworksQueue {
 		String filePathResults = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/Results";
 		String filePathTrainedOutputWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/TrainedSetOutputWeights.txt";
 		String filePathTrainedHiddenWeights = "/Users/zackeryleman/Desktop/NeuralNetOutput/test/TrainedSetHiddenWeights.txt";
+		
+		
+		//KNearestNeighbors a = new KNearestNeighbors(3,true,1,50,filePathResults);
+		
 		///NeuralNet secondFF4 = new NeuralNet(30,1000,0.4,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
  //NeuralNet secondFF4 = new NeuralNet(25,1000,0.4,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20 //88.76
 		//NeuralNet secondFF4 = new NeuralNet(21,500,0.4,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20
 		
-		NeuralNet secondFF4 = new NeuralNet(30,500,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20 //20 percent for captchas
+	NeuralNet secondFF4 = new NeuralNet(30,1000,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);//epochs 16-20 //20 percent for captchas
 		//NeuralNet secondFF4 = new NeuralNet(30,500,0.3,0,true,filePathResults,filePathTrainedOutputWeights,filePathTrainedHiddenWeights,1);
 		//KNearestNeighbors c = new KNearestNeighbors(3,false,1,40,filePathResults);
 		//To expand the current trail  by another 5 epochs, simply change the first line in each set to make it use the data already written to files: 

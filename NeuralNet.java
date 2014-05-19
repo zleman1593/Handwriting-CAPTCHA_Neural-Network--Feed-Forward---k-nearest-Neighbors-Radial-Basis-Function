@@ -101,10 +101,10 @@ public class NeuralNet {
 		trainingSetReductionFactor = trainingSetReductionFactor1;
 		
 		//These are just constants
-		//String  trainingImages = "Training-Images";
-		//String testingImages = "Testing-images";
-		//String trainingLabels = "Training-Labels";
-		//String testingLabels = "Testing-Labels";
+		String  trainingImages = "Training-Images";
+		String testingImages = "Testing-images";
+		String trainingLabels = "Training-Labels";
+		String testingLabels = "Testing-Labels";
 
 		//Sets up an array that will allow us to keep track of the number of wrong guesses for each number
 		for (int m = 0; m < holder.length; m++) {
@@ -116,8 +116,8 @@ public class NeuralNet {
 		// Trains the Network from scratch
 		if (usePriorWeights == 0) {
 			System.out.println("Training from Scratch");
-			//initializeMultilayerFeedForward(trainingImages, trainingLabels);
-			initializeMultilayerFeedForwardCaptcha();
+			initializeMultilayerFeedForward(trainingImages, trainingLabels);
+			
 			// Trains the network with the training Data
 			long startTimeForTrainingData = System.currentTimeMillis();
 			trainTheNetwork();
@@ -134,14 +134,14 @@ public class NeuralNet {
 			readDataFromTrainedFiles();
 			// Trains the network with the training Data
 			long startTimeForTrainingData = System.currentTimeMillis();
-			trainTheNetwork(trainingData);
+			trainTheNetwork();
 			trainingTime = System.currentTimeMillis() - startTimeForTrainingData;
 			System.out.println("Training time: " + trainingTime + " milliseconds");
 			// Creates data files that can be reused by the network without retraining.
 			writeTrainedWeights();
-		}*/
+		}
 		// Tests network using weights stored in file without retraining
-		/*else if ( usePriorWeights == 1)  {
+		else if ( usePriorWeights == 1)  {
 			readDataFromTrainedFiles();
 			System.out.println("Reading Data from trained files");
 			numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
@@ -151,31 +151,36 @@ public class NeuralNet {
 		}*/
 
 		for (int m = 0; m < holder.length; m++) {
-			System.out.println("Number " + m +" was guessed incorrectly " + holder[m]+ " times."); 
+			if(m>9){
+				String letter =getCharForNumber(m);
+				System.out.println("Letter " + letter +" was guessed " + holder[m] + " times, when it should have guessed another number.");
+			} else{
+				System.out.println("Number " + m +" was guessed " + holder[m] + " times, when it should have guessed another number.");
+			}
 		}
 	}
 
 	// Loads training and testing data sets
 	public static void initializeMultilayerFeedForward(String trainingImages, String trainingLabels) throws IOException {
-		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages, binaryInput);
-		try {
-			// Our data structure holds the training data
-			trainingData = train.loadDigitImages();
+
 			// Alters data into proper form
 			if (NUMBER_OF_OUTPUT_NODES == 10) {
+				DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages, binaryInput);
+				// Our data structure holds the training data
+				trainingData = train.loadDigitImages();
 				for (int i = 0; i < trainingData.size(); i++) {
 					trainingData.get(i).vectorizeTrainingData();
 				}
 			}
 			else{
+				loadCaptchaImage dataSets = new loadCaptchaImage();
+				trainingData = dataSets.getTrainingData();
+				testingData = dataSets.getTestingData();
+				// Alters data into proper form
 				for (int i = 0; i < trainingData.size(); i++) {
 					trainingData.get(i).vectorizeTrainingDataAlphaNum();
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		// Looks at a representation of an image
 		// and determines how many pixels and thus how many input nodes are
 		// needed
@@ -498,8 +503,14 @@ public class NeuralNet {
 		}
 		
 		for (int m = 0; m < holder.length; m++) {
+			if(m>9){
+				String letter =getCharForNumber(m);
+				outputWriter.write("Letter " + letter +" was guessed " + holder[m] + " times, when it should have guessed another number.");
+				outputWriter.newLine();
+			} else{
 			outputWriter.write("Number " + m +" was guessed " + holder[m] + " times, when it should have guessed another number.");
 			outputWriter.newLine();
+			}
 		}
 		outputWriter.flush();
 		outputWriter.close();
@@ -836,105 +847,47 @@ public static void twentyFourCore(){
 	
 //----------------------END UTILITY METHODS-----------------------------------------------------------------------------------------------
 	
-//The two methods below are slightly altered methods from above,
+//The methods below are slightly altered methods from above,
 	//tailored to starting and testing the network with captchas.
 	//No need to read the code, as it is almost identical to the previous  methods
 	
 	
-	
-	
-	public static void initializeMultilayerFeedForwardCaptcha() throws IOException {
-		// Loads training and testing data sets
-				loadCaptchaImage dataSets = new loadCaptchaImage();
-				trainingData = dataSets.getTrainingData();
-				
-		testingData = dataSets.getTestingData();
-					// Alters data into proper form
-					if(NUMBER_OF_OUTPUT_NODES==10){
-					for (int i = 0; i < trainingData.size(); i++) {
-						trainingData.get(i).vectorizeTrainingData();
-					}
-					}
-					else{
-						for (int i = 0; i < trainingData.size(); i++) {
-							trainingData.get(i).vectorizeTrainingDataAlphaNum();
-						}
-					}
-					System.out.println("BREAKING...");
-
-		// Looks at a representation of an image
-		// and determines how many pixels and thus how many input nodes are
-		// needed
-		// (one per pixel)
-		numberOfInputNodes = trainingData.get(0).getData().length;
-
-		// Initialize weights with random values for all nodes in the first
-		// hidden layer.
-		for (int i = 0; i < numberOfNodesInHiddenLayer; i++) {
-			ArrayList<Double> weights = new ArrayList<Double>(numberOfInputNodes);
-			for (int j = 0; j < numberOfInputNodes; j++) {
-				weights.add(random.nextGaussian());
-			}
-			hiddenLayerNodes.add(weights);
-		}
-		// Initialize weights with random values for all nodes in the output
-		// layer.
-		for (int i = 0; i < NUMBER_OF_OUTPUT_NODES; i++) {
-			ArrayList<Double> weights = new ArrayList<Double>(numberOfNodesInHiddenLayer);
-			for (int j = 0; j < numberOfNodesInHiddenLayer; j++) {
-				weights.add(random.nextGaussian());
-			}
-			outputLayerNodes.add(weights);
-		}
-	}
-	
 
 
-	
-	public static void testMultilayerFeedForwardCaptcha() throws IOException {
-		countOfImagesAnalyzed = 0;
-		countOfCorrectImagesAnalyzed = 0;
-		// Loads testing data set
-
-		
-		
-		
-	
-		
-		
-		// Tests the network with the testing Data and prints results to file
-		//write(solveTestingData(testingData));
-		solveTestingDataCaptcha(testingData);
-		// reports network Performance
-		double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
-		System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-		System.out.println("Look in" + filePathResults + " directory to find  the output.");
-	} 
-	
-	
-
-		
+public static void testMultilayerFeedForwardCaptcha() throws IOException {
+	countOfImagesAnalyzed = 0;
+	countOfCorrectImagesAnalyzed = 0;
+	// Loads testing data set
+	// Tests the network with the testing Data and prints results to file
+	//write(solveTestingData(testingData));
+	solveTestingDataCaptcha(testingData);
+	// reports network Performance
+	double percentCorrect = (countOfCorrectImagesAnalyzed / countOfImagesAnalyzed) * 100;
+	System.out.println("Analyzed " + countOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
+	System.out.println("Look in" + filePathResults + " directory to find  the output.");
+} 
 
 
-	
-	
-	
-	/*
-	 * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
-	 */
-	public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
-		numImgAnalyzed=0;
-		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
-		for (int i = 0; i < networkInputData.size(); i++) {
-			for(int j=0; j<networkInputData.get(i).size();j++){
+
+
+/*
+ * Takes an image and returns the results of the neural network on the Testing Data in an object that can then be read and written to a file
+ */
+public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
+	numImgAnalyzed=0;
+	ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
+	for (int i = 0; i < networkInputData.size(); i++) {
+		for(int j=0; j<networkInputData.get(i).size();j++){
 			newtworkResults.add(singleImageBestGuess(networkInputData.get(i), j));
 			numImgAnalyzed++;
-			}
 		}
-		System.out.println("num images analyzed" + numImgAnalyzed);
-		return newtworkResults;
 	}
-	
-	
-	
+	System.out.println("num images analyzed" + numImgAnalyzed);
+	return newtworkResults;
+}
+
+
+
+
+
 }
