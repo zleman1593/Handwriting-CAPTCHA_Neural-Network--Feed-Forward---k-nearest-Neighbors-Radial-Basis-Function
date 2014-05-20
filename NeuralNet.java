@@ -65,9 +65,9 @@ public class NeuralNet {
 	public static final int NUMBER_OF_CORES=8;
 	//These are just the data files that hold the MNIST testing and training sets
 	public static final String  trainingImages = "Training-Images";
-	public static final	String testingImages = "Testing-images";
-	public static final	String trainingLabels = "Training-Labels";
-	public static final	String testingLabels = "Testing-Labels";
+	public static final String testingImages = "Testing-images";
+	public static final String trainingLabels = "Training-Labels";
+	public static final String testingLabels = "Testing-Labels";
 	//CAPTCHA testing Data
 	public static  ArrayList<ArrayList<DigitImage>> captchaTestingData= new ArrayList<ArrayList<DigitImage>>();
 	//Constructor for a FF neural net
@@ -198,20 +198,20 @@ public class NeuralNet {
 			for (int images = 0; images < trainingData.size()/trainingSetReductionFactor; images++) { 
 				calculateErrorForEachOutputNode(trainingData, images);
 				
-				if(NUMBER_OF_CORES==8){
+				if (NUMBER_OF_CORES == 8){
 					 eightCore();
-				 }else if (NUMBER_OF_CORES==24) {
+				 }else if (NUMBER_OF_CORES == 24) {
 					 twentyFourCore();
 				 }else{
 					 System.out.println("There are not 24 or 8 cores?");
 				 }
 				// Resets temporary data structure
-				tempOutput = new ArrayList<ArrayList<Double>>();
+				tempOutput = new ArrayList < ArrayList<Double>>();
 			}
 			// Test the Feed-Forward network
 			try {
 				trainingTime = System.currentTimeMillis() - startTime;
-				if(i < epochs-1){
+				if (i < epochs - 1){
 				testMultilayerFeedForward(false);
 			} else {
 				//Prints results on last epoch
@@ -330,7 +330,7 @@ public class NeuralNet {
 		countOfImagesAnalyzed = 0;
 		countOfCorrectImagesAnalyzed = 0;
 		
-		if(NUMBER_OF_OUTPUT_NODES==10){
+		if (NUMBER_OF_OUTPUT_NODES == 10){
 		// Loads testing data set
 		DigitImageLoadingService test = new DigitImageLoadingService(testingLabels, testingImages,binaryInput);
 		ArrayList<DigitImage> testingData = new ArrayList<DigitImage>();
@@ -383,7 +383,7 @@ public class NeuralNet {
 	public static ArrayList<OutputVector> solveTestingDataCaptcha(ArrayList<ArrayList<DigitImage>> networkInputData) {
 		ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
 		for (int i = 0; i < networkInputData.size(); i++) {
-			for(int j=0; j<networkInputData.get(i).size();j++){
+			for(int j=0; j < networkInputData.get(i).size(); j++){
 				newtworkResults.add(singleImageBestGuess(networkInputData.get(i), j));
 			}
 		}
@@ -825,15 +825,5 @@ public static void twentyFourCore(){
 		fin2.close();
 
 	}
-	
-	
 	//----------------------END UTILITY METHODS-----------------------------------------------------------------------------------------------
-
-
-
-
-	
-	
-	
-	
 }
