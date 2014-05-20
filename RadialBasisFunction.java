@@ -56,22 +56,22 @@ public class RadialBasisFunction {
 	// Set to one to use all of the training data to train the network. The number of training examples is divided by this number
 	public  static int trainingSetReductionFactor;
 	// Keeps track of false positive guesses for each alphanumeric character.
-	public static int[]  falsePositiveCount=new int[NUMBER_OF_OUTPUT_NODES];
+	public static int[]  falsePositiveCount = new int[NUMBER_OF_OUTPUT_NODES];
 	public static long testingTime;
 	public static long startTime;
-	public static final int NUMBER_OF_CORES=8;
+	public static final int NUMBER_OF_CORES = 8;
 	// Tracks the number of images correctly identified in the testing set.
 	public static ArrayList<Integer> countOfCorrectImagesAnalyzed = new ArrayList<Integer>();
 	// Tracks the number of images processed in the testing set.
 	public static ArrayList<Integer> countOfImagesAnalyzed = new ArrayList<Integer>();
-	public static  double totalCountOfImagesAnalyzed=0;
-	public static  double totalCountOfCorrectImagesAnalyzed=0;
+	public static  double totalCountOfImagesAnalyzed = 0;
+	public static  double totalCountOfCorrectImagesAnalyzed = 0;
 	public static ArrayList<OutputVector> newtworkResults = new ArrayList<OutputVector>();
 	//These are just the data files that hold the MNIST d testing and training sets
 	public static final String  trainingImages = "Training-Images";
-	public static final	String testingImages = "Testing-images";
-	public static final	String trainingLabels = "Training-Labels";
-	public static final	String testingLabels = "Testing-Labels";
+	public static final String testingImages = "Testing-images";
+	public static final String trainingLabels = "Training-Labels";
+	public static final String testingLabels = "Testing-Labels";
 
 
 	public RadialBasisFunction(int trainingSetReductionFactor1,boolean binaryInput1, int sigmaSquared1, int epochs1, double learningRate1, int usePriorWeights1, String filePathResults1 ,String filePathTrainedOutputWeights1 ) throws IOException, ClassNotFoundException{
@@ -92,13 +92,13 @@ public class RadialBasisFunction {
 		epochs = epochs1;
 		learningRate = learningRate1;
 		usePriorWeights = usePriorWeights1;
-		filePathResults=filePathResults1;
-		filePathTrainedOutputWeights=filePathTrainedOutputWeights1;
+		filePathResults = filePathResults1;
+		filePathTrainedOutputWeights = filePathTrainedOutputWeights1;
 
 
 
 		//Sets up count trackers for each thread
-		for(int y=0; y<NUMBER_OF_CORES;y++){
+		for (int y = 0; y < NUMBER_OF_CORES; y++){
 			countOfImagesAnalyzed.add(0);
 			countOfCorrectImagesAnalyzed.add(0);
 		}
@@ -107,16 +107,16 @@ public class RadialBasisFunction {
 
 		//Sets up an array that will allow us to keep track of the number of false positive guesses for each number.
 		for (int m = 0; m < falsePositiveCount.length; m++) {
-			falsePositiveCount[m]=0;
+			falsePositiveCount[m] = 0;
 		}
-		System.out.println("There are " +Runtime.getRuntime().availableProcessors()+ " cores avalible to the JVM.");
+		System.out.println("There are " + Runtime.getRuntime().availableProcessors() + " cores avalible to the JVM.");
 		System.out.println("Intel hyperthreading can be responsible for the apparent doubling  in cores.");
 
 
 		initializeRBF();
 		long startTime = System.currentTimeMillis();
-
-		if (usePriorWeights==1) {		// Trains the Network starting from weights stored in file
+		if (usePriorWeights == 1) {	
+			// Trains the Network starting from weights stored in file
 			System.out.println("Reading Data from Trainined Files and continuing Training");
 			readDataFromTrainedFiles();
 			trainTheNetwork();
@@ -127,7 +127,8 @@ public class RadialBasisFunction {
 
 			// Test the  RBF Network
 			testRBF(testingImages, testingLabels);
-		} else if (usePriorWeights==0) {	// Trains the Network from scratch
+		} else if (usePriorWeights == 0) {	
+			// Trains the Network from scratch
 			System.out.println("Training from scratch");
 			trainTheNetwork();
 			long endTime = System.currentTimeMillis();
@@ -136,7 +137,8 @@ public class RadialBasisFunction {
 			writeTrainedWeights();
 			// Test the  RBF Network
 			testRBF(testingImages, testingLabels);
-		} else if (usePriorWeights==2) { 	// Tests network using weights stored in file without retraining
+		} else if (usePriorWeights == 2) { 	
+			// Tests network using weights stored in file without retraining
 			readDataFromTrainedFiles();
 			// Test the  RBF Network
 			System.out.println("Testing only. Using trained files");
@@ -144,12 +146,11 @@ public class RadialBasisFunction {
 		}
 		//Output all false positives
 		for (int m = 0; m < falsePositiveCount.length; m++) {
-			System.out.println("Number " + m+" was guessed " +falsePositiveCount[m]+ " times, when it should have guessed another number.");
+			System.out.println("Number " + m +" was guessed " +falsePositiveCount[m] + " times, when it should have guessed another number.");
 		}
 	}
 
 	public static void initializeRBF() throws IOException {
-
 		// Loads training and testing data sets
 		DigitImageLoadingService train = new DigitImageLoadingService(trainingLabels, trainingImages,binaryInput);
 		trainingData = new ArrayList<DigitImage>();
@@ -208,7 +209,7 @@ public class RadialBasisFunction {
 		//Summarizes results
 		double percentCorrect = (totalCountOfCorrectImagesAnalyzed / totalCountOfImagesAnalyzed) * 100;
 		System.out.println("Analyzed " + totalCountOfImagesAnalyzed + " images with " + percentCorrect + " percent accuracy.");
-		System.out.println("Look in " +filePathResults+  " directory to find  the output.");
+		System.out.println("Look in " + filePathResults +  " directory to find  the output.");
 		long endTime = System.currentTimeMillis();
 		testingTime = endTime - startTime;
 		System.out.println("Testing time: " + testingTime + " milliseconds");
@@ -222,10 +223,10 @@ public class RadialBasisFunction {
 		double sum = 0;
 		for (int i = 0; i < outputFromPreviousLayer.size(); i++) {
 
-			sum=sum+Math.pow(layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i),2);
+			sum = sum + Math.pow(layerOfNodes.get(indexOfNodeinlayer).get(i) - outputFromPreviousLayer.get(i), 2);
 
 		}
-		return Math.exp(-1*(sum/sigmaSquared));
+		return Math.exp(-1 * (sum / sigmaSquared));
 	}
 	/*
 	 * Returns the final layer output from a given node after the input has been summed. It takes the layer that the node is in, the index of the node in the
@@ -254,8 +255,6 @@ public class RadialBasisFunction {
 		return outputOfCurrentlayer;
 	}
 
-
-
 	/*
 	 * This takes the training data and 
 	 * attempts to train the neural net to learn how to recognize characters from images.
@@ -270,11 +269,13 @@ public class RadialBasisFunction {
 				calculateErrorForEachOutputNode(images);
 
 				//Now update all weights
-				if(NUMBER_OF_CORES==8){
+				if (NUMBER_OF_CORES == 8){
 					eightCores();
-				}else if (NUMBER_OF_CORES==24) {
+				}
+				else if (NUMBER_OF_CORES == 24) {
 					twentyFourCores();
-				}else{
+				}
+				else{
 					System.out.println("There are not 24 or 8 cores?");
 				}
 
@@ -284,7 +285,7 @@ public class RadialBasisFunction {
 			long endTime = System.currentTimeMillis();
 			executionTime = endTime - startTime;
 			System.out.println("Training time: " + executionTime + " milliseconds");
-			System.out.println("Epoch " + (i+1) + " has finished.");
+			System.out.println("Epoch " + (i + 1) + " has finished.");
 		}
 	}
 	/*
@@ -348,17 +349,18 @@ public class RadialBasisFunction {
 		tempOutput.add(errorLayer);
 	}
 
-
 	/*
 	 * Takes an image and updates the results of the neural network on the testing data
 	 * in an object that can then be read and then written to a file.
 	 */
 	public static void solveTestingData() {		
-		if(NUMBER_OF_CORES==8){
+		if (NUMBER_OF_CORES == 8){
 			eightCoreSolve();
-		}else if (NUMBER_OF_CORES==24) {
+		}
+		else if (NUMBER_OF_CORES == 24) {
 			twentyFourCoreSolve();
-		}else{
+		}
+		else{
 			System.out.println("There are not 24 or 8 cores?");
 		}
 
@@ -394,8 +396,6 @@ public class RadialBasisFunction {
 		return result;
 	}
 
-
-
 	/*
 	 * Returns the derivative of the output of the sigmoid activation function but takes as a parameter the already computer sigmoid output
 	 */
@@ -403,7 +403,6 @@ public class RadialBasisFunction {
 		double output = (sigmoidPrime * (1 - sigmoidPrime));
 		return output;
 	}
-
 
 	public static void eightCores(){
 
