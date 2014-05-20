@@ -18,7 +18,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.*;
 
-public class NeuralNet {
+public class FeedForward {
 	// Tracks the number of images processed in the testing set.
 	public static double countOfImagesAnalyzed = 0;
 	// Tracks the number of images correctly identified in the testing set.
@@ -71,7 +71,7 @@ public class NeuralNet {
 	//CAPTCHA testing Data
 	public static  ArrayList<ArrayList<DigitImage>> captchaTestingData= new ArrayList<ArrayList<DigitImage>>();
 	//Constructor for a FF neural net
-	public NeuralNet(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, 
+	public FeedForward(int numberOfNodesInHiddenLayer1,int epochs1, double learningRate1, int usePriorWeights1,boolean binaryInput1, 
 		String filePathResults1, String filePathTrainedOutputWeights1, String filePathTrainedHiddenWeights1, 
 		int trainingSetReductionFactor1) throws IOException, ClassNotFoundException{
 		
