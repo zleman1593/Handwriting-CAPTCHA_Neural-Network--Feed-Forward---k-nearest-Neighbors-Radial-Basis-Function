@@ -101,7 +101,6 @@ public class FeedForward {
 		if (usePriorWeights == 0) {
 			System.out.println("Training from Scratch");
 			initializeMultilayerFeedForward();
-			//initializeMultilayerFeedForwardCaptcha();
 			// Trains the network with the training Data
 			long startTimeForTrainingData = System.currentTimeMillis();
 			trainTheNetwork();
