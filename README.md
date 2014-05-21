@@ -20,6 +20,6 @@ All of the networks are objects that need to be created via a constructor in ano
 
 
 // NOTES: To run these networks we had to pass the argument " -Xmx3000M"  to the java virtual machine to increase heap memory allocation.
-// This code requires that the newest Java Runtime environment is installed. Fatal bugs in older runtimes will prevent the networka from functioning.
+// This code requires that the newest Java Runtime environment is installed. Fatal bugs in older runtimes will prevent the networks from functioning.
 //When testing Captchas if you get a, cannot find file error, either add or remove the "src/" before all file paths in the CAPTCHA loading method.
 
