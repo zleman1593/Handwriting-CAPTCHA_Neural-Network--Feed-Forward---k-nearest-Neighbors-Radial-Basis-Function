@@ -126,7 +126,7 @@ public class FeedForward {
 		else if ( usePriorWeights == 1)  {
 			System.out.println("Reading Data from trained files");
 			readDataFromTrainedFiles();
-			numberOfInputNodes = hiddenLayerNodes.get(0).size();// This could be an issue
+			numberOfInputNodes = hiddenLayerNodes.get(0).size();
 			testMultilayerFeedForward(true);
 		}
 
