@@ -4,8 +4,7 @@ MNIST Handwriting Recongnition Neural Networks. Feed-Forward back propagation, k
 Hand Writing Recognition and Simple CAPTCHA Neural Networks:
 Feed-Forward Backpropagation network,  K-nearest Neighbor network,  Radial Basis Function Network
 
-  CS 3425 Final project
-  Spring 2014
+ 
   Min "Ivy" Xing, Zackery Leman
   
   These networks work by reading in an image (image data provided by MNIST) and then selecting the number 0-9.
